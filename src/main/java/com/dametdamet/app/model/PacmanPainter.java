@@ -14,6 +14,7 @@ import com.dametdamet.app.engine.GamePainter;
  */
 public class PacmanPainter implements GamePainter {
 
+	PacmanGame pacmanGame;
 	/**
 	 * la taille des cases
 	 */
@@ -26,7 +27,8 @@ public class PacmanPainter implements GamePainter {
 	 * @param game
 	 *            le jeutest a afficher
 	 */
-	public PacmanPainter() {
+	public PacmanPainter(PacmanGame game) {
+		this.pacmanGame = game;
 	}
 
 	/**

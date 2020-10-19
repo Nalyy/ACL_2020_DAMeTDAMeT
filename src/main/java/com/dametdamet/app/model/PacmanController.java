@@ -2,7 +2,7 @@ package com.dametdamet.app.model;
 
 import java.awt.event.KeyEvent;
 
-import com.dametdamet.app.engine.Cmd;
+import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.GameController;
 
 
@@ -17,13 +17,13 @@ public class PacmanController implements GameController {
 	/**
 	 * commande en cours
 	 */
-	private Cmd commandeEnCours;
+	private Command commandEnCours;
 	
 	/**
 	 * construction du controleur par defaut le controleur n'a pas de commande
 	 */
 	public PacmanController() {
-		this.commandeEnCours = Cmd.IDLE;
+		this.commandEnCours = Command.IDLE;
 	}
 
 	/**
@@ -32,8 +32,8 @@ public class PacmanController implements GameController {
 	 * 
 	 * @return commande faite par le joueur
 	 */
-	public Cmd getCommand() {
-		return this.commandeEnCours;
+	public Command getCommand() {
+		return this.commandEnCours;
 	}
 
 	@Override
@@ -43,11 +43,28 @@ public class PacmanController implements GameController {
 	public void keyPressed(KeyEvent e) {
 
 		switch (e.getKeyChar()) {
-		// si on appuie sur 'q',commande joueur est gauche
-		case 'l':
-		case 'L':
-			this.commandeEnCours = Cmd.LEFT;
-			break;
+		// si on appuie sur 'q', commande joueur est gauche
+			case 'q':
+			case 'Q':
+				this.commandEnCours = Command.LEFT;
+				break;
+		// si on appuie sur 'd', commande joueur est droite
+			case 'd':
+			case 'D':
+				this.commandEnCours = Command.RIGHT;
+				break;
+
+		// si on appuie sur 's', commande joueur est bas
+			case 's' :
+			case 'S':
+				this.commandEnCours = Command.DOWN;
+				break;
+
+		// si on appuie sur 'z', commande joueur est haut
+			case 'z':
+			case 'Z':
+				this.commandEnCours = Command.UP;
+				break;
 		}
 
 	}
@@ -57,7 +74,7 @@ public class PacmanController implements GameController {
 	 * met a jour les commandes quand le joueur relache une touche
 	 */
 	public void keyReleased(KeyEvent e) {
-		this.commandeEnCours = Cmd.IDLE;
+		this.commandEnCours = Command.IDLE;
 	}
 
 	@Override

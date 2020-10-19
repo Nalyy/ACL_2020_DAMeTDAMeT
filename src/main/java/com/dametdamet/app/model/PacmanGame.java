@@ -3,8 +3,10 @@ package com.dametdamet.app.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import com.dametdamet.app.engine.Cmd;
+import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
 
 /**
@@ -15,12 +17,27 @@ import com.dametdamet.app.engine.Game;
  * 
  */
 public class PacmanGame implements Game {
+	private boolean isFinished;
+	private Hero hero;
+	private Collection<Monster> monsters;
+	private Maze maze;
 
 	/**
 	 * constructeur avec fichier source pour le help
 	 * 
 	 */
 	public PacmanGame(String source) {
+		/* Construction du jeu */
+		hero = new Hero();
+		maze = new Maze();
+
+		// TODO : quel type de liste ?
+		monsters = new ArrayList(4);
+
+		// Construction des monstres
+
+
+		/* Fichier d'aide */
 		BufferedReader helpReader;
 		try {
 			helpReader = new BufferedReader(new FileReader(source));
@@ -37,11 +54,29 @@ public class PacmanGame implements Game {
 	/**
 	 * faire evoluer le jeu suite a une commande
 	 * 
-	 * @param commande
+	 * @param command
 	 */
 	@Override
-	public void evolve(Cmd commande) {
-		System.out.println("Execute "+commande);
+	public void evolve(Command command) {
+		System.out.println("Execute "+ command);
+	}
+
+	/**
+	 * Donne la nouvelle position si exécution de cmd.
+	 *
+	 * @param position
+	 * @param command
+	 * @return
+	 */
+	private Position getTargetPosition(Position position, Command command){
+		return new Position(0,0);
+	}
+
+	/**
+	 * indiquer si le jeu est fini
+	 */
+	private void setFinished(boolean b){
+		isFinished = b;
 	}
 
 	/**
@@ -50,7 +85,7 @@ public class PacmanGame implements Game {
 	@Override
 	public boolean isFinished() {
 		// le jeu n'est jamais fini
-		return false;
+		return isFinished;
 	}
 
 }
