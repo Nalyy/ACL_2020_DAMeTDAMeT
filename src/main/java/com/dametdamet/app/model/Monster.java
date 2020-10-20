@@ -7,6 +7,7 @@ public class Monster extends Entity{
 
     public Monster(Position position, MoveStrategy strategy){
         super(position,TypeEntity.MONSTER);
+        Objects.requireNonNull(strategy, "La stratégie donnée à la construction du monstre est null.");
         this.strategy = strategy;
     }
 
@@ -15,7 +16,7 @@ public class Monster extends Entity{
      * @return Command
      */
     public Command getNextCommand(){
-           return Command.IDLE;
+           return strategy.getNextCommand(this);
     }
 
 
