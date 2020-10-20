@@ -23,6 +23,8 @@ public class Maze{
      * @return TypeCase
      */
     public TypeCase whatIsIn(Position position){
-        return maze[position.getX()][position.getY()].getType();
+        if(maze[position.getX()][position.getY()] != null)
+            return maze[position.getX()][position.getY()].getType();
+        return TypeCase.EMPTY;
     }
 }

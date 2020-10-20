@@ -42,7 +42,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		monsters = new ArrayList<>(NB_MONSTERS);
 		addMonsters();
 
-
 		/* Fichier d'aide */
 		BufferedReader helpReader;
 		try {
@@ -155,6 +154,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	public boolean isFinished() {
 		// le jeu n'est jamais fini
 		return isFinished;
+	}
+
+	public Maze getMaze() {
+		return maze;
+	}
+
+	public Entity getHero() {
+		return hero;
 	}
 
 	@Override

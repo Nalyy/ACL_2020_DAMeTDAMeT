@@ -6,7 +6,7 @@ public class Monster extends Entity{
     private MoveStrategy strategy;
 
     public Monster(Position position, MoveStrategy strategy){
-        super(position);
+        super(position,TypeEntity.MONSTER);
         this.strategy = strategy;
     }
 

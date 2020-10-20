@@ -3,8 +3,11 @@ package com.dametdamet.app.model;
 public abstract class Entity {
     private Position position;
 
-    public Entity(Position position){
+    private TypeEntity type;
+
+    public Entity(Position position,TypeEntity type){
         this.position = position;
+        this.type = type;
     }
 
     /**
@@ -23,5 +26,9 @@ public abstract class Entity {
      */
     public Position getPosition() {
         return position;
+    }
+
+    public TypeEntity getType() {
+        return type;
     }
 }
