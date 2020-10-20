@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Random;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
@@ -16,25 +18,29 @@ import com.dametdamet.app.engine.Game;
  *         versions suivantes.
  * 
  */
-public class PacmanGame implements Game {
+public class PacmanGame implements Game, Iterable<Entity> {
 	private boolean isFinished;
-	private Hero hero;
-	private Collection<Monster> monsters;
+	private Entity hero;
+	// TODO : je sais que c'est bien d'utiliser la classe abstraite, mais je sais pas si
+	// là c'est vraiment nécessaire... + je commence à me demander si Monster devrait vraiment hériter
+	// de Entity
+	private Collection<Entity> monsters;
 	private Maze maze;
+	public static int NB_MONSTERS = 1;
 
 	/**
 	 * constructeur avec fichier source pour le help
-	 * 
 	 */
 	public PacmanGame(String source) {
 		/* Construction du jeu */
-		hero = new Hero();
+		Position initialPosition = new Position(0,0);
+		hero = new Hero(initialPosition);
 		maze = new Maze();
 
 		// TODO : quel type de liste ?
-		monsters = new ArrayList(4);
-
-		// Construction des monstres
+		// Création des monstres
+		monsters = new ArrayList<>(NB_MONSTERS);
+		addMonsters();
 
 
 		/* Fichier d'aide */
@@ -51,6 +57,30 @@ public class PacmanGame implements Game {
 		}
 	}
 
+	private void addMonsters(){
+		Position initialPosition = new Position(0,0);
+		MoveStrategy moveStrategy = RandomMove.INSTANCE;
+		RandomMove.INSTANCE.setMaze(maze);
+		Random randomGenerator = new Random();
+
+		// Création des monstres à mettre dans la liste
+		for (int i =0; i<NB_MONSTERS; i++){
+			// On génère les positions initiales aléatoirement
+			// Formule du random : int nombreAleatoire = rand.nextInt(max - min + 1) + min;
+			int randomX = randomGenerator.nextInt(Maze.LENGTH); // Maze.LENGTH - 1 pour max, 0 pour min
+			int randomY = randomGenerator.nextInt(Maze.HEIGHT); // Idem
+
+			initialPosition.setX(randomX);
+			initialPosition.setY(randomY);
+
+			// On crée le monstre
+			Monster monster = new Monster(initialPosition, moveStrategy);
+
+			// On met le monstre dans la liste
+			monsters.add(monster);
+		}
+	}
+
 	/**
 	 * faire evoluer le jeu suite a une commande
 	 * 
@@ -58,7 +88,30 @@ public class PacmanGame implements Game {
 	 */
 	@Override
 	public void evolve(Command command) {
+
+		// Héros
 		System.out.println("Execute "+ command);
+
+		Position initialPosition;
+		Position targetPosition;
+		Command nextCommand;
+
+		// Monstres
+		for (Entity m : monsters){
+			Monster monster = (Monster) m;
+
+			// Déplacement du monstre
+			initialPosition = monster.getPosition();
+			nextCommand = monster.getNextCommand();
+			targetPosition = getTargetPosition(initialPosition, nextCommand);
+
+			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
+			monster.moveTo(targetPosition);
+
+		}
+
+
+
 	}
 
 	/**
@@ -69,7 +122,23 @@ public class PacmanGame implements Game {
 	 * @return
 	 */
 	private Position getTargetPosition(Position position, Command command){
-		return new Position(0,0);
+		int initialX = position.getX();
+		int initialY = position.getY();
+		switch (command){
+			case UP:
+				position.setY(initialY + 1);
+				break;
+			case DOWN:
+				position.setY(initialY - 1);
+				break;
+			case LEFT:
+				position.setX(initialX - 1);
+				break;
+			case RIGHT:
+				position.setX(initialX + 1);
+				break;
+		}
+		return position;
 	}
 
 	/**
@@ -88,4 +157,8 @@ public class PacmanGame implements Game {
 		return isFinished;
 	}
 
+	@Override
+	public Iterator<Entity> iterator() {
+		return monsters.iterator();
+	}
 }

@@ -3,6 +3,10 @@ package com.dametdamet.app.model;
 public abstract class Entity {
     private Position position;
 
+    public Entity(Position position){
+        this.position = position;
+    }
+
     /**
      * Remplace la position avec la nouvelle position.
      * @param position

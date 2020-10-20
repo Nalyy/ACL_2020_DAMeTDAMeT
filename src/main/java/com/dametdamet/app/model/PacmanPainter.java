@@ -39,6 +39,11 @@ public class PacmanPainter implements GamePainter {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 		crayon.setColor(Color.blue);
 		crayon.fillOval(0,0,10,10);
+		for (Entity monster : pacmanGame){
+			Position position = monster.getPosition();
+			crayon.setColor(Color.yellow);
+			crayon.fillOval(position.getX(), position.getY(), 10, 10);
+		}
 	}
 
 	@Override

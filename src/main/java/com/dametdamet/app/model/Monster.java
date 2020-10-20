@@ -2,10 +2,11 @@ package com.dametdamet.app.model;
 
 import com.dametdamet.app.engine.Command;
 
-public class Monster {
+public class Monster extends Entity{
     private MoveStrategy strategy;
 
-    public Monster(MoveStrategy strategy){
+    public Monster(Position position, MoveStrategy strategy){
+        super(position);
         this.strategy = strategy;
     }
 
