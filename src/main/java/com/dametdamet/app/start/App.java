@@ -1,6 +1,6 @@
 package com.dametdamet.app.start;
 
-import com.dametdamet.app.model.PacmanPainter;
+import com.dametdamet.app.model.graphic.PacmanPainter;
 import com.dametdamet.app.engine.GameEngineGraphical;
 import com.dametdamet.app.model.PacmanController;
 import com.dametdamet.app.model.PacmanGame;

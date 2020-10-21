@@ -2,6 +2,8 @@ package com.dametdamet.app.model;
 
 import com.dametdamet.app.engine.Command;
 
+import java.util.Objects;
+
 public class Monster extends Entity{
     private MoveStrategy strategy;
 

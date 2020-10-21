@@ -1,4 +1,7 @@
-package com.dametdamet.app.model;
+package com.dametdamet.app.model.graphic.factory;
+
+import com.dametdamet.app.model.TypeCase;
+import com.dametdamet.app.model.TypeEntity;
 
 import java.awt.*;
 
@@ -13,10 +16,11 @@ public enum ColorFactory {
     private final Color emptyColor = Color.white;
     private final Color treasureColor = Color.yellow;
 
-    private ColorFactory(){
-
-    }
-
+    /**
+     * retourne une couleur selon le type d'entité
+     * @param type type de l'entité à colorier
+     * @return la couleur correspondante au type d'entité en paramètre
+     */
     public Color getEntityColor(TypeEntity type){
         switch (type){
             case HERO:
@@ -28,6 +32,11 @@ public enum ColorFactory {
         }
     }
 
+    /**
+     * retourne une couleur selon le type de case
+     * @param type type de l'entité à colorier
+     * @return la couleur correspondante au type de case en paramètre
+     */
     public Color getCaseColor(TypeCase type){
         switch (type){
             case WALL:
