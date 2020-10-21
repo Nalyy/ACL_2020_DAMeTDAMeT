@@ -14,7 +14,7 @@ import com.dametdamet.app.model.maze.Maze;
  */
 public class PacmanPainter implements GamePainter {
 
-	PacmanGame pacmanGame;
+	private PacmanGame pacmanGame;
 	/**
 	 * la taille des cases
 	 */
@@ -52,7 +52,7 @@ public class PacmanPainter implements GamePainter {
 		for (Entity monster: pacmanGame) {
 			Position position = monster.getPosition();
 			crayon.setColor(ColorFactory.INSTANCE.getEntityColor(monster.getType()));
-			crayon.fillOval(position.getX()*(WIDTH/ Maze.WIDTH), position.getY()*(HEIGHT/Maze.HEIGHT), WIDTH/Maze.WIDTH, HEIGHT/Maze.HEIGHT);
+			crayon.fillOval(position.getX()*(WIDTH/ pacmanGame.getMaze().getWidth()), position.getY()*(HEIGHT/pacmanGame.getMaze().getHeight()), WIDTH/pacmanGame.getMaze().getWidth(), HEIGHT/pacmanGame.getMaze().getHeight());
 		}
 	}
 
@@ -64,12 +64,12 @@ public class PacmanPainter implements GamePainter {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 		Maze maze = pacmanGame.getMaze();
 		Position position = new Position(0,0);
-		for(int i = 0; i < Maze.WIDTH; i++){
-			for(int j = 0; j < Maze.HEIGHT;j++){
+		for(int i = 0; i < maze.getWidth(); i++){
+			for(int j = 0; j < maze.getHeight();j++){
 				position.setX(i);
 				position.setY(j);
 				crayon.setColor(ColorFactory.INSTANCE.getCaseColor(maze.whatIsIn(position).getType()));
-				crayon.fillRect(position.getX()*(WIDTH/Maze.WIDTH),position.getY()*(HEIGHT/Maze.HEIGHT),WIDTH/Maze.WIDTH,HEIGHT/Maze.HEIGHT);
+				crayon.fillRect(position.getX()*(WIDTH/maze.getWidth()),position.getY()*(HEIGHT/maze.getHeight()),WIDTH/maze.getWidth(),HEIGHT/maze.getHeight());
 			}
 		}
 	}
@@ -84,7 +84,7 @@ public class PacmanPainter implements GamePainter {
 
 		Position position = hero.getPosition();
 		crayon.setColor(ColorFactory.INSTANCE.getEntityColor((hero.getType())));
-		crayon.fillOval(position.getX()*(WIDTH/Maze.WIDTH),position.getY()*(HEIGHT/Maze.HEIGHT),WIDTH/Maze.WIDTH,HEIGHT/Maze.HEIGHT);
+		crayon.fillOval(position.getX()*(WIDTH/pacmanGame.getMaze().getWidth()),position.getY()*(HEIGHT/pacmanGame.getMaze().getHeight()),WIDTH/pacmanGame.getMaze().getWidth(),HEIGHT/pacmanGame.getMaze().getHeight());
 	}
 
 	@Override

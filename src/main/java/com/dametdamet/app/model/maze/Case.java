@@ -1,5 +1,7 @@
 package com.dametdamet.app.model.maze;
 
+import java.util.Objects;
+
 public class Case {
     private final TypeCase type;
 
@@ -17,5 +19,18 @@ public class Case {
      */
     public TypeCase getType(){
         return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Case aCase = (Case) o;
+        return type == aCase.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type);
     }
 }

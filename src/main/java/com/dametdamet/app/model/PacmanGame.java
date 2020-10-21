@@ -67,8 +67,8 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		for (int i =0; i<NB_MONSTERS; i++){
 			// On génère les positions initiales aléatoirement
 			// Formule du random : int nombreAleatoire = rand.nextInt(max - min + 1) + min;
-			int randomX = randomGenerator.nextInt(Maze.WIDTH); // Maze.LENGTH - 1 pour max, 0 pour min
-			int randomY = randomGenerator.nextInt(Maze.HEIGHT); // Idem
+			int randomX = randomGenerator.nextInt(maze.getWidth()); // Maze.LENGTH - 1 pour max, 0 pour min
+			int randomY = randomGenerator.nextInt(maze.getHeight()); // Idem
 
 			initialPosition.setX(randomX);
 			initialPosition.setY(randomY);
