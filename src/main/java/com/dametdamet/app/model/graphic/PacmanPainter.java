@@ -5,10 +5,10 @@ import java.awt.image.BufferedImage;
 
 import com.dametdamet.app.engine.GamePainter;
 import com.dametdamet.app.model.Entity;
-import com.dametdamet.app.model.Maze;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.graphic.factory.ColorFactory;
+import com.dametdamet.app.model.maze.Maze;
 
 /**
  * @author Horatiu Cirstea, Vincent Thomas
@@ -56,7 +56,7 @@ public class PacmanPainter implements GamePainter {
 		for (Entity monster: pacmanGame) {
 			Position position = monster.getPosition();
 			crayon.setColor(ColorFactory.INSTANCE.getEntityColor(monster.getType()));
-			crayon.fillOval(position.getX()*(WIDTH/ Maze.LENGTH), position.getY()*(HEIGHT/Maze.HEIGHT), WIDTH/Maze.LENGTH, HEIGHT/Maze.HEIGHT);
+			crayon.fillOval(position.getX()*(WIDTH/pacmanGame.getMaze().getWidth()), position.getY()*(HEIGHT/pacmanGame.getMaze().getHeight()), WIDTH/pacmanGame.getMaze().getWidth(), HEIGHT/pacmanGame.getMaze().getHeight());
 		}
 	}
 
