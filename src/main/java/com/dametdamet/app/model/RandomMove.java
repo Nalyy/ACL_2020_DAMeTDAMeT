@@ -1,6 +1,8 @@
 package com.dametdamet.app.model;
 
 import com.dametdamet.app.engine.Command;
+import com.dametdamet.app.model.maze.Maze;
+import com.dametdamet.app.model.maze.TypeCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,22 +33,22 @@ public enum RandomMove implements MoveStrategy {
         /* On commence par regarder les commandes possibles à exécuter */
         // Case de haut
         position.setY(initialY + 1);
-        if (maze.isOpen(position)) candidates.add(Command.UP);
+        if (maze.isNotWall(position)) candidates.add(Command.UP);
         position.setY(initialY);  // remise à l'état initial de la position
 
         // Case de bas
         position.setY(initialY - 1);
-        if (maze.isOpen(position)) candidates.add(Command.DOWN);
+        if (maze.isNotWall(position)) candidates.add(Command.DOWN);
         position.setY(initialY);
 
         // Case de gauche
         position.setX(initialX - 1);
-        if (maze.isOpen(position)) candidates.add(Command.LEFT);
+        if (maze.isNotWall(position)) candidates.add(Command.LEFT);
         position.setX(initialX);
 
         // Case de droite
         position.setX(initialX + 1);
-        if (maze.isOpen(position)) candidates.add(Command.RIGHT);
+        if (maze.isNotWall(position)) candidates.add(Command.RIGHT);
         position.setX(initialX);
 
         // nbAléatoire : random.nextInt(max - min + 1) + min = 3 - 0 + 1 + 0 = 2

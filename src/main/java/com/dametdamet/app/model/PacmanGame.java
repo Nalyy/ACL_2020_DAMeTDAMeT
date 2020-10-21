@@ -10,6 +10,7 @@ import java.util.Random;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
+import com.dametdamet.app.model.maze.Maze;
 
 /**
  * @author Horatiu Cirstea, Vincent Thomas
@@ -66,7 +67,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		for (int i =0; i<NB_MONSTERS; i++){
 			// On génère les positions initiales aléatoirement
 			// Formule du random : int nombreAleatoire = rand.nextInt(max - min + 1) + min;
-			int randomX = randomGenerator.nextInt(Maze.LENGTH); // Maze.LENGTH - 1 pour max, 0 pour min
+			int randomX = randomGenerator.nextInt(Maze.WIDTH); // Maze.LENGTH - 1 pour max, 0 pour min
 			int randomY = randomGenerator.nextInt(Maze.HEIGHT); // Idem
 
 			initialPosition.setX(randomX);

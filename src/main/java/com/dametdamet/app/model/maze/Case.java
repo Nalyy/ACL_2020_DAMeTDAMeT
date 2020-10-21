@@ -1,13 +1,13 @@
-package com.dametdamet.app.model;
+package com.dametdamet.app.model.maze;
 
 public class Case {
-    TypeCase type;
+    private final TypeCase type;
 
     /**
      * Crée une case de type donné.
-     * @param type
+     * @param type type de la case initialisé
      */
-    Case(TypeCase type){
+    public Case(TypeCase type){
         this.type = type;
     }
 

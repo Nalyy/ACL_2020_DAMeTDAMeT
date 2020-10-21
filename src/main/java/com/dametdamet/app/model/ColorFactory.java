@@ -1,5 +1,7 @@
 package com.dametdamet.app.model;
 
+import com.dametdamet.app.model.maze.TypeCase;
+
 import java.awt.*;
 
 public enum ColorFactory {

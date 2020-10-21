@@ -1,14 +1,10 @@
 package com.dametdamet.app.model;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import com.dametdamet.app.engine.GamePainter;
-
-import javax.imageio.ImageIO;
+import com.dametdamet.app.model.maze.Maze;
 
 /**
  * @author Horatiu Cirstea, Vincent Thomas
@@ -42,10 +38,9 @@ public class PacmanPainter implements GamePainter {
 	public void draw(BufferedImage im) {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 
-		drawHero(im);
 		drawMaze(im);
+		drawHero(im);
 		drawMonsters(im);
-
 	}
 
 	/**
@@ -57,7 +52,7 @@ public class PacmanPainter implements GamePainter {
 		for (Entity monster: pacmanGame) {
 			Position position = monster.getPosition();
 			crayon.setColor(ColorFactory.INSTANCE.getEntityColor(monster.getType()));
-			crayon.fillOval(position.getX()*(WIDTH/Maze.LENGTH), position.getY()*(HEIGHT/Maze.HEIGHT), WIDTH/Maze.LENGTH, HEIGHT/Maze.HEIGHT);
+			crayon.fillOval(position.getX()*(WIDTH/ Maze.WIDTH), position.getY()*(HEIGHT/Maze.HEIGHT), WIDTH/Maze.WIDTH, HEIGHT/Maze.HEIGHT);
 		}
 	}
 
@@ -69,12 +64,12 @@ public class PacmanPainter implements GamePainter {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 		Maze maze = pacmanGame.getMaze();
 		Position position = new Position(0,0);
-		for(int i = 0; i < Maze.LENGTH;i++){
+		for(int i = 0; i < Maze.WIDTH; i++){
 			for(int j = 0; j < Maze.HEIGHT;j++){
 				position.setX(i);
 				position.setY(j);
-				crayon.setColor(ColorFactory.INSTANCE.getCaseColor(maze.whatIsIn(position)));
-				crayon.fillRect(position.getX()*(WIDTH/Maze.LENGTH),position.getY()*(HEIGHT/Maze.HEIGHT),WIDTH/Maze.LENGTH,HEIGHT/Maze.HEIGHT);
+				crayon.setColor(ColorFactory.INSTANCE.getCaseColor(maze.whatIsIn(position).getType()));
+				crayon.fillRect(position.getX()*(WIDTH/Maze.WIDTH),position.getY()*(HEIGHT/Maze.HEIGHT),WIDTH/Maze.WIDTH,HEIGHT/Maze.HEIGHT);
 			}
 		}
 	}
@@ -89,7 +84,7 @@ public class PacmanPainter implements GamePainter {
 
 		Position position = hero.getPosition();
 		crayon.setColor(ColorFactory.INSTANCE.getEntityColor((hero.getType())));
-		crayon.fillOval(position.getX()*(WIDTH/Maze.LENGTH),position.getY()*(HEIGHT/Maze.HEIGHT),WIDTH/Maze.LENGTH,HEIGHT/Maze.HEIGHT);
+		crayon.fillOval(position.getX()*(WIDTH/Maze.WIDTH),position.getY()*(HEIGHT/Maze.HEIGHT),WIDTH/Maze.WIDTH,HEIGHT/Maze.HEIGHT);
 	}
 
 	@Override
