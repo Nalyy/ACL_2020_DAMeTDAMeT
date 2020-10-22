@@ -113,7 +113,7 @@ public class RandomMonsterTest {
      * On vérifie aussi que comme il n'y a pas de murs autour de lui, il accepte de se déplacer.
      */
     @Test
-    public void goHorsLabyUP(){
+    public void neVaPasHorsLabyUP(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, HEIGHT - 1);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
@@ -123,7 +123,7 @@ public class RandomMonsterTest {
         for (int i = 0 ; i < 100; i++){  // à 40 essais (sachant que sa position ne change pas)
                                         // , il devrait forcément réussir à prendre une mauvaise décision
             Command nextCommand = monster.getNextCommand();
-            assert (nextCommand != Command.UP && nextCommand != Command.IDLE) : nextCommand;
+            assert (nextCommand != Command.DOWN && nextCommand != Command.IDLE) : nextCommand;
         }
     }
 
@@ -132,7 +132,7 @@ public class RandomMonsterTest {
      * On vérifie aussi que comme il n'y a pas de murs autour de lui, il accepte de se déplacer.
      */
     @Test
-    public void goHorsLabyDOWN(){
+    public void neVaPasHorsLabyDOWN(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, 0);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
@@ -141,7 +141,7 @@ public class RandomMonsterTest {
         // descendre (= case 0 -> DOWN de case -1)
         for (int i = 0 ; i < 100; i++){
             Command nextCommand = monster.getNextCommand();
-            assert (nextCommand != Command.DOWN && nextCommand != Command.IDLE) : nextCommand;
+            assert (nextCommand != Command.UP && nextCommand != Command.IDLE) : nextCommand;
         }
     }
 
@@ -150,7 +150,7 @@ public class RandomMonsterTest {
      * On vérifie aussi que comme il n'y a pas de murs autour de lui, il accepte de se déplacer.
      */
     @Test
-    public void goHorsLabyRIGHT(){
+    public void neVaPasHorsLabyRIGHT(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(WIDTH - 1, 0);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
@@ -167,7 +167,7 @@ public class RandomMonsterTest {
      * On vérifie que le monstre ne veut pas sortir du labyrinthe de tout à gauche (-> faire LEFT).
      * On vérifie aussi que comme il n'y a pas de murs autour de lui, il accepte de se déplacer.
      */
-    public void goHorsLabyLEFT(){
+    public void neVaPasHorsLabyLEFT(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, 0);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);

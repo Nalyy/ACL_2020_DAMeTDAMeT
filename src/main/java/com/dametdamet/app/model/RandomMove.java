@@ -37,7 +37,7 @@ public enum RandomMove implements MoveStrategy {
     }
 
     @Override
-    public Command getNextCommand(Monster monster) {
+    public Command getNextCommand(Monster monster){
         Objects.requireNonNull(maze, "La stratégie appliquée au monstre n'a pas de labyrinthe associé.");
         Position position = monster.getPosition();
         int initialX = position.getX();
@@ -48,12 +48,12 @@ public enum RandomMove implements MoveStrategy {
 
         /* On commence par regarder les commandes possibles à exécuter */
         // Case de haut
-        position.setY(initialY + 1);
+        position.setY(initialY - 1);
         if (maze.isNotWall(position)) candidates.add(Command.UP);
         position.setY(initialY);  // remise à l'état initial de la position
 
         // Case de bas
-        position.setY(initialY - 1);
+        position.setY(initialY + 1);
         if (maze.isNotWall(position)) candidates.add(Command.DOWN);
         position.setY(initialY);
 
