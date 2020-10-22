@@ -84,7 +84,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	/**
 	 * faire evoluer le jeu suite a une commande
 	 * 
-	 * @param command
+	 * @param command la commande courante
 	 */
 	@Override
 	public void evolve(Command command) {
@@ -123,9 +123,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	/**
 	 * Donne la nouvelle position si exécution de cmd.
 	 *
-	 * @param position
-	 * @param command
-	 * @return
+	 * @param position la position de départ
+	 * @param command la commande à exécuter
+	 * @return une nouvelle position modifiée selon command
 	 */
 	private Position getTargetPosition(Position position, Command command){
 		int x = position.getX();
