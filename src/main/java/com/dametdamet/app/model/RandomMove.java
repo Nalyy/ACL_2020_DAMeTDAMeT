@@ -6,38 +6,54 @@ import com.dametdamet.app.model.maze.TypeCase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public enum RandomMove implements MoveStrategy {
     INSTANCE;
-
     private Maze maze;
 
-    // Le constructeur d'une enum ne prend pas d'arguments
-    RandomMove(){
-    }
-
+    @Override
     public void setMaze(Maze maze){
         this.maze = maze;
     }
 
     @Override
-    public Command getNextCommand(Monster monster) {
+    public boolean hasMaze(){
+        return maze!=null;
+    }
+
+    @Override
+    public boolean isInMaze(Position position) {
+        int x = position.getX();
+        int y = position.getY();
+        int width = maze.getWidth();
+        int height = maze.getHeight();
+
+        boolean isWithinWitdh = (x >= 0) && (x < width);
+        boolean isWithinHeight = (y >= 0) && (y < height);
+
+        return isWithinWitdh && isWithinHeight;
+    }
+
+    @Override
+    public Command getNextCommand(Monster monster){
+        Objects.requireNonNull(maze, "La stratégie appliquée au monstre n'a pas de labyrinthe associé.");
         Position position = monster.getPosition();
         int initialX = position.getX();
         int initialY = position.getY();
         TypeCase type;
-        List<Command> candidates = new ArrayList<>(4); // 4 = nombre de commandes possible
+        List<Command> candidates = new ArrayList<>(4); // 4 = nombre de commandes possibles
         Random randomGenerator = new Random();
 
         /* On commence par regarder les commandes possibles à exécuter */
         // Case de haut
-        position.setY(initialY + 1);
+        position.setY(initialY - 1);
         if (maze.isNotWall(position)) candidates.add(Command.UP);
         position.setY(initialY);  // remise à l'état initial de la position
 
         // Case de bas
-        position.setY(initialY - 1);
+        position.setY(initialY + 1);
         if (maze.isNotWall(position)) candidates.add(Command.DOWN);
         position.setY(initialY);
 
@@ -51,7 +67,8 @@ public enum RandomMove implements MoveStrategy {
         if (maze.isNotWall(position)) candidates.add(Command.RIGHT);
         position.setX(initialX);
 
-        // nbAléatoire : random.nextInt(max - min + 1) + min = 3 - 0 + 1 + 0 = 2
-        return candidates.isEmpty() ? Command.IDLE : candidates.get(randomGenerator.nextInt(3));
+        int boundForRandom = candidates.size() ;
+        return candidates.isEmpty() ? Command.IDLE : candidates.get(randomGenerator.nextInt(boundForRandom));
     }
+
 }
