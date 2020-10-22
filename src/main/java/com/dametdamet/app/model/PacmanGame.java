@@ -27,7 +27,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	// de Entity
 	private Collection<Entity> monsters;
 	private Maze maze;
-	public static int NB_MONSTERS = 1;
+	public static int NB_MONSTERS = 5;
 
 	/**
 	 * constructeur avec fichier source pour le help
@@ -74,7 +74,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			initialPosition.setY(randomY);
 
 			// On crée le monstre
-			Monster monster = new Monster(initialPosition, moveStrategy);
+			Monster monster = new Monster(new Position(randomX, randomY), moveStrategy);
 
 			// On met le monstre dans la liste
 			monsters.add(monster);

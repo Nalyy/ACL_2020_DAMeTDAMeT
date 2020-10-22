@@ -6,6 +6,8 @@ import java.util.Objects;
 
 public class Monster extends Entity{
     private MoveStrategy strategy;
+    private Timer timer;
+    private long millisecondsToWait = 400; // par défaut, chaque monstre bouge après 0.5 secondes d'attente
 
     /**
      * Construit un monstre avec une position initiale et une stratégie non nulle.
@@ -20,17 +22,21 @@ public class Monster extends Entity{
     public Monster(Position position, MoveStrategy strategy){
         super(position, TypeEntity.MONSTER);
 
-        // Si pas de stratégie donnée
+        // Lance une erreur si la stratégie donnée est null
         Objects.requireNonNull(strategy, "La stratégie donnée à la construction du monstre est null.");
 
-        // Si la stratégie donnée n'a pas de labyrinthe, on doit lancer une erreur.
+        // Lance une erreur si la stratégie donnée n'a pas de labyrinthe
         assert strategy.hasMaze()  : "La stratégie donnée n'a pas de labyrinthe.";
 
         // Lance une erreur si position initiale incorrecte
         assert strategy.isInMaze(position) : "La position initiale est hors du labyrinthe.";
 
-        // Si tout ok, on accepte de lui donner la stratégie pour qu'il puisse se construire
+        // Si tout ok, on accepte de lui donner la stratégie pour qu'il puisse se construire.
         this.strategy = strategy;
+
+        // On donne son timer au monstre et on le démarre.
+        timer = new Timer();
+        resetTimer();
 
     }
 
@@ -46,5 +52,29 @@ public class Monster extends Entity{
            return strategy.getNextCommand(this);
     }
 
+    /**
+     * Retourne vrai si le timer du monstre a atteint la valeur de l'attribut millisecondsToWait.
+     * @return vrai si le timer du monstre est fini
+     */
+    public boolean isFinishedTimer(){
+        return timer.isFinished();
+    }
+
+    /**
+     * Reset le timer du monstre.
+     */
+    public void resetTimer(){
+        timer.top(millisecondsToWait);
+    }
+
+    /**
+     * Met à jour le nombre de milliseconds que le monstre attend avant de pouvoir se déplacer à nouveau.
+     * @param milliseconds le nombre de millisecondes
+     */
+    public void setMillisecondsToWait(int milliseconds){
+        assert (milliseconds >= 0) : "Il faut un nombre de millisecondes positif.";
+        millisecondsToWait = milliseconds;
+        timer.top(milliseconds);
+    }
 
 }

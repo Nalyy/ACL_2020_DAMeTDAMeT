@@ -39,6 +39,13 @@ public enum RandomMove implements MoveStrategy {
     @Override
     public Command getNextCommand(Monster monster){
         Objects.requireNonNull(maze, "La stratégie appliquée au monstre n'a pas de labyrinthe associé.");
+
+        // On vérifie si le monstre a le droit de se re-déplacer tout de suite.
+        if (!monster.isFinishedTimer()) return Command.IDLE;
+
+        // Si oui, on reset son timer pour le prochain déplacement et on lui donne sa direction.
+        monster.resetTimer();
+
         Position position = monster.getPosition();
         int initialX = position.getX();
         int initialY = position.getY();

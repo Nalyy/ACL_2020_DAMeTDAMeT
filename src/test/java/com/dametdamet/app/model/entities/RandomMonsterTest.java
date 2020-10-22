@@ -167,6 +167,7 @@ public class RandomMonsterTest {
      * On vérifie que le monstre ne veut pas sortir du labyrinthe de tout à gauche (-> faire LEFT).
      * On vérifie aussi que comme il n'y a pas de murs autour de lui, il accepte de se déplacer.
      */
+    @Test
     public void neVaPasHorsLabyLEFT(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, 0);

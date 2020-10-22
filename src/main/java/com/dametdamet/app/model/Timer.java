@@ -10,15 +10,8 @@ public class Timer {
     private long startTime;
     private long timerTime;
 
-
-
     public Timer(){
         this.startTime = System.currentTimeMillis() - timerTime;
-    }
-
-
-    public void setTimerTime(long timerTime) {
-        this.timerTime = timerTime;
     }
 
     /**
