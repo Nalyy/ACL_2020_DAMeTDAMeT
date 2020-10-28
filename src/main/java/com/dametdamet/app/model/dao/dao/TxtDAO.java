@@ -5,6 +5,7 @@ import com.dametdamet.app.model.maze.TypeCase;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.URL;
 
 public enum TxtDAO implements AbstractFileDAO {
 
@@ -15,7 +16,11 @@ public enum TxtDAO implements AbstractFileDAO {
         RandomAccessFile fr = null;
         Case[][] laby = new Case[0][0];
         try {
-            fr = new RandomAccessFile(getClass().getResource("/" + nomFichier).getFile(), "r"); // Permet de lire le fichier
+            URL x = getClass().getResource("/" + nomFichier);
+            if(x != null)
+                fr = new RandomAccessFile(x.getFile(), "r"); // Permet de lire le fichier
+            else
+                throw new IOException("Impossible de lire le fichier, le fichier n'existe pas. " + "\"/" + nomFichier + "\"");
 
             // Premier check des tailles du fichier
             int[] widthHeight = trouverTaillesTabCases(fr);

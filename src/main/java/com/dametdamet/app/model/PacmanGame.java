@@ -32,11 +32,12 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	/**
 	 * constructeur avec fichier source pour le help
 	 */
-	public PacmanGame(String source) {
+	public PacmanGame(String source, String sourceMaze) {
 		/* Construction du jeu */
 		Position initialPosition = new Position(0,0);
 		hero = new Hero(initialPosition);
-		maze = new Maze();
+		if(sourceMaze != null && !sourceMaze.equals(""))
+			maze = new Maze(sourceMaze);
 
 		// TODO : quel type de liste ?
 		// Création des monstres
@@ -64,7 +65,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		Random randomGenerator = new Random();
 
 		// Création des monstres à mettre dans la liste
-		for (int i =0; i<NB_MONSTERS; i++){
+		for (int i = 0; i<NB_MONSTERS; i++){
 			// On génère les positions initiales aléatoirement
 			// Formule du random : int nombreAleatoire = rand.nextInt(max - min + 1) + min;
 			int randomX = randomGenerator.nextInt(maze.getWidth()); // Maze.LENGTH - 1 pour max, 0 pour min

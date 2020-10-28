@@ -34,10 +34,6 @@ public class Maze{
      */
     public Maze(String nomFichier){
         generate(nomFichier);
-        if(maze == null || maze.length == 0){
-            maze = new Case[width][height];
-            generate();
-        }
     }
 
     /**
@@ -46,6 +42,12 @@ public class Maze{
      */
     private void generate(String nomFichier) {
         maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(nomFichier);
+        if(maze == null || maze.length == 0){
+            maze = new Case[width][height];
+            generate();
+        }
+        width = maze.length;
+        height = maze[0].length;
     }
 
     public int getWidth() {
