@@ -1,5 +1,7 @@
 package com.dametdamet.app.model;
 
+import java.util.Objects;
+
 /**
  * Stocke des coordonnées.
  * (utile pour passer de modèle 2D à modèle 3D)
@@ -27,5 +29,14 @@ public class Position {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Position)) return false;
+        Position position = (Position) o;
+        return x == position.x &&
+                y == position.y;
     }
 }

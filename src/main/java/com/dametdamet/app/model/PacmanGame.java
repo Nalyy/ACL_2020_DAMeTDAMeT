@@ -27,7 +27,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	// de Entity
 	private Collection<Entity> monsters;
 	private Maze maze;
-	public static int NB_MONSTERS = 1;
+	public static int NB_MONSTERS = 5;
 
 	/**
 	 * constructeur avec fichier source pour le help
@@ -75,7 +75,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			initialPosition.setY(randomY);
 
 			// On crée le monstre
-			Monster monster = new Monster(initialPosition, moveStrategy);
+			Monster monster = new Monster(new Position(randomX, randomY), moveStrategy);
 
 			// On met le monstre dans la liste
 			monsters.add(monster);
@@ -85,17 +85,25 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	/**
 	 * faire evoluer le jeu suite a une commande
 	 * 
-	 * @param command
+	 * @param command la commande courante
 	 */
 	@Override
 	public void evolve(Command command) {
 
 		// Héros
-		System.out.println("Execute "+ command);
+		if (command != Command.IDLE) {
+			Position initPosHero = hero.getPosition();
+			Position targetPosHero = getTargetPosition(initPosHero, command);
+
+			if (maze.isNotWall(targetPosHero)) {
+				hero.moveTo(targetPosHero);
+			}
+		}
 
 		Position initialPosition;
 		Position targetPosition;
 		Command nextCommand;
+		Position heroPosition = hero.getPosition();
 
 		// Monstres
 		for (Entity m : monsters){
@@ -109,37 +117,38 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
 			monster.moveTo(targetPosition);
 
+			// Test collision avec le héro
+			if (targetPosition.equals(heroPosition)) {
+				setFinished(true);
+			}
 		}
-
-
-
 	}
 
 	/**
 	 * Donne la nouvelle position si exécution de cmd.
 	 *
-	 * @param position
-	 * @param command
-	 * @return
+	 * @param position la position de départ
+	 * @param command la commande à exécuter
+	 * @return une nouvelle position modifiée selon command
 	 */
 	private Position getTargetPosition(Position position, Command command){
-		int initialX = position.getX();
-		int initialY = position.getY();
+		int x = position.getX();
+		int y = position.getY();
 		switch (command){
 			case UP:
-				position.setY(initialY + 1);
+				y = y - 1;
 				break;
 			case DOWN:
-				position.setY(initialY - 1);
+				y = y + 1;
 				break;
 			case LEFT:
-				position.setX(initialX - 1);
+				x = x - 1;
 				break;
 			case RIGHT:
-				position.setX(initialX + 1);
+				x = x + 1;
 				break;
 		}
-		return position;
+		return new Position(x, y);
 	}
 
 	/**
@@ -154,7 +163,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public boolean isFinished() {
-		// le jeu n'est jamais fini
 		return isFinished;
 	}
 
