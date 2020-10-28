@@ -16,6 +16,22 @@ public class Maze{
         generate();
     }
 
+    /**
+     * Initialise un maze vide de taille width*height
+     * @param width largeur du labyrinthe
+     * @param height hauteur du labyrinthe
+     */
+    public Maze(int width, int height){
+        this.width = width;
+        this.height = height;
+        maze = new Case[width][height];
+        generate();
+    }
+
+    /**
+     * Génère le labyrinthe à partir d'un fichier, si le fichier est incorrect alors on génère un labyrinthe vide
+     * @param nomFichier nom du fichier qui contient un labyrinthe
+     */
     public Maze(String nomFichier){
         generate(nomFichier);
         if(maze == null || maze.length == 0){
@@ -24,15 +40,12 @@ public class Maze{
         }
     }
 
+    /**
+     * Génère un labyrinthe à partir d'un nom de fichier
+     * @param nomFichier le nom du fichier qui contient le labyrinthe
+     */
     private void generate(String nomFichier) {
         maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(nomFichier);
-    }
-
-    public Maze(int width, int height){
-        this.width = width;
-        this.height = height;
-        maze = new Case[width][height];
-        generate();
     }
 
     public int getWidth() {
