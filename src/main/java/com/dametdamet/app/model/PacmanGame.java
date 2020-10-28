@@ -99,10 +99,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			}
 		}
 
-
 		Position initialPosition;
 		Position targetPosition;
 		Command nextCommand;
+		Position heroPosition = hero.getPosition();
 
 		// Monstres
 		for (Entity m : monsters){
@@ -116,8 +116,11 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
 			monster.moveTo(targetPosition);
 
+			// Test collision avec le héro
+			if (targetPosition.equals(heroPosition)) {
+				setFinished(true);
+			}
 		}
-
 	}
 
 	/**
@@ -159,7 +162,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public boolean isFinished() {
-		// le jeu n'est jamais fini
 		return isFinished;
 	}
 
