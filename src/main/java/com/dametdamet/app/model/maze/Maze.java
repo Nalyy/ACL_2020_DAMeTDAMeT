@@ -1,6 +1,7 @@
 package com.dametdamet.app.model.maze;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 
 public class Maze{
     private Case[][] maze;
@@ -13,6 +14,18 @@ public class Maze{
     public Maze(){
         maze = new Case[width][height];
         generate();
+    }
+
+    public Maze(String nomFichier){
+        generate(nomFichier);
+        if(maze == null || maze.length == 0){
+            maze = new Case[width][height];
+            generate();
+        }
+    }
+
+    private void generate(String nomFichier) {
+        maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(nomFichier);
     }
 
     public Maze(int width, int height){
@@ -33,9 +46,9 @@ public class Maze{
     /**
      * Génère un labyrinthe vide.
      */
-    private void generate(){
-        for (int x = 0; x < width; x++){
-            for (int y = 0 ; y < height; y++){
+    private void generate() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 maze[x][y] = new Case(TypeCase.EMPTY);
             }
         }
