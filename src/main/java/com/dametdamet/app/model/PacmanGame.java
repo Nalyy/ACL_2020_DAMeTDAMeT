@@ -126,6 +126,8 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 		}
 
+		//TEST si le timer est terminé
+		setFinished(gameTimer.isFinished());
 	}
 
 	/**
@@ -167,7 +169,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public boolean isFinished() {
-		setFinished(gameTimer.isFinished());
 		return isFinished;
 	}
 
