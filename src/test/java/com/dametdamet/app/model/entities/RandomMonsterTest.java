@@ -117,6 +117,7 @@ public class RandomMonsterTest {
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, HEIGHT - 1);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+        monster.setMillisecondsToWait(0);
 
         // Si le monstre est déjà tout en bas du labyrinthe (= case 19), il ne veut pas encore
         // descendre (= case 20 -> UP de case 19)
@@ -136,6 +137,7 @@ public class RandomMonsterTest {
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, 0);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+        monster.setMillisecondsToWait(0);
 
         // Si le monstre est déjà tout en haut du labyrinthe (= case 0), il ne veut pas encore
         // descendre (= case 0 -> DOWN de case -1)
@@ -154,6 +156,7 @@ public class RandomMonsterTest {
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(WIDTH - 1, 0);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+        monster.setMillisecondsToWait(0);
 
         // Si le monstre est déjà tout en haut du labyrinthe (= case 0), il ne veut pas encore
         // descendre (= case 0 -> DOWN de case -1)
@@ -172,6 +175,7 @@ public class RandomMonsterTest {
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, 0);
         Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+        monster.setMillisecondsToWait(0);
 
         // Si le monstre est déjà tout en haut du labyrinthe (= case 0), il ne veut pas encore
         // descendre (= case 0 -> DOWN de case -1)

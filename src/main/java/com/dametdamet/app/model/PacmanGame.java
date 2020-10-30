@@ -22,9 +22,6 @@ import com.dametdamet.app.model.maze.Maze;
 public class PacmanGame implements Game, Iterable<Entity> {
 	private boolean isFinished;
 	private Entity hero;
-	// TODO : je sais que c'est bien d'utiliser la classe abstraite, mais je sais pas si
-	// là c'est vraiment nécessaire... + je commence à me demander si Monster devrait vraiment hériter
-	// de Entity
 	private Collection<Entity> monsters;
 	private Maze maze;
 	private Timer gameTimer;
