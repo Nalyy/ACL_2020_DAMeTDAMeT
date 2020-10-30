@@ -47,10 +47,22 @@ public class PacmanPainter implements GamePainter {
 	public void draw(BufferedImage im) {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 
-		drawMaze(im);
-		drawHero(im);
-		drawMonsters(im);
-		drawHUD(im);
+		if (pacmanGame.isFinished()){
+			crayon.setColor(Color.BLACK);
+			crayon.fillRect(0, 0, getWidth(), getHeight());
+			crayon.setColor(Color.WHITE);
+			crayon.drawString("Retry ?", 0, getHeight()/2);
+		}else if (pacmanGame.isPaused()){
+			crayon.setColor(Color.BLACK);
+			crayon.fillRect(0, 0, getWidth(), getHeight());
+			crayon.setColor(Color.WHITE);
+			crayon.drawString("Pause", 0, getHeight()/2);
+		}else {
+			drawMaze(im);
+			drawHero(im);
+			drawMonsters(im);
+			drawHUD(im);
+		}
 
 	}
 

@@ -20,11 +20,12 @@ import com.dametdamet.app.model.maze.Maze;
  * 
  */
 public class PacmanGame implements Game, Iterable<Entity> {
-	private boolean isFinished;
+	private GameState state;
 	private Entity hero;
 	private Collection<Entity> monsters;
 	private Maze maze;
 	private Timer gameTimer;
+
 
 	public static int NB_MONSTERS = 5;
 	public static int TEMPS_TIMER = 60;//temps du timer en seconde
@@ -93,6 +94,24 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public void evolve(Command command) {
+		/*
+		TEST si le timer est terminé, besoin de vérifier en premier sinon met à jour l'état sans prendre en compte
+		les mises à jour précédentes
+		*/
+		setFinished(gameTimer.isFinished());
+
+		// Si le jeu est déjà en pause, on le lance, sinon on met le jeu en pause
+		if (command == Command.PAUSE){
+			state = isPaused() ? GameState.ONGOING : GameState.PAUSED;
+		}
+
+		/*
+		Il ne faut pas que le reste du jeu tourne si on est en pause ou si le jeu est fini, donc on return
+		/!\ Il faut bien que cette vérification soit faite APRÈS le check de la commande
+		 */
+		if (isPaused() || isFinished()){
+			return;
+		}
 
 		// Héros
 		if (command != Command.IDLE) {
@@ -104,11 +123,15 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			}
 		}
 
+		// Monstres
+		moveMonsters();
 
-		Position initialPosition;
-		Position targetPosition;
-		Command nextCommand;
+	}
+
+	private void moveMonsters(){
+		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
+		Command nextCommand;
 
 		// Monstres
 		for (Entity m : monsters){
@@ -124,12 +147,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			// Test collision avec le héro
 			if (targetPosition.equals(heroPosition)) {
-				setFinished(true);
+				setFinished();
 			}
 		}
-
-		//TEST si le timer est terminé
-		setFinished(gameTimer.isFinished());
 	}
 
 	/**
@@ -163,7 +183,11 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 * indiquer si le jeu est fini
 	 */
 	private void setFinished(boolean b){
-		isFinished = b;
+		state = (b ? GameState.LOST : GameState.ONGOING);
+	}
+
+	private void setFinished(){
+		state = GameState.LOST;
 	}
 
 	/**
@@ -171,7 +195,11 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public boolean isFinished() {
-		return isFinished;
+		return state == GameState.LOST;
+	}
+
+	public boolean isPaused() {
+		return state == GameState.PAUSED;
 	}
 
 	public Maze getMaze() {

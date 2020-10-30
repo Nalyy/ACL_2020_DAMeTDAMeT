@@ -43,6 +43,7 @@ public class PacmanController implements GameController {
 	public void keyPressed(KeyEvent e) {
 
 		switch (e.getKeyChar()) {
+			/* DÉPLACEMENTS PERSONNAGE */
 		// si on appuie sur 'q', commande joueur est gauche
 			case 'q':
 			case 'Q':
@@ -64,6 +65,25 @@ public class PacmanController implements GameController {
 			case 'z':
 			case 'Z':
 				this.commandEnCours = Command.UP;
+				break;
+
+				/* OPTIONS ÉTAT DU JEU */
+		// si on appuie sur 'r', le jeu recommence
+			case 'r':
+			case 'R':
+				this.commandEnCours = Command.RETRY;
+				break;
+
+		// si on appuie sur 'p', le jeu est en pause
+			case 'p':
+			case 'P':
+				this.commandEnCours = Command.PAUSE;
+				break;
+
+		// si on appuie sur 'c', le jeu se ferme
+			case 'c':
+			case 'C':
+				this.commandEnCours = Command.CLOSE;
 				break;
 		}
 
