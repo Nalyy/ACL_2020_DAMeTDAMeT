@@ -37,7 +37,7 @@ public class PacmanPainter implements GamePainter {
 		this.pacmanGame = game;
 		this.WIDTH = width;
 		this.HEIGHT = height;
-		this.HEIGHT_HUD = getRatioHeight();
+		this.HEIGHT_HUD = getRatioHeight() * 2;
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class PacmanPainter implements GamePainter {
 	private void drawHUD(BufferedImage im){
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 		crayon.setColor(Color.black);
-		crayon.setFont(new Font("Serial",Font.PLAIN,getRatioHeight()));
+		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
 		crayon.drawString(String.valueOf(pacmanGame.getGameTimer().getTime() / 1000),0,crayon.getFontMetrics().getAscent());
 	}
 
