@@ -118,7 +118,7 @@ public class PacmanPainter implements GamePainter {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 		crayon.setColor(Color.black);
 		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
-		crayon.drawString(String.valueOf(pacmanGame.getGameTimer().getTime() / 1000),0,crayon.getFontMetrics().getAscent());
+		crayon.drawString(String.valueOf(pacmanGame.getGameTimer()),0,crayon.getFontMetrics().getAscent());
 	}
 
 	@Override

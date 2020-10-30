@@ -26,25 +26,15 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private Maze maze;
 	private Timer gameTimer;
 
-
 	public static int NB_MONSTERS = 5;
-	public static int TEMPS_TIMER = 60;//temps du timer en seconde
+	public static int TEMPS_TIMER = 60; // Temps du timer en seconde
 
 	/**
-	 * constructeur avec fichier source pour le help
+	 * Constructeur avec fichier source pour le help
 	 */
 	public PacmanGame(String source) {
-		/* Construction du jeu */
-		Position initialPosition = new Position(0,0);
-		hero = new Hero(initialPosition);
-		maze = new Maze();
-		gameTimer = new Timer();
-		gameTimer.pause();
-
-		// TODO : quel type de liste ?
-		// Création des monstres
 		monsters = new ArrayList<>(NB_MONSTERS);
-		addMonsters();
+		init();
 
 		/* Fichier d'aide */
 		BufferedReader helpReader;
@@ -58,11 +48,33 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		} catch (IOException e) {
 			System.out.println("Help not available");
 		}
-
-		//lancement du timer
-		gameTimer.top(TEMPS_TIMER * 1000);
 	}
 
+	/**
+	 * Initialise le jeu comme neuf.
+	 */
+	public void init(){
+		/* Construction du jeu */
+		Position initialPosition = new Position(0,0);
+		hero = new Hero(initialPosition);
+		maze = new Maze();
+		gameTimer = new Timer();
+		gameTimer.pause();
+
+		// Re-création du monde
+		monsters.clear();
+		addMonsters();
+
+		// Lancement du timer
+		gameTimer.top(TEMPS_TIMER * 1000);
+
+		// Le jeu peut se relancer
+		state = GameState.ONGOING;
+	}
+
+	/**
+	 * Ajoute les monstres au jeu.
+	 */
 	private void addMonsters(){
 		Position initialPosition = new Position(0,0);
 		MoveStrategy moveStrategy = RandomMove.INSTANCE;
@@ -128,6 +140,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 	}
 
+	/**
+	 * Déplace les monstres et vérifie s'il y a collision avec le joueur.
+	 */
 	private void moveMonsters(){
 		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
@@ -180,12 +195,15 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	/**
-	 * indiquer si le jeu est fini
+	 * Indiquer si le jeu est fini
 	 */
 	private void setFinished(boolean b){
 		state = (b ? GameState.LOST : GameState.ONGOING);
 	}
 
+	/**
+	 * Indiquer que le jeu est fini.
+	 */
 	private void setFinished(){
 		state = GameState.LOST;
 	}
@@ -198,22 +216,38 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		return state == GameState.LOST;
 	}
 
+	/**
+	 * Vérifie si le jeu est en pause.
+	 * @return vrai si le jeu est en pause
+	 */
 	public boolean isPaused() {
 		return state == GameState.PAUSED;
 	}
 
+	/**
+	 * @return le labyrinthe du jeu
+	 */
 	public Maze getMaze() {
 		return maze;
 	}
 
+	/**
+	 * @return le héros du jeu
+	 */
 	public Entity getHero() {
 		return hero;
 	}
 
-	public Timer getGameTimer() {
-		return gameTimer;
+	/**
+	 * @return le timer du jeu
+	 */
+	public int getGameTimer() {
+		return (int)(gameTimer.getTime() / 1000);
 	}
 
+	/**
+	 * @return l'itérateur sur les monstres
+	 */
 	@Override
 	public Iterator<Entity> iterator() {
 		return monsters.iterator();
