@@ -1,6 +1,6 @@
 package com.dametdamet.app.model.graphic;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import com.dametdamet.app.engine.GamePainter;
@@ -22,17 +22,22 @@ public class PacmanPainter implements GamePainter {
 	/**
 	 * la taille des cases
 	 */
-	protected static final int WIDTH = 200;
-	protected static final int HEIGHT = 200;
+	protected final int WIDTH;
+	protected final int HEIGHT;
+	protected final int HEIGHT_HUD;
 
 	/**
 	 * appelle constructeur parent
 	 * 
-	 * @param game
-	 *            le jeutest a afficher
+	 * @param game le jeu a afficher
+	 * @param width longueur de la fenêtre du jeu
+	 * @param height hauteur de la fenêtre du jeu
 	 */
-	public PacmanPainter(PacmanGame game) {
+	public PacmanPainter(PacmanGame game,int width, int height) {
 		this.pacmanGame = game;
+		this.WIDTH = width;
+		this.HEIGHT = height;
+		this.HEIGHT_HUD = getRatioHeight() * 2;
 	}
 
 	/**
@@ -45,6 +50,8 @@ public class PacmanPainter implements GamePainter {
 		drawMaze(im);
 		drawHero(im);
 		drawMonsters(im);
+		drawHUD(im);
+
 	}
 
 	/**
@@ -56,7 +63,7 @@ public class PacmanPainter implements GamePainter {
 		for (Entity monster: pacmanGame) {
 			Position position = monster.getPosition();
 			crayon.setColor(ColorFactory.INSTANCE.getEntityColor(monster.getType()));
-			crayon.fillOval(position.getX()*(WIDTH/pacmanGame.getMaze().getWidth()), position.getY()*(HEIGHT/pacmanGame.getMaze().getHeight()), WIDTH/pacmanGame.getMaze().getWidth(), HEIGHT/pacmanGame.getMaze().getHeight());
+			crayon.fillOval(position.getX()*getRatioWidth(), position.getY()*getRatioHeight() + HEIGHT_HUD, getRatioWidth(), getRatioHeight());
 		}
 	}
 
@@ -73,7 +80,7 @@ public class PacmanPainter implements GamePainter {
 				position.setX(i);
 				position.setY(j);
 				crayon.setColor(ColorFactory.INSTANCE.getCaseColor(maze.whatIsIn(position).getType()));
-				crayon.fillRect(position.getX()*(WIDTH/maze.getWidth()),position.getY()*(HEIGHT/maze.getHeight()),WIDTH/maze.getWidth(),HEIGHT/maze.getHeight());
+				crayon.fillRect(position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight());
 			}
 		}
 	}
@@ -88,7 +95,18 @@ public class PacmanPainter implements GamePainter {
 
 		Position position = hero.getPosition();
 		crayon.setColor(ColorFactory.INSTANCE.getEntityColor((hero.getType())));
-		crayon.fillOval(position.getX()*(WIDTH/pacmanGame.getMaze().getWidth()),position.getY()*(HEIGHT/pacmanGame.getMaze().getHeight()),WIDTH/pacmanGame.getMaze().getWidth(),HEIGHT/pacmanGame.getMaze().getHeight());
+		crayon.fillOval(position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight());
+	}
+
+	/**
+	 * dessine le hud sur l'image en paramètre
+	 * @param im image sur laquelle on dessine le hud
+	 */
+	private void drawHUD(BufferedImage im){
+		Graphics2D crayon = (Graphics2D) im.getGraphics();
+		crayon.setColor(Color.black);
+		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
+		crayon.drawString(String.valueOf(pacmanGame.getGameTimer().getTime() / 1000),0,crayon.getFontMetrics().getAscent());
 	}
 
 	@Override
@@ -98,7 +116,14 @@ public class PacmanPainter implements GamePainter {
 
 	@Override
 	public int getHeight() {
-		return HEIGHT;
+		return HEIGHT + HEIGHT_HUD;
 	}
 
+	private int getRatioWidth(){
+		return (WIDTH/pacmanGame.getMaze().getWidth());
+	}
+
+	private int getRatioHeight(){
+		return (HEIGHT/pacmanGame.getMaze().getHeight());
+	}
 }

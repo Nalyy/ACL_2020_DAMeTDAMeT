@@ -27,7 +27,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	// de Entity
 	private Collection<Entity> monsters;
 	private Maze maze;
+	private Timer gameTimer;
+
 	public static int NB_MONSTERS = 5;
+	public static int TEMPS_TIMER = 60;//temps du timer en seconde
 
 	/**
 	 * constructeur avec fichier source pour le help
@@ -37,6 +40,8 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		Position initialPosition = new Position(0,0);
 		hero = new Hero(initialPosition);
 		maze = new Maze();
+		gameTimer = new Timer();
+		gameTimer.pause();
 
 		// TODO : quel type de liste ?
 		// Création des monstres
@@ -55,6 +60,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		} catch (IOException e) {
 			System.out.println("Help not available");
 		}
+
+		//lancement du timer
+		gameTimer.top(TEMPS_TIMER * 1000);
 	}
 
 	private void addMonsters(){
@@ -99,6 +107,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			}
 		}
 
+
 		Position initialPosition;
 		Position targetPosition;
 		Command nextCommand;
@@ -121,6 +130,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 				setFinished(true);
 			}
 		}
+
+		//TEST si le timer est terminé
+		setFinished(gameTimer.isFinished());
 	}
 
 	/**
@@ -171,6 +183,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 	public Entity getHero() {
 		return hero;
+	}
+
+	public Timer getGameTimer() {
+		return gameTimer;
 	}
 
 	@Override
