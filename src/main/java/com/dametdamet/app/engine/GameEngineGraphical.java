@@ -55,17 +55,24 @@ public class GameEngineGraphical {
 		this.gui = new GraphicalInterface(this.gamePainter,this.gameController);
 
 		// boucle de game
-		while (!this.game.isFinished()) {
+		while (!game.isClosed()) {
+
 			// demande controle utilisateur
 			Command c = this.gameController.getCommand();
+
 			// fait evoluer le game
 			this.game.evolve(c);
+
 			// affiche le game
 			this.gui.paint();
+
 			// met en attente
 			Thread.sleep(100);
+
+
 		}
-		System.out.println("FIN");
+		gui.exit();
+
 	}
 
 }

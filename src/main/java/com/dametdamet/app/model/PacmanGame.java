@@ -106,16 +106,11 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public void evolve(Command command) {
-		/*
-		TEST si le timer est terminé, besoin de vérifier en premier sinon met à jour l'état sans prendre en compte
-		les mises à jour précédentes
-		*/
-		setFinished(gameTimer.isFinished());
+		boolean optionCommand = (command == Command.CLOSE)
+				|| (command == Command.PAUSE)
+				|| (command == Command.RETRY);
 
-		// Si le jeu est déjà en pause, on le lance, sinon on met le jeu en pause
-		if (command == Command.PAUSE){
-			state = isPaused() ? GameState.ONGOING : GameState.PAUSED;
-		}
+		if (optionCommand) checkOptions(command);
 
 		/*
 		Il ne faut pas que le reste du jeu tourne si on est en pause ou si le jeu est fini, donc on return
@@ -124,6 +119,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		if (isPaused() || isFinished()){
 			return;
 		}
+
+		/*
+		Si le timer est fini, alors le jeu est fini
+		*/
+		if (gameTimer.isFinished()){
+			setFinished();
+		}
+
 
 		// Héros
 		if (command != Command.IDLE) {
@@ -138,6 +141,30 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		// Monstres
 		moveMonsters();
 
+
+	}
+
+	/**
+	 * Exécute une action d'option en fonction de la commande.
+	 * @param command commande demandée par l'utilisateur.
+	 */
+	private void checkOptions(Command command){
+		// Le joueur ferme la fenêtre du jeu
+		if (command == Command.CLOSE){
+			setClosed();
+		}
+
+		// Si le joueur veut recommencer la partie, il peut, sauf si le jeu est en pause
+		if (command == Command.RETRY){
+			if (!isPaused()){
+				init();
+			}
+		}
+
+		// Si le jeu est déjà en pause, on le lance, sinon on met le jeu en pause
+		if (command == Command.PAUSE){
+			state = isPaused() ? GameState.ONGOING : GameState.PAUSED;
+		}
 	}
 
 	/**
@@ -222,6 +249,21 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	public boolean isPaused() {
 		return state == GameState.PAUSED;
+	}
+
+	/**
+	 * Vérifie si le jeu est fermé.
+	 * @return vrai si le jeu est fermé.
+	 */
+	public boolean isClosed(){
+		return state == GameState.CLOSED;
+	}
+
+	/**
+	 * Indique que le joueur a fermé le jeu.
+	 */
+	private void setClosed(){
+		state = GameState.CLOSED;
 	}
 
 	/**
