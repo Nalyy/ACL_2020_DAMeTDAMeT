@@ -6,6 +6,11 @@ import com.dametdamet.app.model.maze.TypeCase;
 
 import java.awt.*;
 
+/**
+ * @author Maxime Choné
+ *
+ * classe qui permet d'obtenir une couleur pour afficher une case ou une entité
+ */
 public enum ColorFactory {
 
     INSTANCE;

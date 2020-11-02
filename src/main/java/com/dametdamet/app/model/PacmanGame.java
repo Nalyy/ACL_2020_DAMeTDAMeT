@@ -21,30 +21,21 @@ import com.dametdamet.app.model.maze.Maze;
  * 
  */
 public class PacmanGame implements Game, Iterable<Entity> {
-	private boolean isFinished;
+	private GameState state;
 	private Entity hero;
-	// TODO : je sais que c'est bien d'utiliser la classe abstraite, mais je sais pas si
-	// là c'est vraiment nécessaire... + je commence à me demander si Monster devrait vraiment hériter
-	// de Entity
 	private Collection<Entity> monsters;
-	private final Maze maze;
+	private Maze maze;
+	private Timer gameTimer;
+
+	public static int NB_MONSTERS = 5;
+	public static int TEMPS_TIMER = 60; // Temps du timer en seconde
 
 	/**
-	 * constructeur avec fichier source pour le help
+	 * Constructeur avec fichier source pour le help
 	 */
-	public PacmanGame(String source, String sourceMaze) {
-		/* Construction du jeu */
-		Position initialPosition = new Position(0,0);
-		hero = new Hero(initialPosition);
-		if(sourceMaze != null && !sourceMaze.equals(""))
-			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(sourceMaze);
-		else
-			maze = new Maze();
-
-		// TODO : quel type de liste ?
-		// Création des monstres
-		monsters = new ArrayList<>();
-		addMonsters();
+	public PacmanGame(String source) {
+		monsters = new ArrayList<>(NB_MONSTERS);
+		init();
 
 		/* Fichier d'aide */
 		BufferedReader helpReader;
@@ -60,6 +51,31 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		}
 	}
 
+	/**
+	 * Initialise le jeu comme neuf.
+	 */
+	public void init(){
+		/* Construction du jeu */
+		Position initialPosition = new Position(0,0);
+		hero = new Hero(initialPosition);
+		maze = new Maze();
+		gameTimer = new Timer();
+		gameTimer.pause();
+
+		// Re-création du monde
+		monsters.clear();
+		addMonsters();
+
+		// Lancement du timer
+		gameTimer.top(TEMPS_TIMER * 1000);
+
+		// Le jeu peut se relancer
+		state = GameState.ONGOING;
+	}
+
+	/**
+	 * Ajoute les monstres au jeu.
+	 */
 	private void addMonsters(){
 		MoveStrategy moveStrategy = RandomMove.INSTANCE;
 		RandomMove.INSTANCE.setMaze(maze);
@@ -80,6 +96,27 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public void evolve(Command command) {
+		boolean optionCommand = (command == Command.CLOSE)
+				|| (command == Command.PAUSE)
+				|| (command == Command.RETRY);
+
+		if (optionCommand) checkOptions(command);
+
+		/*
+		Il ne faut pas que le reste du jeu tourne si on est en pause ou si le jeu est fini, donc on return
+		/!\ Il faut bien que cette vérification soit faite APRÈS le check de la commande
+		 */
+		if (isPaused() || isFinished()){
+			return;
+		}
+
+		/*
+		Si le timer est fini, alors le jeu est fini
+		*/
+		if (gameTimer.isFinished()){
+			setFinished();
+		}
+
 
 		// Héros
 		if (command != Command.IDLE) {
@@ -91,10 +128,42 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			}
 		}
 
-		Position initialPosition;
-		Position targetPosition;
-		Command nextCommand;
+		// Monstres
+		moveMonsters();
+
+
+	}
+
+	/**
+	 * Exécute une action d'option en fonction de la commande.
+	 * @param command commande demandée par l'utilisateur.
+	 */
+	private void checkOptions(Command command){
+		// Le joueur ferme la fenêtre du jeu
+		if (command == Command.CLOSE){
+			setClosed();
+		}
+
+		// Si le joueur veut recommencer la partie, il peut, sauf si le jeu est en pause
+		if (command == Command.RETRY){
+			if (!isPaused()){
+				init();
+			}
+		}
+
+		// Si le jeu est déjà en pause, on le lance, sinon on met le jeu en pause
+		if (command == Command.PAUSE){
+			state = isPaused() ? GameState.ONGOING : GameState.PAUSED;
+		}
+	}
+
+	/**
+	 * Déplace les monstres et vérifie s'il y a collision avec le joueur.
+	 */
+	private void moveMonsters(){
+		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
+		Command nextCommand;
 
 		// Monstres
 		for (Entity m : monsters){
@@ -110,7 +179,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			// Test collision avec le héro
 			if (targetPosition.equals(heroPosition)) {
-				setFinished(true);
+				setFinished();
 			}
 		}
 	}
@@ -143,10 +212,17 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	/**
-	 * indiquer si le jeu est fini
+	 * Indiquer si le jeu est fini
 	 */
 	private void setFinished(boolean b){
-		isFinished = b;
+		state = (b ? GameState.LOST : GameState.ONGOING);
+	}
+
+	/**
+	 * Indiquer que le jeu est fini.
+	 */
+	private void setFinished(){
+		state = GameState.LOST;
 	}
 
 	/**
@@ -154,17 +230,56 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	@Override
 	public boolean isFinished() {
-		return isFinished;
+		return state == GameState.LOST;
 	}
 
+	/**
+	 * Vérifie si le jeu est en pause.
+	 * @return vrai si le jeu est en pause
+	 */
+	public boolean isPaused() {
+		return state == GameState.PAUSED;
+	}
+
+	/**
+	 * Vérifie si le jeu est fermé.
+	 * @return vrai si le jeu est fermé.
+	 */
+	public boolean isClosed(){
+		return state == GameState.CLOSED;
+	}
+
+	/**
+	 * Indique que le joueur a fermé le jeu.
+	 */
+	private void setClosed(){
+		state = GameState.CLOSED;
+	}
+
+	/**
+	 * @return le labyrinthe du jeu
+	 */
 	public Maze getMaze() {
 		return maze;
 	}
 
+	/**
+	 * @return le héros du jeu
+	 */
 	public Entity getHero() {
 		return hero;
 	}
 
+	/**
+	 * @return le timer du jeu
+	 */
+	public int getGameTimer() {
+		return (int)(gameTimer.getTime() / 1000);
+	}
+
+	/**
+	 * @return l'itérateur sur les monstres
+	 */
 	@Override
 	public Iterator<Entity> iterator() {
 		return monsters.iterator();

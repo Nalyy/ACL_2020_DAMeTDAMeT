@@ -14,7 +14,7 @@ public class App {
 
 		// creation du jeu particulier et de son afficheur
 		PacmanGame game = new PacmanGame("helpFilePacman.txt", "long_maze.txt");
-		PacmanPainter painter = new PacmanPainter(game);
+		PacmanPainter painter = new PacmanPainter(game,200,200);
 		PacmanController controller = new PacmanController();
 
 		// classe qui lance le moteur de jeu generique

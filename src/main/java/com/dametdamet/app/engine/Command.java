@@ -5,5 +5,8 @@ package com.dametdamet.app.engine;
  *
  */
 public enum Command {
-	 LEFT,RIGHT,UP,DOWN,IDLE; 
+	// Déplacements du personnage
+	 LEFT,RIGHT,UP,DOWN,IDLE,
+	// Options sur l'état du jeu
+	PAUSE, RETRY, CLOSE;
 }

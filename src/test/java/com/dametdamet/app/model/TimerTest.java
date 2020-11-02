@@ -22,5 +22,53 @@ class TimerTest {
         Thread.sleep(100);
 
         assert (timer.isFinished());
+
     }
+
+    @Test
+    void isFinishedSansTop(){
+        assert(timer.isFinished());
+
+        timer.pause();
+
+        timer.continueTimer();
+
+        assert (timer.isFinished());
+    }
+
+    @Test
+    void pauseAndContinueTimer() throws InterruptedException {
+
+        //cas où on fait une pause qu'on continue après
+        timer.top(100);
+
+        timer.pause();
+
+        Thread.sleep(100);
+
+        assert(!timer.isFinished());
+
+        timer.continueTimer();
+
+        assert(!timer.isFinished());
+
+        Thread.sleep(100);
+
+        assert(timer.isFinished());
+
+
+
+        //cas où on relance un nouveau top après avoir fait une pause
+        timer.top(100);
+
+        timer.pause();
+
+        timer.top(50);
+
+        Thread.sleep(50);
+
+        assert (timer.isFinished());
+    }
+
+
 }

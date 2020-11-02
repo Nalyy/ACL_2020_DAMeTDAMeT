@@ -1,0 +1,10 @@
+Moving your hero :
+    z : up
+    s : down
+    d : right
+    q : left
+
+Options :
+    p : pause
+    r : retry
+    c : close
