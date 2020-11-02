@@ -1,19 +1,29 @@
 package com.dametdamet.app.model.maze;
 
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Random;
 
 public class Maze{
     private Case[][] maze;
-    private int width = 20;
-    private int height = 20;
+    private static final int DEFAULT_WIDTH = 20;
+    private static final int DEFAULT_HEIGHT = 20;
+    public static final int DEFAULT_NB_MONSTERS = 5;
+
+    private Position initialPositionPlayer;
+    private Collection<Position> initialPositionMonster;
 
     /**
      * Initialise un Maze vide
      */
     public Maze(){
-        maze = new Case[width][height];
+        maze = new Case[DEFAULT_WIDTH][DEFAULT_HEIGHT];
+        initialPositionMonster = new ArrayList<>();
         generate();
+        this.setInitialPositionPlayer(new Position(0,0));
     }
 
     /**
@@ -22,50 +32,88 @@ public class Maze{
      * @param height hauteur du labyrinthe
      */
     public Maze(int width, int height){
-        this.width = width;
-        this.height = height;
         maze = new Case[width][height];
+        initialPositionPlayer = new Position(0,0);
+        initialPositionMonster = new ArrayList<>();
         generate();
     }
 
     /**
-     * Génère le labyrinthe à partir d'un fichier, si le fichier est incorrect alors on génère un labyrinthe vide
-     * @param nomFichier nom du fichier qui contient un labyrinthe
+     * Définit la position du joueur quand il apparaitras dans le labyrinthe
+     * @param initialPositionPlayer position initiale du joueur quand il apparaitras
      */
-    public Maze(String nomFichier){
-        generate(nomFichier);
+    public void setInitialPositionPlayer(Position initialPositionPlayer) {
+        if(!isNotWall(initialPositionPlayer)){ // Si le joueur est dans un mur
+            Position initialPos = new Position(initialPositionPlayer.getX(), initialPositionPlayer.getY());
+            boolean isFinished = false;
+
+            while(!isNotWall(initialPos) && !isFinished){
+                initialPos.setX(initialPos.getX() + 1);
+
+                if(initialPos.getX() >= this.getWidth()){ // On check les bornes de X
+                    initialPos.setY(initialPos.getY() + 1);
+                    initialPos.setX(0);
+                    isFinished = initialPos.getY() >= this.getHeight(); // Si on arrive à la fin du maze on termine tout
+                }
+            }
+            if(isFinished){ // Si on a pas trouvé un meilleur emplacement on prends celui donné de base
+                this.initialPositionPlayer = initialPositionPlayer;
+            }else{
+                this.initialPositionPlayer = initialPos;
+            }
+        }else{
+            this.initialPositionPlayer = initialPositionPlayer;
+        }
     }
 
-    /**
-     * Génère un labyrinthe à partir d'un nom de fichier
-     * @param nomFichier le nom du fichier qui contient le labyrinthe
-     */
-    private void generate(String nomFichier) {
-        maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(nomFichier);
-        if(maze == null || maze.length == 0){
-            maze = new Case[width][height];
-            generate();
-        }
-        width = maze.length;
-        height = maze[0].length;
+    public Position getInitialPositionPlayer() {
+        return initialPositionPlayer;
+    }
+
+    public void addInitialMonsterPosition(Position initialPositionMonster){
+        this.initialPositionMonster.add(initialPositionMonster);
+    }
+
+    public Iterator<Position> getIteratorMonsterPositions(){
+        return initialPositionMonster.iterator();
+    }
+
+    public void setMaze(Case[][] maze){
+        this.maze = maze;
     }
 
     public int getWidth() {
-        return width;
+        return maze.length;
     }
 
     public int getHeight() {
-        return height;
+        return maze[0].length;
     }
 
     /**
      * Génère un labyrinthe vide.
      */
     private void generate() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 0; x < this.getWidth(); x++) {
+            for (int y = 0; y < this.getHeight(); y++) {
                 maze[x][y] = new Case(TypeCase.EMPTY);
             }
+        }
+    }
+
+    /**
+     * Génère des positions aléatoire pour un certain nombre de monstres
+     * @param nbMonstres le nombre de monstres à générer dans le maze
+     */
+    private void generateInitialPositionMonster(int nbMonstres){
+        Random randomGenerator = new Random();
+        for (int i = 0; i < nbMonstres; i++) {
+            // On génère les positions initiales aléatoirement
+            // Formule du random : int nombreAleatoire = rand.nextInt(max - min + 1) + min;
+            initialPositionMonster.add(
+                    new Position(
+                            randomGenerator.nextInt(this.getWidth()),
+                            randomGenerator.nextInt(this.getHeight())));
         }
     }
 
@@ -78,7 +126,7 @@ public class Maze{
         int x = position.getX();
         int y = position.getY();
 
-        boolean isWithin = (x < width && x >= 0) && (y < height && y >= 0);
+        boolean isWithin = (x < this.getWidth() && x >= 0) && (y < this.getHeight() && y >= 0);
 
         return isWithin ? maze[x][y] : new Case(TypeCase.OUTOFBOUND);
     }

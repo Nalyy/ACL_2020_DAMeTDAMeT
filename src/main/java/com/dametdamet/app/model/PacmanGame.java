@@ -10,6 +10,7 @@ import java.util.Random;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
+import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 import com.dametdamet.app.model.maze.Maze;
 
 /**
@@ -26,8 +27,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	// là c'est vraiment nécessaire... + je commence à me demander si Monster devrait vraiment hériter
 	// de Entity
 	private Collection<Entity> monsters;
-	private Maze maze;
-	public static int NB_MONSTERS = 5;
+	private final Maze maze;
 
 	/**
 	 * constructeur avec fichier source pour le help
@@ -37,11 +37,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		Position initialPosition = new Position(0,0);
 		hero = new Hero(initialPosition);
 		if(sourceMaze != null && !sourceMaze.equals(""))
-			maze = new Maze(sourceMaze);
+			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(sourceMaze);
+		else
+			maze = new Maze();
 
 		// TODO : quel type de liste ?
 		// Création des monstres
-		monsters = new ArrayList<>(NB_MONSTERS);
+		monsters = new ArrayList<>();
 		addMonsters();
 
 		/* Fichier d'aide */
@@ -59,26 +61,15 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	private void addMonsters(){
-		Position initialPosition = new Position(0,0);
 		MoveStrategy moveStrategy = RandomMove.INSTANCE;
 		RandomMove.INSTANCE.setMaze(maze);
-		Random randomGenerator = new Random();
+
+		Iterator<Position> initialPositionMonster = maze.getIteratorMonsterPositions();
 
 		// Création des monstres à mettre dans la liste
-		for (int i = 0; i<NB_MONSTERS; i++){
-			// On génère les positions initiales aléatoirement
-			// Formule du random : int nombreAleatoire = rand.nextInt(max - min + 1) + min;
-			int randomX = randomGenerator.nextInt(maze.getWidth()); // Maze.LENGTH - 1 pour max, 0 pour min
-			int randomY = randomGenerator.nextInt(maze.getHeight()); // Idem
-
-			initialPosition.setX(randomX);
-			initialPosition.setY(randomY);
-
-			// On crée le monstre
-			Monster monster = new Monster(new Position(randomX, randomY), moveStrategy);
-
-			// On met le monstre dans la liste
-			monsters.add(monster);
+		while (initialPositionMonster.hasNext()){
+			// On met le nouveau monstre dans la liste en lui assignant une position initiale
+			monsters.add(new Monster(initialPositionMonster.next(), moveStrategy));
 		}
 	}
 

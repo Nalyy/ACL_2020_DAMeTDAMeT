@@ -15,7 +15,9 @@ public enum TypeCase {
      * @return le type de Case en fonction de c
      */
     public static TypeCase getValueOf(char c){
-        if (c == WALL.value) {
+        if(c == EMPTY.value){
+            return EMPTY;
+        }else if (c == WALL.value) {
             return WALL;
         }else if (c == TREASURE.value){
             return TREASURE;

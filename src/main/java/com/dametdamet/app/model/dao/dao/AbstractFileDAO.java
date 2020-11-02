@@ -1,6 +1,6 @@
 package com.dametdamet.app.model.dao.dao;
 
-import com.dametdamet.app.model.maze.Case;
+import com.dametdamet.app.model.maze.Maze;
 
 public interface AbstractFileDAO {
 
@@ -9,5 +9,5 @@ public interface AbstractFileDAO {
      * @param nomFichier nom du fichier à charger (présent dans le package ressources)
      * @return le tableau à deux dimensions pour le labyrinthe
      */
-    Case[][] load(String nomFichier);
+   Maze load(String nomFichier);
 }

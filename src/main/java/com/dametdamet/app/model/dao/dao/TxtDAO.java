@@ -1,20 +1,26 @@
 package com.dametdamet.app.model.dao.dao;
 
+import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.maze.Case;
+import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.TypeCase;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URL;
 
+
 public enum TxtDAO implements AbstractFileDAO {
 
     INSTANCE;
 
+    private static final char POS_JOUEUR = 'X';
+    private static final char POS_MONSTRE = 'Y';
+
     @Override
-    public Case[][] load(String nomFichier) {
+    public Maze load(String nomFichier) {
         RandomAccessFile fr = null;
-        Case[][] laby = new Case[0][0];
+        Maze laby = new Maze();
         try {
             URL x = getClass().getResource("/" + nomFichier);
             if(x != null)
@@ -80,13 +86,16 @@ public enum TxtDAO implements AbstractFileDAO {
      * @return la tableau de cases du fichier
      * @throws IOException exception du lecteur
      */
-    private Case[][] createTabCases(RandomAccessFile fr, int width, int height) throws IOException {
+    private Maze createTabCases(RandomAccessFile fr, int width, int height) throws IOException {
         // On commence la construction du labyrinthe
         Case[][] laby = new Case[width][height];
         int c;
 
+        Maze maze = new Maze();
+
         int x = 0;
         int y = 0;
+        Position positionJoueur = new Position(0, 0);
         while((c = fr.read()) != -1){ // On va construire le labyrinthe (tableau à deux dim)
             if(c == 13 || c == '\n'){ // idem, caractère 13 avant le saut à la ligne
                 if(c == 13){ // On skip le saut à la ligne
@@ -100,10 +109,27 @@ public enum TxtDAO implements AbstractFileDAO {
                 y++;
                 x = 0;
             } else {
-                laby[x][y] = new Case(TypeCase.getValueOf((char) c)); // On demande à quoi correspond le caractère à TypeCase
+                Character.toLowerCase(POS_JOUEUR);
+                switch (c) {
+                    case POS_JOUEUR:
+                        positionJoueur = new Position(x, y);
+                        laby[x][y] = new Case(TypeCase.EMPTY);
+                        break;
+                    case POS_MONSTRE:
+                        maze.addInitialMonsterPosition(new Position(x, y));
+                        laby[x][y] = new Case(TypeCase.EMPTY);
+                        break;
+                    default:
+                        laby[x][y] = new Case(TypeCase.getValueOf((char) c)); // On demande à quoi correspond le caractère à TypeCase
+                        break;
+                }
                 x++;
             }
         }
-        return laby;
+
+        maze.setMaze(laby);
+        maze.setInitialPositionPlayer(positionJoueur);
+
+        return maze;
     }
 }
