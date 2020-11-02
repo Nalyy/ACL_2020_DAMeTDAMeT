@@ -27,14 +27,20 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private Maze maze;
 	private Timer gameTimer;
 
-	public static int NB_MONSTERS = 5;
 	public static int TEMPS_TIMER = 60; // Temps du timer en seconde
 
 	/**
 	 * Constructeur avec fichier source pour le help
 	 */
-	public PacmanGame(String source) {
-		monsters = new ArrayList<>(NB_MONSTERS);
+	public PacmanGame(String source, String sourceMaze) {
+		monsters = new ArrayList<>();
+
+		/* Construction du Labyrinthe */
+		if(sourceMaze != null && !sourceMaze.equals(""))
+			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(sourceMaze);
+		else
+			maze = new Maze();
+
 		init();
 
 		/* Fichier d'aide */
@@ -56,9 +62,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	public void init(){
 		/* Construction du jeu */
-		Position initialPosition = new Position(0,0);
-		hero = new Hero(initialPosition);
-		maze = new Maze();
+		hero = new Hero(maze.getInitialPositionPlayer());
 		gameTimer = new Timer();
 		gameTimer.pause();
 
