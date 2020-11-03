@@ -1,13 +1,11 @@
-package com.dametdamet.app.model.entities;
+package com.dametdamet.app.model.entity.monster;
 
 import com.dametdamet.app.engine.Command;
-import com.dametdamet.app.model.Monster;
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.RandomMove;
 import com.dametdamet.app.model.maze.Maze;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RandomMonsterTest {
+class RandomMonsterTest {
 
     private static final int WIDTH = 20;
     private static final int HEIGHT = 20;
@@ -23,7 +21,7 @@ public class RandomMonsterTest {
     /**
      * On vérifie que le monstre ne se construit pas si on ne lui donne pas de stratégie à utiliser.
      */
-    @Test (expected =  NullPointerException.class)
+    @Test
     public void pasDeStrategy(){
         Position initialPosition = new Position(0, 0);
         Monster monster = new Monster(initialPosition, null);
@@ -33,7 +31,7 @@ public class RandomMonsterTest {
      * On vérifie que le monstre ne se construit pas si on ne donne pas de labyrinthe à la stratégie
      * qu'il utilise.
      */
-    @Test (expected = AssertionError.class)
+    @Test
     public void strategySansLabyrinthe() {
         RandomMove.INSTANCE.setMaze(null);
         Position initialPosition = new Position(0, 0);
@@ -44,7 +42,7 @@ public class RandomMonsterTest {
      * On vérifie que le monstre ne peut pas prendre une position initiale plus grande en hauteur
      * que celle du labyrinthe.
      */
-    @Test(expected =  AssertionError.class)
+    @Test
     public void positionInitialePlusHauteur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(12, HEIGHT);
@@ -56,7 +54,7 @@ public class RandomMonsterTest {
      * On vérifie que le monstre ne peut pas prendre une position initiale plus petite en hauteur
      * que celle du labyrinthe.
      */
-    @Test(expected =  AssertionError.class)
+    @Test
     public void positionInitialeMoinsHauteur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, -1);
@@ -68,7 +66,7 @@ public class RandomMonsterTest {
      * On vérifie que le monstre ne peut pas prendre une position initiale plus petite en largeur
      * que celle du labyrinthe.
      */
-    @Test(expected =  AssertionError.class)
+    @Test
     public void positionInitialeMoinsLargeur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(-1, 8);
@@ -79,7 +77,7 @@ public class RandomMonsterTest {
      * On vérifie que le monstre ne peut pas prendre une position initiale plus grande en largeur
      * que celle du labyrinthe.
      */
-    @Test(expected =  AssertionError.class)
+    @Test
     public void positionInitialePlusLargeur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(WIDTH, 8);

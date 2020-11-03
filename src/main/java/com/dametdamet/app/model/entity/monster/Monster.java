@@ -1,10 +1,13 @@
-package com.dametdamet.app.model;
+package com.dametdamet.app.model.entity.monster;
 
 import com.dametdamet.app.engine.Command;
+import com.dametdamet.app.model.*;
+import com.dametdamet.app.model.entity.Entity;
+import com.dametdamet.app.model.entity.TypeEntity;
 
 import java.util.Objects;
 
-public class Monster extends Entity{
+public class Monster extends Entity {
     private MoveStrategy strategy;
     private Timer timer;
     private long millisecondsToWait = 400; // par défaut, chaque monstre bouge après 0.5 secondes d'attente

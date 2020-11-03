@@ -1,6 +1,6 @@
 package com.dametdamet.app.model.graphic.factory;
 
-import com.dametdamet.app.model.TypeEntity;
+import com.dametdamet.app.model.entity.TypeEntity;
 
 import com.dametdamet.app.model.maze.TypeCase;
 

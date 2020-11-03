@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Random;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
 import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
+import com.dametdamet.app.model.entity.*;
+import com.dametdamet.app.model.entity.monster.Monster;
+import com.dametdamet.app.model.entity.monster.MoveStrategy;
+import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.Maze;
 
 /**

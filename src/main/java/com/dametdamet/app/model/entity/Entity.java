@@ -1,4 +1,6 @@
-package com.dametdamet.app.model;
+package com.dametdamet.app.model.entity;
+
+import com.dametdamet.app.model.Position;
 
 public abstract class Entity {
     private Position position;

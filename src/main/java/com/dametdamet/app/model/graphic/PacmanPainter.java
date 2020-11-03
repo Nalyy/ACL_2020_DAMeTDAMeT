@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import com.dametdamet.app.engine.GamePainter;
-import com.dametdamet.app.model.Entity;
+import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.graphic.factory.ColorFactory;

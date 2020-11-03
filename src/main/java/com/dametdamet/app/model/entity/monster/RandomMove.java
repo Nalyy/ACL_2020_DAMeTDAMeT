@@ -1,6 +1,9 @@
-package com.dametdamet.app.model;
+package com.dametdamet.app.model.entity.monster;
 
 import com.dametdamet.app.engine.Command;
+import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.monster.Monster;
+import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.TypeCase;
 
