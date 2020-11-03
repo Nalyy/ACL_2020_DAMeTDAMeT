@@ -15,6 +15,7 @@ import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.Maze;
+import com.dametdamet.app.model.maze.TypeCase;
 
 /**
  * @author Horatiu Cirstea, Vincent Thomas
@@ -113,7 +114,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		Il ne faut pas que le reste du jeu tourne si on est en pause ou si le jeu est fini, donc on return
 		/!\ Il faut bien que cette vérification soit faite APRÈS le check de la commande
 		 */
-		if (isPaused() || isFinished()){
+		if (isPaused() || isFinished() || isWon()){
 			return;
 		}
 
@@ -132,7 +133,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			if (maze.isNotWall(targetPosHero)) {
 				hero.moveTo(targetPosHero);
+
+				if (maze.whatIsIn(targetPosHero).getType().equals(TypeCase.TREASURE)){
+					setWon();
+					return ; // pas besoin de bouger les monstres si le héros a gagné
+				}
 			}
+
+
 		}
 
 		// Monstres
@@ -233,12 +241,22 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	/**
+	 * Indiquer que le jeu est gagné.
+	 */
+	private void setWon() { state = GameState.WON; }
+
+	/**
 	 * verifier si le jeu est fini
 	 */
 	@Override
 	public boolean isFinished() {
 		return state == GameState.LOST;
 	}
+
+	/**
+	 * Vérifier si le jeu est gagné.
+	 */
+	public boolean isWon() { return state == GameState.WON ; }
 
 	/**
 	 * Vérifie si le jeu est en pause.

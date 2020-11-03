@@ -1,5 +1,5 @@
 package com.dametdamet.app.model;
 
 public enum GameState {
-    LOST, PAUSED, ONGOING, CLOSED
+    LOST, PAUSED, ONGOING, CLOSED, WON
 }
