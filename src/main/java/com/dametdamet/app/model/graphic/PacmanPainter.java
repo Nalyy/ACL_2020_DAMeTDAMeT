@@ -47,28 +47,43 @@ public class PacmanPainter implements GamePainter {
 	public void draw(BufferedImage im) {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 
-		if (pacmanGame.isFinished()){
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("Retry ?", 0, getHeight()/2);
-		}else if (pacmanGame.isPaused()) {
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("Pause", 0, getHeight() / 2);
-		}else if (pacmanGame.isWon()){
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("You won !", 0, getHeight()/2);
-		}else {
+		if(pacmanGame.isOnGoing()) {
 			drawMaze(im);
 			drawHero(im);
 			drawMonsters(im);
 			drawHUD(im);
+		} else {
+			drawScreenGameState(im);
 		}
 
+	}
+
+	/**
+	 * dessine les écrans de pause/victoire/défaite
+	 * @param im image sur laquelle on dessine les écrans
+	 */
+	private void drawScreenGameState(BufferedImage im) {
+		Graphics2D crayon = (Graphics2D) im.getGraphics();
+
+		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
+
+		int height = (getHeight() / 2) + (crayon.getFontMetrics().getAscent() / 2);
+		if (pacmanGame.isFinished()) {
+			crayon.setColor(Color.BLACK);
+			crayon.fillRect(0, 0, getWidth(), getHeight());
+			crayon.setColor(Color.WHITE);
+			crayon.drawString("Retry ?", 0, height);
+		} else if (pacmanGame.isPaused()) {
+			crayon.setColor(Color.BLACK);
+			crayon.fillRect(0, 0, getWidth(), getHeight());
+			crayon.setColor(Color.WHITE);
+			crayon.drawString("Pause", 0, height);
+		} else if (pacmanGame.isWon()) {
+			crayon.setColor(Color.BLACK);
+			crayon.fillRect(0, 0, getWidth(), getHeight());
+			crayon.setColor(Color.WHITE);
+			crayon.drawString("You won !", 0, height);
+		}
 	}
 
 	/**

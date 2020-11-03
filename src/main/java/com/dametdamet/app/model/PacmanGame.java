@@ -168,7 +168,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 		// Si le jeu est déjà en pause, on le lance, sinon on met le jeu en pause
 		if (command == Command.PAUSE){
-			state = isPaused() ? GameState.ONGOING : GameState.PAUSED;
+			if(isPaused()){
+				state = GameState.ONGOING;
+				gameTimer.continueTimer();
+			}else {
+				state = GameState.PAUSED;
+				gameTimer.pause();
+			}
 		}
 	}
 
@@ -266,6 +272,11 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		return state == GameState.PAUSED;
 	}
 
+	/**
+	 * Vérifie si le jeu est en cours.
+	 * @return vrai si le jeu est en cours
+	 */
+	public boolean isOnGoing(){ return state == GameState.ONGOING;}
 	/**
 	 * Vérifie si le jeu est fermé.
 	 * @return vrai si le jeu est fermé.
