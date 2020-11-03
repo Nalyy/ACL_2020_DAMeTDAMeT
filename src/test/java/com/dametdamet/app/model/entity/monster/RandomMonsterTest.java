@@ -3,7 +3,9 @@ package com.dametdamet.app.model.entity.monster;
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.maze.Maze;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 class RandomMonsterTest {
 
@@ -20,68 +22,95 @@ class RandomMonsterTest {
      */
     /**
      * On vérifie que le monstre ne se construit pas si on ne lui donne pas de stratégie à utiliser.
+     *
+     * Erreur : NullPointerException
      */
     @Test
     public void pasDeStrategy(){
         Position initialPosition = new Position(0, 0);
-        Monster monster = new Monster(initialPosition, null);
+        Assertions.assertThrows(NullPointerException.class, () ->
+                { Monster monster = new Monster(initialPosition, null); }
+        );
     }
 
     /**
      * On vérifie que le monstre ne se construit pas si on ne donne pas de labyrinthe à la stratégie
      * qu'il utilise.
+     *
+     * Erreur : AssertionError
      */
     @Test
     public void strategySansLabyrinthe() {
         RandomMove.INSTANCE.setMaze(null);
         Position initialPosition = new Position(0, 0);
-        Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+        Assertions.assertThrows(AssertionError.class, () ->
+                { Monster monster = new Monster(initialPosition, RandomMove.INSTANCE); }
+        );
     }
 
     /**
      * On vérifie que le monstre ne peut pas prendre une position initiale plus grande en hauteur
      * que celle du labyrinthe.
+     *
+     * Erreur : AssertionError
      */
     @Test
     public void positionInitialePlusHauteur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(12, HEIGHT);
 
-        Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+        Assertions.assertThrows(AssertionError.class, () ->
+        { Monster monster = new Monster(initialPosition, RandomMove.INSTANCE); }
+        );
+
     }
 
     /**
      * On vérifie que le monstre ne peut pas prendre une position initiale plus petite en hauteur
      * que celle du labyrinthe.
+     *
+     * Erreur : AssertionError
      */
     @Test
     public void positionInitialeMoinsHauteur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(0, -1);
 
-        Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+        Assertions.assertThrows(AssertionError.class, () ->
+                { Monster monster = new Monster(initialPosition, RandomMove.INSTANCE); }
+        );
     }
 
     /**
      * On vérifie que le monstre ne peut pas prendre une position initiale plus petite en largeur
      * que celle du labyrinthe.
+     *
+     * Erreur : AssertionError
      */
     @Test
     public void positionInitialeMoinsLargeur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(-1, 8);
-        Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+
+        Assertions.assertThrows(AssertionError.class, () ->
+                { Monster monster = new Monster(initialPosition, RandomMove.INSTANCE); }
+        );
     }
 
     /**
      * On vérifie que le monstre ne peut pas prendre une position initiale plus grande en largeur
      * que celle du labyrinthe.
+     *
+     * Erreur : AssertionError
      */
     @Test
     public void positionInitialePlusLargeur(){
         RandomMove.INSTANCE.setMaze(maze);
         Position initialPosition = new Position(WIDTH, 8);
-        Monster monster = new Monster(initialPosition, RandomMove.INSTANCE);
+
+        Assertions.assertThrows(AssertionError.class, () ->
+                { Monster monster = new Monster(initialPosition, RandomMove.INSTANCE); }
+        );
     }
 
     /**
