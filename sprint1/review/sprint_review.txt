@@ -1,0 +1,13 @@
+Sprint 1 :
+    -a. Le héros se déplace à l'intérieur d'un plateau de taille 20x20 dans 4 directions
+    -b. Le héros se déplace à l'intérieur d'un labyrinthe
+    -c. Le héros doit aller chercher un trésor dans un temps imparti pour gagner la partie 
+    -d. Des monstres qui peuvent tuer le héros se déplacent dans le labyrinthe de manière aléatoire
+    -e. Création d'un labyrinthe par défaut à partir d'un fichier
+
+
+-a. Ok ( mais pas forcément 20x20, taille variable)
+-b. Ok
+-c. Ok 
+-d. Ok
+-e. Ok

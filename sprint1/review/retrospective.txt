@@ -1,0 +1,11 @@
+Points à travailler :
+- Aller plus dans les détails (cf collisions monstre, quel type de fichier pour labyrinthe)
+- Besoin de se mettre d'accord sur la façon de collaborer avec les outils (branche git)
+- Peu de morning meetings (communication presque que si problèmes rencontrés)
+- Le type de fichier de Maze (qu'on a pas pensé à discuter au début cf premier -) a apporté des problèmes de conception
+- Répartition des charges inégale (mais se corrigera avec la prévision des nb d'heures)
+
+
+Points ok :
+- communication rapide sur les problèmes
+- travail régulier
