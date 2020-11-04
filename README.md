@@ -2,7 +2,10 @@
 Pacman
 
 compilation : mvn package
+
 exécution : java -jar target/pacman-1.0.jar
+
+dépendances : junit-jupiter pour les tests
 
 Projet de M1 : Réalisation d'un pacman avec Java swing et compilé avec Maven |
 Équipe DAMeTDAMeT
