@@ -69,23 +69,29 @@ public class PacmanPainter implements GamePainter {
 
 		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
 
-		int height = (getHeight() / 2) + (crayon.getFontMetrics().getAscent() / 2);
+		int heightText = (getHeight() / 2) + (crayon.getFontMetrics().getAscent() / 2);
+		int heightTextScore = heightText + crayon.getFontMetrics().getAscent();
 
 		if (pacmanGame.isFinished()) {
 			crayon.setColor(Color.BLACK);
 			crayon.fillRect(0, 0, getWidth(), getHeight());
 			crayon.setColor(Color.WHITE);
-			crayon.drawString("Retry ?", 0, height);
+			crayon.drawString("Retry ?", 0, heightText);
+			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
 		} else if (pacmanGame.isPaused()) {
 			crayon.setColor(Color.BLACK);
 			crayon.fillRect(0, 0, getWidth(), getHeight());
 			crayon.setColor(Color.WHITE);
-			crayon.drawString("Pause", 0, height);
+			crayon.drawString("Pause", 0, heightText);
+			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+
 		} else if (pacmanGame.isWon()) {
 			crayon.setColor(Color.BLACK);
 			crayon.fillRect(0, 0, getWidth(), getHeight());
 			crayon.setColor(Color.WHITE);
-			crayon.drawString("You won !", 0, height);
+			crayon.drawString("You won !", 0, heightText);
+			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+
 		}
 	}
 
@@ -163,7 +169,6 @@ public class PacmanPainter implements GamePainter {
 
 
 		//affichage timer
-
 		double tailleTimer = getWidth()*0.1;
 		if(tailleTimer > HEIGHT_HUD * 0.9) tailleTimer = HEIGHT_HUD * 0.9;
 
@@ -188,6 +193,15 @@ public class PacmanPainter implements GamePainter {
 		for(int i = 0; i < hero.getMAX_HP();i++){
 			crayon.drawImage(hero.getHP() > i ? heart_full : heart_empty,(int)(posXDepart + i*1.1*tailleCoeur),0,(int)(tailleCoeur),(int)(tailleCoeur),null);
 		}
+
+		//affichage score
+		double tailleScore = getWidth()*0.1;
+		if(tailleScore > HEIGHT_HUD * 0.9) tailleScore = HEIGHT_HUD * 0.9;
+		crayon.setColor(Color.white);
+		crayon.setFont(new Font("Serial",Font.PLAIN,(int)tailleScore));
+
+		crayon.drawString(String.valueOf(pacmanGame.getScore()),getWidth() - crayon.getFontMetrics().stringWidth(String.valueOf(pacmanGame.getScore())) ,crayon.getFontMetrics().getAscent());
+
 
 
 	}

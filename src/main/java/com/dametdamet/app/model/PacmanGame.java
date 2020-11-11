@@ -30,6 +30,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private Collection<Entity> monsters;
 	private Maze maze;
 	private Timer gameTimer;
+	private int score;
 
 	private final String fileMaze;
 
@@ -40,7 +41,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	public PacmanGame(String source, String sourceMaze) {
 		monsters = new ArrayList<>();
-
+		score = 0;
 		/* Construction du Labyrinthe */
 		fileMaze = sourceMaze;
 
@@ -314,6 +315,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	/**
+	 *
+	 * @return le score du jeu
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	/**
 	 * @return le timer du jeu
 	 */
 	public int getGameTimer() {
@@ -326,5 +335,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	@Override
 	public Iterator<Entity> iterator() {
 		return monsters.iterator();
+	}
+
+	public void addScore(int scoreToAdd){
+		score += scoreToAdd;
 	}
 }
