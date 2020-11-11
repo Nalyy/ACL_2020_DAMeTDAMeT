@@ -39,4 +39,8 @@ public class Hero extends Entity {
     public int getMAX_HP() {
         return MAX_HP;
     }
+
+    public Timer getInvicibiltyTimer() {
+        return invicibiltyTimer;
+    }
 }

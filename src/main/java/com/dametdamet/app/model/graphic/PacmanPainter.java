@@ -135,16 +135,19 @@ public class PacmanPainter implements GamePainter {
 	 */
 	private void drawHero(BufferedImage im){
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
-		Entity hero = pacmanGame.getHero();
+		Hero hero = (Hero)pacmanGame.getHero();
 
-		Position position = hero.getPosition();
+		if((hero.getInvicibiltyTimer().getTime()/300)% 2 == 0){//condition pour le clignotement de l'image du héros
+			Position position = hero.getPosition();
 
-		//on récupère l'image du héros
-		BufferedImage imageHero = ImageFactory.getInstance().getEntityImage(hero);
+			//on récupère l'image du héros
+			BufferedImage imageHero = ImageFactory.getInstance().getEntityImage(hero);
 
 
-		//on dessine l'image du héros
-		crayon.drawImage(imageHero,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
+			//on dessine l'image du héros
+
+			crayon.drawImage(imageHero,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
+		}
 	}
 
 	/**
