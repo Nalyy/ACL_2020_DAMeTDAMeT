@@ -182,7 +182,6 @@ public class PacmanPainter implements GamePainter {
 
 		Hero hero = (Hero) pacmanGame.getHero();
 
-
 		//les coeurs occupent 40% de la longueur maximum
 		double tailleCoeur = (getWidth()*0.4)/hero.getMAX_HP();
 		//le ratio de taille des coeurs ne doit pas dépasser la hauteur du HUD (sinon il va dépasser sur le jeu)
@@ -193,6 +192,7 @@ public class PacmanPainter implements GamePainter {
 		for(int i = 0; i < hero.getMAX_HP();i++){
 			crayon.drawImage(hero.getHP() > i ? heart_full : heart_empty,(int)(posXDepart + i*1.1*tailleCoeur),0,(int)(tailleCoeur),(int)(tailleCoeur),null);
 		}
+
 
 		//affichage score
 		double tailleScore = getWidth()*0.1;

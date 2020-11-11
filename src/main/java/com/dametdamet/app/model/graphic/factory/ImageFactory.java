@@ -97,20 +97,37 @@ public class ImageFactory {
         return instance;
     }
 
+    /**
+     *
+     * @param ca case correspondant à l'image qu'on veut
+     * @return l'image correspondant à la case en paramètre
+     */
     public BufferedImage getCaseImage(Case ca){
         TypeCase type = ca.getType();
         switch (type){
             case EMPTY:
+                if(!(ca.getNumSprite() >= empty.length))
                 return empty[ca.getNumSprite()];
+                break;
             case TREASURE:
-                return treasure[ca.getNumSprite()];
+                if(!(ca.getNumSprite() >= treasure.length))
+                    return treasure[ca.getNumSprite()];
+                break;
             case WALL:
-                return wall[ca.getNumSprite()];
+                if(!(ca.getNumSprite() >= wall.length))
+                    return wall[ca.getNumSprite()];
+                break;
             default:
-                return caseNotFound;
+                break;
         }
+        return caseNotFound;
     }
 
+    /**
+     *
+     * @param entity entité correspondante à l'image qu'on veut
+     * @return l'image correspondante à l'entité en paramètre
+     */
     public BufferedImage getEntityImage(Entity entity){
         TypeEntity type = entity.getType();
         switch (type){
@@ -123,6 +140,11 @@ public class ImageFactory {
         }
     }
 
+    /**
+     *
+     * @param hudPartName partie du HUD correspondante à l'image qu'on veut ("heart_full","heart_empty")
+     * @return l'image correspondante à la partie du HUD en paramètre
+     */
     public BufferedImage getHudImage(String hudPartName){
         switch (hudPartName){
             case "heart_full":
