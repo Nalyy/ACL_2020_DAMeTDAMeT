@@ -26,7 +26,7 @@ import com.dametdamet.app.model.maze.TypeCase;
  */
 public class PacmanGame implements Game, Iterable<Entity> {
 	private GameState state;
-	private Entity hero;
+	private Hero hero;
 	private Collection<Entity> monsters;
 	private Maze maze;
 	private Timer gameTimer;
@@ -151,7 +151,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		// Monstres
 		moveMonsters();
 
-
+		if(hero.getHP() == 0){
+			setFinished();
+		}
 	}
 
 	/**
@@ -205,7 +207,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			// Test collision avec le héro
 			if (targetPosition.equals(heroPosition)) {
-				setFinished();
+				hero.loseHP(1);
 			}
 		}
 	}

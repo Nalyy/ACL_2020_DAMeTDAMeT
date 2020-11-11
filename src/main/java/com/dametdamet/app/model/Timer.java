@@ -57,7 +57,7 @@ public class Timer {
     }
 
     /**
-     * vérifie sur le minuteur est terminé
+     * vérifie si le minuteur est terminé
      * @return true si le temps écoulé entre le top et maintenant est supérieur ou égal au timerTime et que le timer n'est pas en pause, sinon faux
      */
     public boolean isFinished() {
