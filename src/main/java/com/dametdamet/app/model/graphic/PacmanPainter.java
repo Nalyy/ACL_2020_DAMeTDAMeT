@@ -7,6 +7,7 @@ import com.dametdamet.app.engine.GamePainter;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.Hero;
 import com.dametdamet.app.model.graphic.factory.ColorFactory;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.Maze;
@@ -166,6 +167,18 @@ public class PacmanPainter implements GamePainter {
 		BufferedImage heart_full = ImageFactory.getInstance().getHudImage("heart_full");
 		BufferedImage heart_empty = ImageFactory.getInstance().getHudImage("heart_empty");
 
+		Hero hero = (Hero) pacmanGame.getHero();
+
+		//ratio de taille des coeurs
+		double tailleCoeur = 8.0/ hero.getMAX_HP();
+
+		//le ratio de taille des coeurs ne doit pas dépasser 1.8 (sinon il va dépasser sur le jeu)
+		if(tailleCoeur > 1.8)tailleCoeur =1.8;
+		int posXDepart = (int)((getWidth()/2) - ((hero.getMAX_HP()/2.0)*1.1)*getRatioWidth()*tailleCoeur);
+		for(int i = 0; i < hero.getMAX_HP();i++){
+			crayon.drawImage(hero.getHP() > i ? heart_full : heart_empty,(int)(posXDepart + i*1.1*getRatioWidth()*tailleCoeur),0,(int)(getRatioWidth()*tailleCoeur),(int)(getRatioHeight()*tailleCoeur),null);
+		}
+
 
 	}
 
@@ -186,4 +199,5 @@ public class PacmanPainter implements GamePainter {
 	private int getRatioHeight(){
 		return (HEIGHT/pacmanGame.getMaze().getHeight());
 	}
+
 }
