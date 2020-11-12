@@ -1,6 +1,7 @@
 package com.dametdamet.app.model.dao.dao;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.Case;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.TypeCase;
@@ -8,6 +9,7 @@ import com.dametdamet.app.model.maze.TypeCase;
 import java.io.*;
 import java.net.URL;
 import java.rmi.server.ExportException;
+import java.util.Random;
 
 
 public enum TxtDAO implements AbstractFileDAO {
@@ -92,6 +94,7 @@ public enum TxtDAO implements AbstractFileDAO {
      */
     private Maze createTabCases(Reader fr, int width, int height) throws IOException {
         // On commence la construction du labyrinthe
+        Random randomGenerator = new Random();
         Case[][] laby = new Case[width][height];
         int c;
 
@@ -107,7 +110,7 @@ public enum TxtDAO implements AbstractFileDAO {
                 }
                 if(x < width){ // Si on est pas au bout de la ligne on remplis de cases vides
                     for(; x < width ; x++){
-                        laby[x][y] = new Case(TypeCase.EMPTY);
+                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                     }
                 }
                 y++;
@@ -116,14 +119,23 @@ public enum TxtDAO implements AbstractFileDAO {
                 switch (c) {
                     case POS_JOUEUR:
                         positionJoueur = new Position(x, y);
-                        laby[x][y] = new Case(TypeCase.EMPTY);
+                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
                     case POS_MONSTRE:
                         maze.addInitialMonsterPosition(new Position(x, y));
-                        laby[x][y] = new Case(TypeCase.EMPTY);
+                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
                     default:
-                        laby[x][y] = new Case(TypeCase.getValueOf((char) c)); // On demande à quoi correspond le caractère à TypeCase
+                        switch (TypeCase.getValueOf((char) c)){
+                            case EMPTY:
+                                laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG)); // On demande à quoi correspond le caractère à TypeCase
+                                break;
+                            case WALL:
+                                laby[x][y] = new Case(TypeCase.WALL,randomGenerator.nextInt(ImageFactory.NB_WALL_IMG)); // On demande à quoi correspond le caractère à TypeCase
+                                break;
+                            default:
+                                laby[x][y] = new Case(TypeCase.getValueOf((char) c)); // On demande à quoi correspond le caractère à TypeCase
+                        }
                         break;
                 }
                 x++;
@@ -133,7 +145,7 @@ public enum TxtDAO implements AbstractFileDAO {
         while(y < height && laby[0][y] == null){ // Gestion du bug quand une ligne n'est pas initialisée
             x = 0;
             for(; x < width ; x++){
-                laby[x][y] = new Case(TypeCase.EMPTY);
+                laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
             }
             y++;
         }

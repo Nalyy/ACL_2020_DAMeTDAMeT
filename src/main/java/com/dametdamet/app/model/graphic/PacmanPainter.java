@@ -7,7 +7,9 @@ import com.dametdamet.app.engine.GamePainter;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.Hero;
 import com.dametdamet.app.model.graphic.factory.ColorFactory;
+import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.Maze;
 
 /**
@@ -37,7 +39,7 @@ public class PacmanPainter implements GamePainter {
 		this.pacmanGame = game;
 		this.WIDTH = width;
 		this.HEIGHT = height;
-		this.HEIGHT_HUD = getRatioHeight() * 2;
+		this.HEIGHT_HUD = (int)( 0.1 * height);
 	}
 
 	/**
@@ -67,22 +69,29 @@ public class PacmanPainter implements GamePainter {
 
 		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
 
-		int height = (getHeight() / 2) + (crayon.getFontMetrics().getAscent() / 2);
+		int heightText = (getHeight() / 2) + (crayon.getFontMetrics().getAscent() / 2);
+		int heightTextScore = heightText + crayon.getFontMetrics().getAscent();
+
 		if (pacmanGame.isFinished()) {
 			crayon.setColor(Color.BLACK);
 			crayon.fillRect(0, 0, getWidth(), getHeight());
 			crayon.setColor(Color.WHITE);
-			crayon.drawString("Retry ?", 0, height);
+			crayon.drawString("Retry ?", 0, heightText);
+			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
 		} else if (pacmanGame.isPaused()) {
 			crayon.setColor(Color.BLACK);
 			crayon.fillRect(0, 0, getWidth(), getHeight());
 			crayon.setColor(Color.WHITE);
-			crayon.drawString("Pause", 0, height);
+			crayon.drawString("Pause", 0, heightText);
+			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+
 		} else if (pacmanGame.isWon()) {
 			crayon.setColor(Color.BLACK);
 			crayon.fillRect(0, 0, getWidth(), getHeight());
 			crayon.setColor(Color.WHITE);
-			crayon.drawString("You won !", 0, height);
+			crayon.drawString("You won !", 0, heightText);
+			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+
 		}
 	}
 
@@ -94,8 +103,13 @@ public class PacmanPainter implements GamePainter {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 		for (Entity monster: pacmanGame) {
 			Position position = monster.getPosition();
-			crayon.setColor(ColorFactory.INSTANCE.getEntityColor(monster.getType()));
-			crayon.fillOval(position.getX()*getRatioWidth(), position.getY()*getRatioHeight() + HEIGHT_HUD, getRatioWidth(), getRatioHeight());
+
+			//on récupère l'image du monstre
+			BufferedImage imageMonster = ImageFactory.getInstance().getEntityImage(monster);
+
+			//on dessine l'image du monstre
+			crayon.drawImage(imageMonster,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
+
 		}
 	}
 
@@ -111,8 +125,12 @@ public class PacmanPainter implements GamePainter {
 			for(int j = 0; j < maze.getHeight();j++){
 				position.setX(i);
 				position.setY(j);
-				crayon.setColor(ColorFactory.INSTANCE.getCaseColor(maze.whatIsIn(position).getType()));
-				crayon.fillRect(position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight());
+
+				//on récupère l'image de la case
+				BufferedImage imageCase = ImageFactory.getInstance().getCaseImage(maze.whatIsIn(position));
+
+				//on dessine l'image de la case
+				crayon.drawImage(imageCase,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
 			}
 		}
 	}
@@ -123,11 +141,19 @@ public class PacmanPainter implements GamePainter {
 	 */
 	private void drawHero(BufferedImage im){
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
-		Entity hero = pacmanGame.getHero();
+		Hero hero = (Hero)pacmanGame.getHero();
 
-		Position position = hero.getPosition();
-		crayon.setColor(ColorFactory.INSTANCE.getEntityColor((hero.getType())));
-		crayon.fillOval(position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight());
+		if((hero.getInvicibiltyTimer().getTime()/300)% 2 == 0){//condition pour le clignotement de l'image du héros
+			Position position = hero.getPosition();
+
+			//on récupère l'image du héros
+			BufferedImage imageHero = ImageFactory.getInstance().getEntityImage(hero);
+
+
+			//on dessine l'image du héros
+
+			crayon.drawImage(imageHero,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
+		}
 	}
 
 	/**
@@ -136,9 +162,48 @@ public class PacmanPainter implements GamePainter {
 	 */
 	private void drawHUD(BufferedImage im){
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
+
+		//coloriage de la bande du HUD en noir
 		crayon.setColor(Color.black);
-		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
+		crayon.fillRect(0,0,getWidth(),HEIGHT_HUD);
+
+
+		//affichage timer
+		double tailleTimer = getWidth()*0.1;
+		if(tailleTimer > HEIGHT_HUD * 0.9) tailleTimer = HEIGHT_HUD * 0.9;
+
+		crayon.setColor(Color.white);
+		crayon.setFont(new Font("Serial",Font.PLAIN,(int)tailleTimer));
 		crayon.drawString(String.valueOf(pacmanGame.getGameTimer()),0,crayon.getFontMetrics().getAscent());
+
+		//affichage point de vie du héros
+		BufferedImage heart_full = ImageFactory.getInstance().getHudImage("heart_full");
+		BufferedImage heart_empty = ImageFactory.getInstance().getHudImage("heart_empty");
+
+		Hero hero = (Hero) pacmanGame.getHero();
+
+		//les coeurs occupent 40% de la longueur maximum
+		double tailleCoeur = (getWidth()*0.4)/hero.getMAX_HP();
+		//le ratio de taille des coeurs ne doit pas dépasser la hauteur du HUD (sinon il va dépasser sur le jeu)
+		if(tailleCoeur > HEIGHT_HUD*0.9) tailleCoeur = HEIGHT_HUD*0.9;
+
+		//on positionne les coeurs au milieu du HUD
+		int posXDepart = (int)((getWidth()/2) - ((hero.getMAX_HP()/2.0)*1.1)*tailleCoeur);
+		for(int i = 0; i < hero.getMAX_HP();i++){
+			crayon.drawImage(hero.getHP() > i ? heart_full : heart_empty,(int)(posXDepart + i*1.1*tailleCoeur),0,(int)(tailleCoeur),(int)(tailleCoeur),null);
+		}
+
+
+		//affichage score
+		double tailleScore = getWidth()*0.1;
+		if(tailleScore > HEIGHT_HUD * 0.9) tailleScore = HEIGHT_HUD * 0.9;
+		crayon.setColor(Color.white);
+		crayon.setFont(new Font("Serial",Font.PLAIN,(int)tailleScore));
+
+		crayon.drawString(String.valueOf(pacmanGame.getScore()),getWidth() - crayon.getFontMetrics().stringWidth(String.valueOf(pacmanGame.getScore())) ,crayon.getFontMetrics().getAscent());
+
+
+
 	}
 
 	@Override
@@ -158,4 +223,5 @@ public class PacmanPainter implements GamePainter {
 	private int getRatioHeight(){
 		return (HEIGHT/pacmanGame.getMaze().getHeight());
 	}
+
 }
