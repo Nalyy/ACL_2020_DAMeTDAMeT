@@ -72,7 +72,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			maze = new Maze();
 
 		/* Construction du jeu */
-		hero = new Hero(new Position(maze.getInitialPositionPlayer()));
+		hero = new Hero(new Position(maze.getInitialPositionPlayer()),3);
 		gameTimer = new Timer();
 		gameTimer.pause();
 

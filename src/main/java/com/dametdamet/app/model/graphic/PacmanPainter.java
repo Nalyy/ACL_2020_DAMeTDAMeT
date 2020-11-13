@@ -8,7 +8,6 @@ import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Hero;
-import com.dametdamet.app.model.graphic.factory.ColorFactory;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.Maze;
 
@@ -183,13 +182,13 @@ public class PacmanPainter implements GamePainter {
 		Hero hero = (Hero) pacmanGame.getHero();
 
 		//les coeurs occupent 40% de la longueur maximum
-		double tailleCoeur = (getWidth()*0.4)/hero.getMAX_HP();
+		double tailleCoeur = (getWidth()*0.4)/hero.getMaxHp();
 		//le ratio de taille des coeurs ne doit pas dépasser la hauteur du HUD (sinon il va dépasser sur le jeu)
 		if(tailleCoeur > HEIGHT_HUD*0.9) tailleCoeur = HEIGHT_HUD*0.9;
 
 		//on positionne les coeurs au milieu du HUD
-		int posXDepart = (int)((getWidth()/2) - ((hero.getMAX_HP()/2.0)*1.1)*tailleCoeur);
-		for(int i = 0; i < hero.getMAX_HP();i++){
+		int posXDepart = (int)((getWidth()/2) - ((hero.getMaxHp()/2.0)*1.1)*tailleCoeur);
+		for(int i = 0; i < hero.getMaxHp(); i++){
 			crayon.drawImage(hero.getHP() > i ? heart_full : heart_empty,(int)(posXDepart + i*1.1*tailleCoeur),0,(int)(tailleCoeur),(int)(tailleCoeur),null);
 		}
 

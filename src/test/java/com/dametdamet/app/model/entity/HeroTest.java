@@ -1,11 +1,8 @@
 package com.dametdamet.app.model.entity;
 
 import com.dametdamet.app.model.Position;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.sql.Time;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +12,7 @@ class HeroTest {
 
     @BeforeEach
     void setUp() {
-        hero = new Hero(new Position(0, 0));
+        hero = new Hero(new Position(0, 0),3);
     }
 
     /*
@@ -27,7 +24,7 @@ class HeroTest {
         int hps = hero.getHP();
         hero.gainHP(1);
         assertEquals(hps, hero.getHP());
-        assertEquals(hps, hero.getMAX_HP());
+        assertEquals(hps, hero.getMaxHp());
     }
 
     @Test
@@ -58,7 +55,7 @@ class HeroTest {
         int hps = hero.getHP();
         hero.gainHP(Integer.MAX_VALUE);
         assertEquals(hps, hero.getHP());
-        assertEquals(hps, hero.getMAX_HP());
+        assertEquals(hps, hero.getMaxHp());
     }
 
     @Test
@@ -66,7 +63,7 @@ class HeroTest {
         int hps = hero.getHP();
         hero.gainHP(-1);
         assertEquals(hps, hero.getHP());
-        assertEquals(hps, hero.getMAX_HP());
+        assertEquals(hps, hero.getMaxHp());
     }
 
     @Test
@@ -74,7 +71,7 @@ class HeroTest {
         int hps = hero.getHP();
         hero.gainHP(Integer.MIN_VALUE);
         assertEquals(hps, hero.getHP());
-        assertEquals(hps, hero.getMAX_HP());
+        assertEquals(hps, hero.getMaxHp());
     }
 
 
@@ -131,7 +128,7 @@ class HeroTest {
         int hps = hero.getHP();
         hero.loseHP(-1);
         assertEquals(hps, hero.getHP());
-        assertEquals(hps, hero.getMAX_HP());
+        assertEquals(hps, hero.getMaxHp());
     }
 
     @Test
@@ -139,6 +136,6 @@ class HeroTest {
         int hps = hero.getHP();
         hero.gainHP(Integer.MIN_VALUE);
         assertEquals(hps, hero.getHP());
-        assertEquals(hps, hero.getMAX_HP());
+        assertEquals(hps, hero.getMaxHp());
     }
 }

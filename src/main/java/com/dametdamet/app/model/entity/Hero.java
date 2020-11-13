@@ -5,17 +5,18 @@ import com.dametdamet.app.model.Timer;
 
 public class Hero extends Entity {
 
-    private final int MAX_HP = 3;
+    private final int maxHp;
 
     private int hp;
     private Timer invicibiltyTimer;
     private final int RECOVERY_TIME = 3000;
 
 
-    public Hero(Position position) {
+    public Hero(Position position,int maxHp) {
         super(position, TypeEntity.HERO);
         invicibiltyTimer = new Timer();
-        hp = MAX_HP;
+        hp = maxHp;
+        this.maxHp = maxHp;
     }
 
     public int getHP() {
@@ -24,22 +25,31 @@ public class Hero extends Entity {
 
     /**
      * ajoute le nombre de point de vie en paramètre (ne peut pas dépasser MAX_HP)
-     * @param hpAmont
+     * @param hpAmont nombre de point de vie à ajouter (doit être positif sinon aucun effet)
      */
     public void gainHP(int hpAmont){
+
+        if(hpAmont > maxHp) hpAmont = maxHp;
+        if(hpAmont < 0) hpAmont = 0;
+
         hp += hpAmont;
-        if(hp > MAX_HP) hp = MAX_HP;
+        if(hp > maxHp) hp = maxHp;
+        if(hp < 0) hp = 0;
     }
 
     /**
      * retire le nombre de point de vie en paramètre si le timer d'invincibilité est fini (ne peut pas descendre en dessous de 0)
-     * @param hpAmont nombre de point de vie à retirer
+     * @param hpAmont nombre de point de vie à retirer (doit être positif sinon aucun effet)
      */
     public void loseHP(int hpAmont){
         if(invicibiltyTimer.isFinished()){
+            if(hpAmont > maxHp) hpAmont = maxHp;
+            if(hpAmont < 0) hpAmont = 0;
+
             hp -= hpAmont;
             invicibiltyTimer.top(RECOVERY_TIME);
         }
+        if(hp > maxHp) hp = maxHp;
         if(hp < 0) hp = 0;
     }
 
@@ -47,8 +57,8 @@ public class Hero extends Entity {
      *
      * @return le nombre de point de vie maximum
      */
-    public int getMAX_HP() {
-        return MAX_HP;
+    public int getMaxHp() {
+        return maxHp;
     }
 
     /**
