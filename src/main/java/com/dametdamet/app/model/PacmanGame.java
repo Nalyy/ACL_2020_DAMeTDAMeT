@@ -31,19 +31,21 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private Maze maze;
 	private Timer gameTimer;
 	private int score;
+	private int nbLevel;
 
-	private final String fileMaze;
+	private String fileName;
+	private String[] filesNames;
+	private final int NB_MAZES;
 
 	public static int TEMPS_TIMER = 60; // Temps du timer en seconde
 
 	/**
 	 * Constructeur avec fichier source pour le help
 	 */
-	public PacmanGame(String source, String sourceMaze) {
+	public PacmanGame(String source, String[] sourceMaze) {
 		monsters = new ArrayList<>();
-		score = 0;
-		/* Construction du Labyrinthe */
-		fileMaze = sourceMaze;
+		filesNames = sourceMaze;
+		NB_MAZES = sourceMaze.length;
 
 		init();
 
@@ -65,11 +67,16 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 * Initialise le jeu comme neuf.
 	 */
 	public void init(){
+		nbLevel = 0;
+		score = 0;
 
-		if(fileMaze != null && !fileMaze.equals(""))
-			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(fileMaze);
-		else
-			maze = new Maze();
+		if (NB_MAZES > 0){
+			fileName = filesNames[0];
+		}else {
+			fileName = "";
+		}
+
+		loadMaze();
 
 		/* Construction du jeu */
 		hero = new Hero(new Position(maze.getInitialPositionPlayer()),3);
@@ -85,6 +92,35 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 		// Le jeu peut se relancer
 		state = GameState.ONGOING;
+	}
+
+	public void goToNextLevel(){
+		nbLevel++;
+
+		// Si c'était le dernier labyrinthe, on arrête le jeu
+		if (nbLevel >= NB_MAZES){
+			setWon();
+		}else {
+			// On charge le prochain labyrinthe
+			fileName = filesNames[nbLevel];
+			loadMaze();
+
+			// On ajoute le score de passage de niveau
+			addScore(nbLevel * 1000);
+
+			// On s'occupe des monstres et des héros
+			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
+			monsters.clear();
+			addMonsters();
+		}
+	}
+
+
+	private void loadMaze(){
+		if(fileName != null && !fileName.equals(""))
+			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(fileName);
+		else
+			maze = new Maze();
 	}
 
 	/**
@@ -146,7 +182,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 				maze.whatIsIn(hero.getPosition()).applyEffect(this, hero);
 
 				if (maze.whatIsIn(hero.getPosition()).getType().equals(TypeCase.STAIRS)){
-					setWon();
+					goToNextLevel();
 					return ; // pas besoin de bouger les monstres si le héros a gagné
 				}
 			}

@@ -5,6 +5,8 @@ import com.dametdamet.app.engine.GameEngineGraphical;
 import com.dametdamet.app.model.PacmanController;
 import com.dametdamet.app.model.PacmanGame;
 
+import java.util.ArrayList;
+
 /**
  * lancement du moteur avec le jeu
  */
@@ -12,8 +14,13 @@ public class App {
 
 	public static void main(String[] args) throws InterruptedException {
 
+		String[] mazes = new String[3];
+		mazes[0] = "maze_1.txt";
+		mazes[1] = "maze_2.txt";
+		mazes[2] = "maze_bonus.txt";
+
 		// creation du jeu particulier et de son afficheur
-		PacmanGame game = new PacmanGame("helpFilePacman.txt", "maze_bonus.txt");
+		PacmanGame game = new PacmanGame("helpFilePacman.txt", mazes);
 		PacmanPainter painter = new PacmanPainter(game,500,500);
 		PacmanController controller = new PacmanController();
 
