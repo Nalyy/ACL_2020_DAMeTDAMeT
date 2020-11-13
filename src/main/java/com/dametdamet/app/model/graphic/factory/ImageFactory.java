@@ -109,7 +109,7 @@ public class ImageFactory {
                 if(!(ca.getNumSprite() >= empty.length))
                 return empty[ca.getNumSprite()];
                 break;
-            case TREASURE:
+            case STAIRS:
                 if(!(ca.getNumSprite() >= treasure.length))
                     return treasure[ca.getNumSprite()];
                 break;

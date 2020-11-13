@@ -13,7 +13,7 @@ public class App {
 	public static void main(String[] args) throws InterruptedException {
 
 		// creation du jeu particulier et de son afficheur
-		PacmanGame game = new PacmanGame("helpFilePacman.txt", "maze_sprint_1.txt");
+		PacmanGame game = new PacmanGame("helpFilePacman.txt", "maze_bonus.txt");
 		PacmanPainter painter = new PacmanPainter(game,500,500);
 		PacmanController controller = new PacmanController();
 

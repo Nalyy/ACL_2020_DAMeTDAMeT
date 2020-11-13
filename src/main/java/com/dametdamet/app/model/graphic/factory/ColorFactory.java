@@ -49,7 +49,7 @@ public enum ColorFactory {
                 return wallColor;
             case EMPTY:
                 return emptyColor;
-            case TREASURE:
+            case STAIRS:
                 return treasureColor;
             default:
                 return Color.green;
