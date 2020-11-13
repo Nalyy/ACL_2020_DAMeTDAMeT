@@ -1,11 +1,15 @@
 package com.dametdamet.app.model.maze;
 
+import com.dametdamet.app.model.PacmanGame;
+import com.dametdamet.app.model.entity.Entity;
+
 import java.util.Objects;
 import java.util.Random;
 
 public class Case {
     private final TypeCase type;
     private int numSprite;
+    private boolean pressed;
 
     /**
      * Crée une case de type donné avec le numéro de sprite donné
@@ -15,6 +19,7 @@ public class Case {
     public Case(TypeCase type,int numSprite){
         this.numSprite = numSprite;
         this.type = type;
+        this.pressed = false;
     }
 
     /**
@@ -24,6 +29,11 @@ public class Case {
     public Case(TypeCase type){
         this.type = type;
         this.numSprite = 0;
+        this.pressed = false;
+    }
+
+    public void applyEffect(PacmanGame game, Entity entity){
+
     }
 
     /**
@@ -42,6 +52,11 @@ public class Case {
         return type == aCase.type;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(type);
+    }
+
     public int getNumSprite() {
         return numSprite;
     }
@@ -50,8 +65,16 @@ public class Case {
         this.numSprite = numSprite;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(type);
+    public void setPressed(boolean pressed) {
+        this.pressed = pressed;
+        checkPressed();
+    }
+
+    private void checkPressed(){
+        numSprite = isPressed()?1:0;
+    }
+
+    public boolean isPressed() {
+        return pressed;
     }
 }

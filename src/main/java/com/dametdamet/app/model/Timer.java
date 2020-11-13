@@ -52,7 +52,6 @@ public class Timer {
      * @return le temps restant du timer en milliseconde
      */
     public long getTime(){
-
         return (timerTime - (System.currentTimeMillis() - startTime))< 0 ? 0:timerTime - (System.currentTimeMillis() - startTime);
     }
 

@@ -33,4 +33,8 @@ public abstract class Entity {
     public TypeEntity getType() {
         return type;
     }
+
+    public boolean isHero(){
+        return TypeEntity.HERO.equals(type);
+    }
 }

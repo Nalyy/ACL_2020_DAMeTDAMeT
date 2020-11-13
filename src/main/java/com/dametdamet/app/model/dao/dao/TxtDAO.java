@@ -5,6 +5,9 @@ import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.Case;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.magicCase.Heal;
+import com.dametdamet.app.model.maze.magicCase.SpawnerChest;
+import com.dametdamet.app.model.maze.magicCase.Time;
 
 import java.io.*;
 import java.net.URL;
@@ -16,8 +19,17 @@ public enum TxtDAO implements AbstractFileDAO {
 
     INSTANCE;
 
+    private static final char EMPTY = '0';
+    private static final char WALL = '1';
+    private static final char STAIRS = '2';
+
     private static final char POS_JOUEUR = 'X';
     private static final char POS_MONSTRE = 'Y';
+
+    private static final char HEAL = 'H';
+    private static final char TIME = 'T';
+    private static final char SPAWNER_CHEST = 'C';
+    private static final char POS_CHEST = 'B';
 
     @Override
     public Maze load(String nomFichier) {
@@ -125,17 +137,27 @@ public enum TxtDAO implements AbstractFileDAO {
                         maze.addInitialMonsterPosition(new Position(x, y));
                         laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
-                    default:
-                        switch (TypeCase.getValueOf((char) c)){
-                            case EMPTY:
-                                laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG)); // On demande à quoi correspond le caractère à TypeCase
-                                break;
-                            case WALL:
-                                laby[x][y] = new Case(TypeCase.WALL,randomGenerator.nextInt(ImageFactory.NB_WALL_IMG)); // On demande à quoi correspond le caractère à TypeCase
-                                break;
-                            default:
-                                laby[x][y] = new Case(TypeCase.getValueOf((char) c)); // On demande à quoi correspond le caractère à TypeCase
-                        }
+                    case EMPTY:
+                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        break;
+                    case WALL:
+                        laby[x][y] = new Case(TypeCase.WALL,randomGenerator.nextInt(ImageFactory.NB_WALL_IMG));
+                        break;
+                    case STAIRS:
+                        laby[x][y] = new Case(TypeCase.STAIRS);
+                        break;
+                    case HEAL:
+                        laby[x][y] = new Heal();
+                        break;
+                    case TIME:
+                        laby[x][y] = new Time();
+                        break;
+                    case SPAWNER_CHEST:
+                        laby[x][y] = new SpawnerChest();
+                        break;
+                    case POS_CHEST:
+                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        maze.addNewPositionChest(new Position(x, y));
                         break;
                 }
                 x++;

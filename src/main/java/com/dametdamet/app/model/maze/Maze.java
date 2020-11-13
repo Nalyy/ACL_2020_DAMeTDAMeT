@@ -1,11 +1,9 @@
 package com.dametdamet.app.model.maze;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.maze.magicCase.Treasure;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 public class Maze{
     private Case[][] maze;
@@ -16,12 +14,15 @@ public class Maze{
     private Position initialPositionPlayer;
     private Collection<Position> initialPositionMonster;
 
+    private Stack<Position> positionBonusChest;
+
     /**
      * Initialise un Maze vide
      */
     public Maze(){
         maze = new Case[DEFAULT_WIDTH][DEFAULT_HEIGHT];
         initialPositionMonster = new ArrayList<>();
+        positionBonusChest = new Stack<>();
         generate();
         this.setInitialPositionPlayer(new Position(0,0));
     }
@@ -33,9 +34,9 @@ public class Maze{
      */
     public Maze(int width, int height){
         maze = new Case[width][height];
-        initialPositionPlayer = new Position(0,0);
         initialPositionMonster = new ArrayList<>();
         generate();
+        this.setInitialPositionPlayer(new Position(0,0));
     }
 
     /**
@@ -102,22 +103,6 @@ public class Maze{
     }
 
     /**
-     * Génère des positions aléatoire pour un certain nombre de monstres
-     * @param nbMonstres le nombre de monstres à générer dans le maze
-     */
-    private void generateInitialPositionMonster(int nbMonstres){
-        Random randomGenerator = new Random();
-        for (int i = 0; i < nbMonstres; i++) {
-            // On génère les positions initiales aléatoirement
-            // Formule du random : int nombreAleatoire = rand.nextInt(max - min + 1) + min;
-            initialPositionMonster.add(
-                    new Position(
-                            randomGenerator.nextInt(this.getWidth()),
-                            randomGenerator.nextInt(this.getHeight())));
-        }
-    }
-
-    /**
      * Retourne le type de la case à la position donnée.
      * @param position position de la case que l'on cherche
      * @return la case correspondante
@@ -147,5 +132,26 @@ public class Maze{
      */
     public boolean isNotOutOfBound(Position position){
         return whatIsIn(position).getType() != TypeCase.OUTOFBOUND;
+    }
+
+    public void addNewPositionChest(Position posChest){
+        this.positionBonusChest.add(posChest);
+        Collections.shuffle(positionBonusChest); // On mélange la liste pour ne pas faire apparaitre en ligne
+    }
+
+    public void addNewChest() {
+        Position pos;
+        if(positionBonusChest.size() == 0){
+            Random rand = new Random();
+            do{
+                pos = new Position(rand.nextInt()%getWidth(),rand.nextInt()%getHeight());
+            }while (isNotWall(pos));
+            maze[pos.getX()][pos.getY()] = new Treasure();
+        }else{
+            pos = positionBonusChest.pop();
+            if(this.isNotWall(pos)){
+                maze[pos.getX()][pos.getY()] = new Treasure();
+            }
+        }
     }
 }

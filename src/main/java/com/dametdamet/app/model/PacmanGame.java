@@ -103,6 +103,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		}
 	}
 
+	public void healHero(int amount){
+		hero.gainHP(amount);
+	}
+
 	/**
 	 * faire evoluer le jeu suite a une commande
 	 * 
@@ -139,14 +143,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			if (maze.isNotWall(targetPosHero)) {
 				hero.moveTo(targetPosHero);
+				maze.whatIsIn(hero.getPosition()).applyEffect(this, hero);
 
-				if (maze.whatIsIn(targetPosHero).getType().equals(TypeCase.TREASURE)){
+				if (maze.whatIsIn(hero.getPosition()).getType().equals(TypeCase.STAIRS)){
 					setWon();
 					return ; // pas besoin de bouger les monstres si le héros a gagné
 				}
 			}
-
-
 		}
 
 		// Monstres
@@ -205,6 +208,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
 			monster.moveTo(targetPosition);
+			maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
 
 			// Test collision avec le héro
 			if (targetPosition.equals(heroPosition)) {
@@ -339,5 +343,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 	public void addScore(int scoreToAdd){
 		score += scoreToAdd;
+	}
+
+	public void addTime(int amountTimeInMs) {
+		gameTimer.top(gameTimer.getTime() + amountTimeInMs);
+	}
+
+	public void spawnNewChest() {
+		maze.addNewChest();
 	}
 }
