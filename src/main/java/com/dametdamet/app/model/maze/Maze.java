@@ -1,6 +1,8 @@
 package com.dametdamet.app.model.maze;
 
+import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.magicCase.Treasure;
 
 import java.util.*;
@@ -15,6 +17,7 @@ public class Maze{
     private Collection<Position> initialPositionMonster;
 
     private Stack<Position> positionBonusChest;
+    private List<Position> positionMonsters;
 
     /**
      * Initialise un Maze vide
@@ -23,6 +26,7 @@ public class Maze{
         maze = new Case[DEFAULT_WIDTH][DEFAULT_HEIGHT];
         initialPositionMonster = new ArrayList<>();
         positionBonusChest = new Stack<>();
+        positionMonsters = new ArrayList<>();
         generate();
         this.setInitialPositionPlayer(new Position(0,0));
     }
@@ -137,6 +141,31 @@ public class Maze{
     public void addNewPositionChest(Position posChest){
         this.positionBonusChest.add(posChest);
         Collections.shuffle(positionBonusChest); // On mélange la liste pour ne pas faire apparaitre en ligne
+    }
+
+    public void addNewPositionMonster(Position position){
+        this.positionMonsters.add(position);
+        Collections.shuffle(positionMonsters);
+    }
+
+    public void addNewMonster(PacmanGame pacmanGame){
+        Position position = getAMonsterPosition(positionMonsters.size());
+        pacmanGame.addMonster(position);
+    }
+
+    private Position getAMonsterPosition(int sizeOfCollection){
+        Position position;
+
+        if (sizeOfCollection == 0 ){
+            Random rand = new Random();
+            do{
+                position = new Position(rand.nextInt()%getWidth(),rand.nextInt()%getHeight());
+            }while (isNotWall(position));
+        }else {
+            position = positionMonsters.get(0);
+        }
+
+        return position;
     }
 
     public void addNewChest() {

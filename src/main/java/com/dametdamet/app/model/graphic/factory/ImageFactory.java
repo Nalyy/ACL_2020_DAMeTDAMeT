@@ -39,6 +39,8 @@ public class ImageFactory {
     private final BufferedImage[] empty;
     private final BufferedImage[] treasure;
     private final BufferedImage[] wall;
+    private final BufferedImage special;
+    private final BufferedImage stairs;
 
     private final BufferedImage entityNotFound;
     private final BufferedImage hero;
@@ -62,6 +64,12 @@ public class ImageFactory {
         for(int i = 1;i < NB_TREASURE_IMG + 1;i++){
             treasure[i - 1] = ImageIO.read(getClass().getResourceAsStream((CASE_PATH+"/treasure" + (i<10 ? "0":"") + i + ".png")));
         }
+
+        // image STAIRS
+        stairs = ImageIO.read(getClass().getResource(CASE_PATH+"/stairs.png"));
+
+        // image SPECIAL
+        special = ImageIO.read(getClass().getResource(CASE_PATH+"/specialcase.png"));
 
         //images WALL
         for(int i = 1;i < NB_WALL_IMG + 1;i++){
@@ -110,13 +118,19 @@ public class ImageFactory {
                 return empty[ca.getNumSprite()];
                 break;
             case STAIRS:
-                if(!(ca.getNumSprite() >= treasure.length))
-                    return treasure[ca.getNumSprite()];
-                break;
+                return stairs;
+            case BONUS:
+                return treasure[1];
             case WALL:
                 if(!(ca.getNumSprite() >= wall.length))
                     return wall[ca.getNumSprite()];
                 break;
+            case SPAWNER_CHEST:
+            case SPAWNER_MONSTERS:
+            case DAMAGE:
+            case HEAL:
+            case TIME:
+                return special;
             default:
                 break;
         }

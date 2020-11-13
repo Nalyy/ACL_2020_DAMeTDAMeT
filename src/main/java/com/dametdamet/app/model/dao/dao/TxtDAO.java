@@ -8,6 +8,8 @@ import com.dametdamet.app.model.maze.TypeCase;
 import com.dametdamet.app.model.maze.magicCase.Heal;
 import com.dametdamet.app.model.maze.magicCase.SpawnerChest;
 import com.dametdamet.app.model.maze.magicCase.Time;
+import com.dametdamet.app.model.maze.trapCases.Damage;
+import com.dametdamet.app.model.maze.trapCases.SpawnerMonster;
 
 import java.io.*;
 import java.net.URL;
@@ -30,6 +32,11 @@ public enum TxtDAO implements AbstractFileDAO {
     private static final char TIME = 'T';
     private static final char SPAWNER_CHEST = 'C';
     private static final char POS_CHEST = 'B';
+
+    private static final char DAMAGE = 'D';
+
+    private static final char SPAWNER_MONSTERS = 'S';
+    private static final char POS_MONSTERS = 'M';
 
     @Override
     public Maze load(String nomFichier) {
@@ -156,9 +163,18 @@ public enum TxtDAO implements AbstractFileDAO {
                         laby[x][y] = new SpawnerChest();
                         break;
                     case POS_CHEST:
-                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        laby[x][y] = new Case(TypeCase.EMPTY, randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         maze.addNewPositionChest(new Position(x, y));
                         break;
+                    case DAMAGE:
+                        laby[x][y] = new Damage(TypeCase.DAMAGE);
+                        break;
+                    case SPAWNER_MONSTERS:
+                        laby[x][y] = new SpawnerMonster(TypeCase.SPAWNER_MONSTERS);
+                        break;
+                    case POS_MONSTERS:
+                        laby[x][y] = new Case(TypeCase.EMPTY,  randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        maze.addNewPositionMonster(new Position(x, y));
                 }
                 x++;
             }

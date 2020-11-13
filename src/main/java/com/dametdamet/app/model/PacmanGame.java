@@ -97,16 +97,17 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	public void goToNextLevel(){
 		nbLevel++;
 
+		// On ajoute le score de passage de niveau
+		addScore(nbLevel * 1000);
+
 		// Si c'était le dernier labyrinthe, on arrête le jeu
 		if (nbLevel >= NB_MAZES){
 			setWon();
+
 		}else {
 			// On charge le prochain labyrinthe
 			fileName = filesNames[nbLevel];
 			loadMaze();
-
-			// On ajoute le score de passage de niveau
-			addScore(nbLevel * 1000);
 
 			// On s'occupe des monstres et des héros
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
@@ -114,7 +115,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			addMonsters();
 		}
 	}
-
 
 	private void loadMaze(){
 		if(fileName != null && !fileName.equals(""))
@@ -141,6 +141,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 	public void healHero(int amount){
 		hero.gainHP(amount);
+	}
+
+	public void hurtHero(int amount){
+		hero.loseHP(amount);
 	}
 
 	/**
@@ -387,5 +391,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 	public void spawnNewChest() {
 		maze.addNewChest();
+	}
+
+	public void spawnNewMonster(){
+		maze.addNewMonster(this);
+	}
+
+	public void addMonster(Position position){
+		Monster monster = new Monster(position, RandomMove.INSTANCE);
+		monsters.add(monster);
 	}
 }
