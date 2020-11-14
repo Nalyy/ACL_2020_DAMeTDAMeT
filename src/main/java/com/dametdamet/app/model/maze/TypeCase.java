@@ -12,6 +12,6 @@ public enum TypeCase {
     BONUS,             // B, conséquence de case magique : un coffre bonus peut y apparaître
     DAMAGE,            // D, case piège : blesse le héros
     SPAWNER_MONSTERS,  // S, case piège : fait apparaître un monstre
-    MONSTER_SPAWN;     // M, conséquence de case piège : un monstre peut y appaître
-    // nom case TP     // P, // description
+    MONSTER_SPAWN,     // M, conséquence de case piège : un monstre peut y appaître
+    TELEPORTATION     // P, case de téléportation : téléporte une entité sur l'autre case du même type
 }

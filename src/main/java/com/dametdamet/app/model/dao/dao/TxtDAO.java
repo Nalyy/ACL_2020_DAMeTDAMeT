@@ -4,6 +4,7 @@ import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.Case;
 import com.dametdamet.app.model.maze.Maze;
+import com.dametdamet.app.model.maze.Teleportation;
 import com.dametdamet.app.model.maze.TypeCase;
 import com.dametdamet.app.model.maze.magicCase.Heal;
 import com.dametdamet.app.model.maze.magicCase.SpawnerChest;
@@ -14,6 +15,7 @@ import com.dametdamet.app.model.maze.trapCases.SpawnerMonster;
 import java.io.*;
 import java.net.URL;
 import java.rmi.server.ExportException;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -37,6 +39,8 @@ public enum TxtDAO implements AbstractFileDAO {
 
     private static final char SPAWNER_MONSTERS = 'S';
     private static final char POS_MONSTERS = 'M';
+
+    private static final char TELEPORTATION = 'P';
 
     @Override
     public Maze load(String nomFichier) {
@@ -115,6 +119,7 @@ public enum TxtDAO implements AbstractFileDAO {
         // On commence la construction du labyrinthe
         Random randomGenerator = new Random();
         Case[][] laby = new Case[width][height];
+        ArrayList<Position> casesTP = new ArrayList<>();
         int c;
 
         Maze maze = new Maze();
@@ -175,8 +180,25 @@ public enum TxtDAO implements AbstractFileDAO {
                     case POS_MONSTERS:
                         laby[x][y] = new Case(TypeCase.EMPTY,  randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         maze.addNewPositionMonster(new Position(x, y));
+                        break;
+                    case TELEPORTATION:
+                        if (casesTP.size() < 2) {
+                            casesTP.add(new Position(x, y));
+                        } else {
+                            laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        }
                 }
                 x++;
+            }
+        }
+
+        if (casesTP.size() == 1) {
+            Position p = casesTP.get(0);
+            laby[p.getX()][p.getY()] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+        } else {
+            for (Position p : casesTP) {
+                laby[p.getX()][p.getY()] = new Teleportation();
+                maze.addTeleportation(p);
             }
         }
 

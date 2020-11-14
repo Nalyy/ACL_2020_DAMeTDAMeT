@@ -285,6 +285,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	/**
+	 * Téléporte le héro ou un monstre vers l'autre case de téléportation
+	 * @param entity l'entité à téléporter
+	 */
+	public void teleport(Entity entity) {
+		System.out.println("On est là!!");
+	}
+
+	/**
 	 * Indiquer si le jeu est fini
 	 */
 	private void setFinished(boolean b){

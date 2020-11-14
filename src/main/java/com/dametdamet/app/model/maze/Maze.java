@@ -19,6 +19,8 @@ public class Maze{
     private Stack<Position> positionBonusChest;
     private List<Position> positionMonsters;
 
+    private List<Position> positionTeleporters;
+
     /**
      * Initialise un Maze vide
      */
@@ -27,6 +29,7 @@ public class Maze{
         initialPositionMonster = new ArrayList<>();
         positionBonusChest = new Stack<>();
         positionMonsters = new ArrayList<>();
+        positionTeleporters = new ArrayList<>();
         generate();
         this.setInitialPositionPlayer(new Position(0,0));
     }
@@ -146,6 +149,10 @@ public class Maze{
     public void addNewPositionMonster(Position position){
         this.positionMonsters.add(position);
         Collections.shuffle(positionMonsters);
+    }
+
+    public void addTeleportation(Position position) {
+        this.positionTeleporters.add(position);
     }
 
     public void addNewMonster(PacmanGame pacmanGame){
