@@ -175,6 +175,14 @@ public class Maze{
         return position;
     }
 
+    public Position getOtherTeleporter(Position p) {
+        if (p.equals(positionTeleporters.get(0))) {
+            return positionTeleporters.get(1);
+        } else {
+            return positionTeleporters.get(0);
+        }
+    }
+
     public void addNewChest() {
         Position pos;
         if(positionBonusChest.size() == 0){

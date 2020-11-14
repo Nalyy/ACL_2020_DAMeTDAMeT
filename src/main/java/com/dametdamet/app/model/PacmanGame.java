@@ -289,7 +289,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 * @param entity l'entité à téléporter
 	 */
 	public void teleport(Entity entity) {
-		System.out.println("On est là!!");
+		entity.moveTo(maze.getOtherTeleporter(entity.getPosition()));
 	}
 
 	/**
