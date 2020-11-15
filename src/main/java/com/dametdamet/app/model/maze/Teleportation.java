@@ -18,4 +18,8 @@ public class Teleportation extends Case {
         super.applyEffect(game, entity);
         entity.moveTo(destination);
     }
+
+    public Position getDestination(){
+        return destination;
+    }
 }
