@@ -248,7 +248,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
 			monster.moveTo(targetPosition);
-			maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
+			if (!nextCommand.equals(Command.IDLE)) {
+				maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
+			}
 
 			// Test collision avec le héro
 			if (targetPosition.equals(heroPosition)) {
@@ -282,14 +284,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 				break;
 		}
 		return new Position(x, y);
-	}
-
-	/**
-	 * Téléporte le héro ou un monstre vers l'autre case de téléportation
-	 * @param entity l'entité à téléporter
-	 */
-	public void teleport(Entity entity) {
-		entity.moveTo(maze.getOtherTeleporter(entity.getPosition()));
 	}
 
 	/**

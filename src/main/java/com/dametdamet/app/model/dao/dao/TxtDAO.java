@@ -119,7 +119,8 @@ public enum TxtDAO implements AbstractFileDAO {
         // On commence la construction du labyrinthe
         Random randomGenerator = new Random();
         Case[][] laby = new Case[width][height];
-        ArrayList<Position> casesTP = new ArrayList<>();
+        Position teleportation = null;
+        boolean isTPSet = false;
         int c;
 
         Maze maze = new Maze();
@@ -182,24 +183,26 @@ public enum TxtDAO implements AbstractFileDAO {
                         maze.addNewPositionMonster(new Position(x, y));
                         break;
                     case TELEPORTATION:
-                        if (casesTP.size() < 2) {
-                            casesTP.add(new Position(x, y));
+                        if (teleportation == null) {
+                            // on a une première case de téléportation
+                            teleportation = new Position(x, y);
+                        } else if (!isTPSet) {
+                            // si on a déjà une première case de téléportation, on peut créer la paire
+                            laby[teleportation.getX()][teleportation.getY()] = new Teleportation(new Position(x, y));
+                            laby[x][y] = new Teleportation(teleportation);
+                            isTPSet = true;
                         } else {
-                            laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                            // si on a déjà deux cases de téléportation (le maximum), on ignore les suivantes et on met une case vide
+                            laby[x][y] = new Case(TypeCase.EMPTY,  randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         }
                 }
                 x++;
             }
         }
 
-        if (casesTP.size() == 1) {
-            Position p = casesTP.get(0);
-            laby[p.getX()][p.getY()] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
-        } else {
-            for (Position p : casesTP) {
-                laby[p.getX()][p.getY()] = new Teleportation();
-                maze.addTeleportation(p);
-            }
+        // si on n'a qu'une seule case de téléportation, on met une case vide
+        if (teleportation != null && !isTPSet) {
+            laby[teleportation.getX()][teleportation.getY()] = new Case(TypeCase.EMPTY, randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
         }
 
         while(y < height && laby[0][y] == null){ // Gestion du bug quand une ligne n'est pas initialisée
