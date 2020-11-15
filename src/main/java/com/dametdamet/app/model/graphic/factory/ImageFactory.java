@@ -41,6 +41,7 @@ public class ImageFactory {
     private final BufferedImage[] wall;
     private final BufferedImage special;
     private final BufferedImage stairs;
+    private final BufferedImage teleportation;
 
     private final BufferedImage entityNotFound;
     private final BufferedImage hero;
@@ -70,6 +71,9 @@ public class ImageFactory {
 
         // image SPECIAL
         special = ImageIO.read(getClass().getResource(CASE_PATH+"/specialcase.png"));
+
+        // image TELEPORTATION
+        teleportation = ImageIO.read(getClass().getResource(CASE_PATH+"/caseTP.png"));
 
         //images WALL
         for(int i = 1;i < NB_WALL_IMG + 1;i++){
@@ -125,6 +129,8 @@ public class ImageFactory {
                 if(!(ca.getNumSprite() >= wall.length))
                     return wall[ca.getNumSprite()];
                 break;
+            case TELEPORTATION:
+                return teleportation;
             case SPAWNER_CHEST:
             case SPAWNER_MONSTERS:
             case DAMAGE:
