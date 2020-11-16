@@ -143,11 +143,20 @@ public class Maze{
         Collections.shuffle(positionBonusChest); // On mélange la liste pour ne pas faire apparaitre en ligne
     }
 
+    /**
+     * Ajoute une nouvelle position où un monstre peut apparaître dans le labyrinthe.
+     *
+     * @param position une position possible où un monstre peut apparaître
+     */
     public void addNewPositionMonster(Position position){
         this.positionMonsters.add(position);
-        Collections.shuffle(positionMonsters);
     }
 
+    /**
+     * Ajoute un monstre dans le monde s'il a un endroit où apparaître.
+     *
+     * @param pacmanGame le jeu qui possède le labyrinthe et qui accueillera peut-être un monstre supplémentaire
+     */
     public void addNewMonster(PacmanGame pacmanGame){
         Position position = getAMonsterPosition(positionMonsters.size());
         if (position!= null){
@@ -156,30 +165,56 @@ public class Maze{
 
     }
 
+    /**
+     * @return la position d'une case vide dans le labyrinthe
+     */
+    private Position getAnEmptyCase(){
+        Position position = new Position(0, 0);
+        Stack<Position> emptyTiles = new Stack<>();
+
+        /* On commence par construire la liste des cases vides du labyrinthe */
+        for (int i = 0; i < getWidth() ; i++){
+            for (int j = 0; j < getHeight(); j++){
+                position.setX(i);
+                position.setX(j);
+
+                Case tile = whatIsIn(position);
+
+                if (tile.getType().equals(TypeCase.EMPTY)){
+                    emptyTiles.push(new Position(position));
+                }
+            }
+        }
+
+        /* S'il n'y avait aucune case vide */
+        if (emptyTiles.size() == 0){
+            position = null;
+        }else {
+            /* On mélange la collection pour retourner une case vide aléatoire */
+            Collections.shuffle(emptyTiles);
+            position = emptyTiles.pop();
+        }
+
+        return position;
+    }
+
+    /**
+     * Donne une position valide et possiblement aléatoire pour qu'un monstre apparaisse dans le labyrinthe.
+     *
+     * @param sizeOfCollection : taille de la collection des positions des monstres
+     * @return une position où le monstre peut apparaître
+     */
     private Position getAMonsterPosition(int sizeOfCollection){
         Position position;
 
         /* Si il n'y a pas de positions données pour le spawn de monstres,
-        * on prend une position aléatoire dans le labyrinthe. */
+        * on prend une case vide aléatoire dans le labyrinthe. */
         if (sizeOfCollection == 0 ){
-            Random rand = new Random();
-            int numberOfTiles = getWidth() * getHeight();
-            int i = 0;
+            position = getAnEmptyCase();
 
-            /* On cherche une position tant qu'il y a encore des positions à tester. */
-            do{
-                i++;
-                position = new Position(rand.nextInt()%getWidth(),rand.nextInt()%getHeight());
-                System.out.println(i);
-            }while (!isNotWall(position) && i<numberOfTiles);
-
-            /* Si on est sortis de la boucle parce qu'il n'y a plus de positions
-            *  à tester et rien n'est correct, alors il n'y a pas de positions
-            *  pour le monstre. */
-            if (i >= numberOfTiles){
-                position = null;
-            }
+        /* Sinon, on en prend une aléatoirement dans la liste. */
         }else {
+            Collections.shuffle(positionMonsters);
             position = positionMonsters.get(0);
         }
 
