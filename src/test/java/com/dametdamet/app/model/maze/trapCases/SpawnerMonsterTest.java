@@ -39,11 +39,14 @@ class SpawnerMonsterTest {
         game = new PacmanGame("helpFilePacman.txt", mazes);
 
         spawnerMonster.applyEffect(game,game.getHero());
+        int nbMonster = 0;
+        int nbMonsterExpected = 1;
 
         for (Entity entity:game) {
-            System.out.println();
+            nbMonster++;
             assertEquals(new Position(1,1),entity.getPosition());
         }
+        assertEquals(nbMonsterExpected,nbMonster);
     }
 
     @Test
@@ -53,12 +56,22 @@ class SpawnerMonsterTest {
         mazes[0]= "maze_spawnerMonster_2.txt";
         game = new PacmanGame("helpFilePacman.txt", mazes);
 
-        spawnerMonster.applyEffect(game,game.getHero());
+        int nbMonsterExpected = 10;
+
+
+        for (int i = 0; i < nbMonsterExpected ; i ++){
+            spawnerMonster.applyEffect(game,game.getHero());
+            spawnerMonster = new SpawnerMonster(TypeCase.SPAWNER_MONSTERS);
+        }
+
+        int nbMonster = 0;
 
         for (Entity entity:game) {
-            System.out.println(entity.getPosition());
+            nbMonster++;
             assertEquals(new Position(0,0),entity.getPosition());
         }
+
+        assertEquals(nbMonsterExpected,nbMonster);
     }
 
     @Test

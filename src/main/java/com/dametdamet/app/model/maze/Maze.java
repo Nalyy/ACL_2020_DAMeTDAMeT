@@ -170,7 +170,6 @@ public class Maze{
             do{
                 i++;
                 position = new Position(rand.nextInt()%getWidth(),rand.nextInt()%getHeight());
-                System.out.println(i);
             }while (!isNotWall(position) && i<numberOfTiles);
 
             /* Si on est sortis de la boucle parce qu'il n'y a plus de positions
