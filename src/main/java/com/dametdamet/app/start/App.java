@@ -15,7 +15,7 @@ public class App {
 	public static void main(String[] args) throws InterruptedException {
 
 		String[] mazes = new String[1];
-		mazes[0]= "maze_tp.txt";
+		mazes[0] = "maze_1.txt";
 
 		// creation du jeu particulier et de son afficheur
 		PacmanGame game = new PacmanGame("helpFilePacman.txt", mazes);

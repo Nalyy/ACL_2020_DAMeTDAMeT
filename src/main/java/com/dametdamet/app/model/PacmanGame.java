@@ -164,7 +164,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		Il ne faut pas que le reste du jeu tourne si on est en pause ou si le jeu est fini, donc on return
 		/!\ Il faut bien que cette vérification soit faite APRÈS le check de la commande
 		 */
-		if (isPaused() || isFinished() || isWon()){
+		if (isPaused() || isFinished() || isWon() || isClosed()){
 			return;
 		}
 
@@ -219,6 +219,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 		// Si le jeu est déjà en pause, on le lance, sinon on met le jeu en pause
 		if (command == Command.PAUSE){
+			/* Rien ne se passe si le jeu est dans un autre état que ONGOING*/
+			if (isWon() || isFinished() || isClosed()){
+				return;
+			}
 			if(isPaused()){
 				state = GameState.ONGOING;
 				gameTimer.continueTimer();
