@@ -185,10 +185,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 				hero.moveTo(targetPosHero);
 				maze.whatIsIn(hero.getPosition()).applyEffect(this, hero);
 
-				if (maze.whatIsIn(hero.getPosition()).getType().equals(TypeCase.STAIRS)){
-					goToNextLevel();
-					return ; // pas besoin de bouger les monstres si le héros a gagné
-				}
 			}
 		}
 

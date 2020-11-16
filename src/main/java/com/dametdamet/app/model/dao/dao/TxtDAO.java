@@ -2,10 +2,7 @@ package com.dametdamet.app.model.dao.dao;
 
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
-import com.dametdamet.app.model.maze.Case;
-import com.dametdamet.app.model.maze.Maze;
-import com.dametdamet.app.model.maze.Teleportation;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.*;
 import com.dametdamet.app.model.maze.magicCase.Heal;
 import com.dametdamet.app.model.maze.magicCase.SpawnerChest;
 import com.dametdamet.app.model.maze.magicCase.Time;
@@ -157,7 +154,7 @@ public enum TxtDAO implements AbstractFileDAO {
                         laby[x][y] = new Case(TypeCase.WALL,randomGenerator.nextInt(ImageFactory.NB_WALL_IMG));
                         break;
                     case STAIRS:
-                        laby[x][y] = new Case(TypeCase.STAIRS);
+                        laby[x][y] = new Stairs();
                         break;
                     case HEAL:
                         laby[x][y] = new Heal();
