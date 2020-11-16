@@ -2,7 +2,10 @@ package com.dametdamet.app.model;
 
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.Hero;
+import com.dametdamet.app.model.entity.monster.Monster;
+import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.Maze;
+import com.dametdamet.app.model.maze.Stairs;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,12 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StairsTest {
 
     private PacmanGame game;
+    private Stairs stairs;
 
     private void loadGame() {
         String[] mazes = new String[2];
         mazes[0] = "stairs_maze/maze_1_stair.txt";
         mazes[1] = "stairs_maze/maze_2_stairs.txt";
         this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
     }
 
     /**
@@ -26,7 +31,7 @@ public class StairsTest {
         loadGame();
         Maze firstMaze = game.getMaze();
 
-        game.goToNextLevel();
+        stairs.applyEffect(game, game.getHero());
         Maze newMaze = game.getMaze();
 
         assertNotEquals(newMaze, firstMaze);
@@ -42,12 +47,13 @@ public class StairsTest {
         mazes[1] = "stairs_maze/maze_1_stair.txt";
         mazes[2] = "stairs_maze/maze_1_stair.txt";
         this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
 
         int prevScore = game.getScore();
-        game.goToNextLevel();
+        stairs.applyEffect(game, game.getHero());
         assertEquals(prevScore + 1000, game.getScore());
         prevScore = game.getScore();
-        game.goToNextLevel();
+        stairs.applyEffect(game, game.getHero());
         assertEquals(prevScore + 2 * 1000, game.getScore());
     }
 
@@ -57,8 +63,8 @@ public class StairsTest {
     @Test
     public void testGameEnds() {
         loadGame();
-        game.goToNextLevel();
-        game.goToNextLevel();
+        stairs.applyEffect(game, game.getHero());
+        stairs.applyEffect(game, game.getHero());
         assertTrue(game.isWon());
     }
 
@@ -68,7 +74,7 @@ public class StairsTest {
     @Test
     public void testReInitPositionHero() {
         loadGame();
-        game.goToNextLevel();
+        stairs.applyEffect(game, game.getHero());
         Position posHero = game.getHero().getPosition();
         Position initPosHero = game.getMaze().getInitialPositionPlayer();
         assertEquals(initPosHero, posHero);
@@ -80,15 +86,16 @@ public class StairsTest {
     @Test
     public void testMonstersChange(){
         String[] mazes = new String[2];
-        mazes[0] = "maze_monstres_1.txt";
-        mazes[1] = "maze_monstres_2.txt";
+        mazes[0] = "stairs_maze/maze_1_stair.txt";
+        mazes[1] = "maze_monstres_1.txt";
         this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
 
         int cptFirstMaze = 0;
         for (Entity entity : game) {
             cptFirstMaze ++;
         }
-        game.goToNextLevel();
+        stairs.applyEffect(game, game.getHero());
         int cptNewMaze = 0;
         for (Entity entity : game) {
             cptNewMaze ++;
@@ -104,7 +111,7 @@ public class StairsTest {
     public void testNoTimerChange() {
         loadGame();
         int prevTime = game.getGameTimer();
-        game.goToNextLevel();
+        stairs.applyEffect(game, game.getHero());
         assertTrue(prevTime >= game.getGameTimer());
     }
 
@@ -116,19 +123,40 @@ public class StairsTest {
         loadGame();
         Hero prevHero = (Hero) game.getHero();
         int prevPV = prevHero.getHP();
-        game.goToNextLevel();
+        stairs.applyEffect(game, prevHero);
         Hero newHero = (Hero) game.getHero();
         assertEquals(prevPV, newHero.getHP());
     }
 
     /**
-     * Il n'y a pas d'erreur si le jeu n'a pas de labyrinthe.
+     * La case ne s'active pas si l'entité marchant dessus est un monstre.
      */
     @Test
-    public void testNoMazeNoFail() {
-        String[] mazes = new String[0];
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
-        game.goToNextLevel();
-        assertTrue(game.isWon());
+    public void testDeadIfMonster() {
+        loadGame();
+        Monster monster = new Monster(game.getMaze().getInitialPositionPlayer(), RandomMove.INSTANCE);
+        Maze prevMaze = game.getMaze();
+        assertEquals(prevMaze, game.getMaze());
+        stairs.applyEffect(game, monster);
+
+        assertEquals(prevMaze, game.getMaze());
+    }
+
+    /**
+     * La case renvoie une exception si le jeu PacmanGame est null.
+     */
+    @Test
+    public void testNullGame() {
+        Hero hero = new Hero(new Position(1, 1), 3);
+        assertThrows(NullPointerException.class, () -> stairs.applyEffect(null, hero));
+    }
+
+    /**
+     * La classe renvoie une exception si le héro est null.
+     */
+    @Test
+    public void testNullHero() {
+        loadGame();
+        assertThrows(NullPointerException.class, () -> stairs.applyEffect(game, null));
     }
 }
