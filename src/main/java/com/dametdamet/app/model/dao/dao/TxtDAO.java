@@ -176,7 +176,7 @@ public enum TxtDAO implements AbstractFileDAO {
                         laby[x][y] = new Damage();
                         break;
                     case SPAWNER_MONSTERS:
-                        laby[x][y] = new SpawnerMonster(TypeCase.SPAWNER_MONSTERS);
+                        laby[x][y] = new SpawnerMonster();
                         break;
                     case POS_MONSTERS:
                         laby[x][y] = new Case(TypeCase.EMPTY,  randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));

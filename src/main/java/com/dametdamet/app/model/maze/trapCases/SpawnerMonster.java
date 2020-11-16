@@ -7,8 +7,8 @@ import com.dametdamet.app.model.maze.TypeCase;
 
 public class SpawnerMonster extends Case {
 
-    public SpawnerMonster(TypeCase type) {
-        super(type);
+    public SpawnerMonster() {
+        super(TypeCase.SPAWNER_MONSTERS);
     }
 
     @Override

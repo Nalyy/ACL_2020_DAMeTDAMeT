@@ -21,7 +21,7 @@ class SpawnerMonsterTest {
 
     @BeforeEach
     void setUp() {
-        spawnerMonster = new SpawnerMonster(TypeCase.SPAWNER_MONSTERS);
+        spawnerMonster = new SpawnerMonster();
     }
 
     @AfterEach
@@ -51,17 +51,15 @@ class SpawnerMonsterTest {
 
     @Test
     void testRight2(){
-
         String[] mazes = new String[1];
         mazes[0]= "maze_spawnerMonster_2.txt";
         game = new PacmanGame("helpFilePacman.txt", mazes);
 
         int nbMonsterExpected = 10;
 
-
         for (int i = 0; i < nbMonsterExpected ; i ++){
             spawnerMonster.applyEffect(game,game.getHero());
-            spawnerMonster = new SpawnerMonster(TypeCase.SPAWNER_MONSTERS);
+            spawnerMonster = new SpawnerMonster();
         }
 
         int nbMonster = 0;
