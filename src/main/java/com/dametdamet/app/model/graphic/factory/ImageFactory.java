@@ -18,6 +18,7 @@ public class ImageFactory {
 
     public final static int NB_EMPTY_IMG = 14;
     public final static int NB_TREASURE_IMG = 2;
+    public final static int NB_SPECIAL_IMG = 2;
     public final static int NB_WALL_IMG = 5;
     private final static String PATH = "/images";
     private final static String CASE_PATH = PATH + "/case";
@@ -39,7 +40,7 @@ public class ImageFactory {
     private final BufferedImage[] empty;
     private final BufferedImage[] treasure;
     private final BufferedImage[] wall;
-    private final BufferedImage special;
+    private final BufferedImage[] special;
     private final BufferedImage stairs;
     private final BufferedImage teleportation;
 
@@ -55,6 +56,7 @@ public class ImageFactory {
         empty = new BufferedImage[NB_EMPTY_IMG];
         treasure = new BufferedImage[NB_TREASURE_IMG];
         wall = new BufferedImage[NB_WALL_IMG];
+        special = new BufferedImage[NB_SPECIAL_IMG];
 
         /// RÉCUPÉRATION DES IMAGES DES CASES ///
         //images EMPTY
@@ -70,7 +72,9 @@ public class ImageFactory {
         stairs = ImageIO.read(getClass().getResource(CASE_PATH+"/stairs.png"));
 
         // image SPECIAL
-        special = ImageIO.read(getClass().getResource(CASE_PATH+"/specialcase.png"));
+        for(int i = 1 ; i < NB_SPECIAL_IMG  + 1; i++){
+            special[i - 1] = ImageIO.read(getClass().getResourceAsStream((CASE_PATH+"/special" + (i<10 ? "0":"") + i + ".png")));
+        }
 
         // image TELEPORTATION
         teleportation = ImageIO.read(getClass().getResource(CASE_PATH+"/caseTP.png"));
@@ -118,15 +122,17 @@ public class ImageFactory {
         TypeCase type = ca.getType();
         switch (type){
             case EMPTY:
-                if(!(ca.getNumSprite() >= empty.length))
+                if(!(ca.getNumSprite() >= empty.length || ca.getNumSprite() < 0) )
                 return empty[ca.getNumSprite()];
                 break;
             case STAIRS:
                 return stairs;
             case BONUS:
-                return treasure[1];
+                if(!(ca.getNumSprite() >= treasure.length || ca.getNumSprite() < 0))
+                    return treasure[ca.getNumSprite()];
+                break;
             case WALL:
-                if(!(ca.getNumSprite() >= wall.length))
+                if(!(ca.getNumSprite() >= wall.length || ca.getNumSprite() < 0))
                     return wall[ca.getNumSprite()];
                 break;
             case TELEPORTATION:
@@ -136,7 +142,9 @@ public class ImageFactory {
             case DAMAGE:
             case HEAL:
             case TIME:
-                return special;
+                if(!(ca.getNumSprite() >= special.length || ca.getNumSprite() < 0))
+                    return special[ca.getNumSprite()];
+                break;
             default:
                 break;
         }
