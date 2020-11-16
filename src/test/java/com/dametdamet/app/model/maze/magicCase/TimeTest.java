@@ -8,17 +8,18 @@ import com.dametdamet.app.model.entity.monster.RandomMove;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class HealTest {
+public class TimeTest {
 
     private PacmanGame game;
-    private Heal heal;
+    private Time time;
 
     private void loadGame() {
         String[] mazes = new String[1];
         mazes[0] = "maze_magicCase.txt";
         this.game = new PacmanGame("helpFilePacman.txt", mazes);
-        this.heal = (Heal) game.getMaze().whatIsIn(new Position(4, 1));
+        this.time = (Time) game.getMaze().whatIsIn(new Position(4, 2));
     }
 
     /**
@@ -27,7 +28,7 @@ public class HealTest {
     @Test
     public void testInitNotPressed() {
         loadGame();
-        assertFalse(heal.isPressed());
+        assertFalse(time.isPressed());
     }
 
     /**
@@ -36,37 +37,21 @@ public class HealTest {
     @Test
     public void testPressedAfterActivation() {
         loadGame();
-        heal.applyEffect(game, game.getHero());
-        assertTrue(heal.isPressed());
+        time.applyEffect(game, game.getHero());
+        assertTrue(time.isPressed());
     }
 
     /**
-     * Le héro gagne un point de vie s'il n'a pas toute sa vie.
+     * Le timer gagne cinq secondes.
      */
     @Test
-    public void testHeal() {
+    public void testTime() {
         loadGame();
 
-        Hero hero = (Hero) game.getHero();
-        hero.loseHP(1);
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, hero);
+        int prevTime = game.getGameTimer();
+        time.applyEffect(game, game.getHero());
 
-        assertEquals(prevHP + 1, hero.getHP());
-    }
-
-    /**
-     * Le héro ne gagne pas de point de vie s'il a tous ses points de vie.
-     */
-    @Test
-    public void testFullHeal() {
-        loadGame();
-
-        Hero hero = (Hero) game.getHero();
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, hero);
-
-        assertEquals(prevHP, hero.getHP());
+        assertEquals(prevTime + 5, game.getGameTimer());
     }
 
     /**
@@ -75,14 +60,12 @@ public class HealTest {
     @Test
     public void testDeadIfPressed() {
         loadGame();
-        Hero hero = (Hero) game.getHero();
-        hero.loseHP(2);
-        heal.applyEffect(game, game.getHero());
+        time.applyEffect(game, game.getHero());
 
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, game.getHero());
+        int prevTime = game.getGameTimer();
+        time.applyEffect(game, game.getHero());
 
-        assertEquals(prevHP, hero.getHP());
+        assertEquals(prevTime, game.getGameTimer());
     }
 
     /**
@@ -93,13 +76,11 @@ public class HealTest {
         loadGame();
 
         Monster monster = new Monster(game.getMaze().getInitialPositionPlayer(), RandomMove.INSTANCE);
-        Hero hero = (Hero) game.getHero();
-        hero.loseHP(1);
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, monster);
+        int prevTime = game.getGameTimer();
+        time.applyEffect(game, monster);
 
-        assertEquals(prevHP, hero.getHP());
-        assertFalse(heal.isPressed());
+        assertEquals(prevTime, game.getGameTimer());
+        assertFalse(time.isPressed());
     }
 
     /**
@@ -108,7 +89,7 @@ public class HealTest {
     @Test
     public void testNullGame() {
         Hero hero = new Hero(new Position(1, 1), 3);
-        assertThrows(NullPointerException.class, () -> heal.applyEffect(null, hero));
+        assertThrows(NullPointerException.class, () -> time.applyEffect(null, hero));
     }
 
     /**
@@ -117,6 +98,6 @@ public class HealTest {
     @Test
     public void testNullHero() {
         loadGame();
-        assertThrows(NullPointerException.class, () -> heal.applyEffect(game, null));
+        assertThrows(NullPointerException.class, () -> time.applyEffect(game, null));
     }
 }
