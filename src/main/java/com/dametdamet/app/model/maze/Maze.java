@@ -150,17 +150,35 @@ public class Maze{
 
     public void addNewMonster(PacmanGame pacmanGame){
         Position position = getAMonsterPosition(positionMonsters.size());
-        pacmanGame.addMonster(position);
+        if (position!= null){
+            pacmanGame.addMonster(position);
+        }
+
     }
 
     private Position getAMonsterPosition(int sizeOfCollection){
         Position position;
 
+        /* Si il n'y a pas de positions données pour le spawn de monstres,
+        * on prend une position aléatoire dans le labyrinthe. */
         if (sizeOfCollection == 0 ){
             Random rand = new Random();
+            int numberOfTiles = getWidth() * getHeight();
+            int i = 0;
+
+            /* On cherche une position tant qu'il y a encore des positions à tester. */
             do{
+                i++;
                 position = new Position(rand.nextInt()%getWidth(),rand.nextInt()%getHeight());
-            }while (isNotWall(position));
+                System.out.println(i);
+            }while (!isNotWall(position) && i<numberOfTiles);
+
+            /* Si on est sortis de la boucle parce qu'il n'y a plus de positions
+            *  à tester et rien n'est correct, alors il n'y a pas de positions
+            *  pour le monstre. */
+            if (i >= numberOfTiles){
+                position = null;
+            }
         }else {
             position = positionMonsters.get(0);
         }

@@ -21,7 +21,7 @@ class DamageTest {
 
     @BeforeEach
     void setUp() {
-        dmg = new Damage(TypeCase.DAMAGE);
+        dmg = new Damage();
     }
 
     @AfterEach

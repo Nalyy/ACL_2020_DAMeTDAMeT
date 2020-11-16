@@ -173,7 +173,7 @@ public enum TxtDAO implements AbstractFileDAO {
                         maze.addNewPositionChest(new Position(x, y));
                         break;
                     case DAMAGE:
-                        laby[x][y] = new Damage(TypeCase.DAMAGE);
+                        laby[x][y] = new Damage();
                         break;
                     case SPAWNER_MONSTERS:
                         laby[x][y] = new SpawnerMonster(TypeCase.SPAWNER_MONSTERS);

@@ -10,7 +10,7 @@ public class Damage extends Case {
 
     private final static int AMOUNT_HEAL = 1;
 
-    public Damage(TypeCase damage) {
+    public Damage() {
         super(TypeCase.DAMAGE);
     }
 
