@@ -8,17 +8,20 @@ import com.dametdamet.app.model.entity.monster.RandomMove;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class HealTest {
+public class TreasureTest {
 
     private PacmanGame game;
-    private Heal heal;
+    private Treasure treasure;
 
     private void loadGame() {
         String[] mazes = new String[1];
-        mazes[0] = "maze_magicCase.txt";
+        mazes[0] = "spawnerChest_maze/maze_1_bonusChest.txt";
         this.game = new PacmanGame("helpFilePacman.txt", mazes);
-        this.heal = (Heal) game.getMaze().whatIsIn(new Position(4, 1));
+        SpawnerChest spawner = (SpawnerChest) game.getMaze().whatIsIn(new Position(4, 1));
+        spawner.applyEffect(game, game.getHero());
+        this.treasure = (Treasure) game.getMaze().whatIsIn(new Position(1, 3));
     }
 
     /**
@@ -27,7 +30,7 @@ public class HealTest {
     @Test
     public void testInitNotPressed() {
         loadGame();
-        assertFalse(heal.isPressed());
+        assertFalse(treasure.isPressed());
     }
 
     /**
@@ -36,37 +39,21 @@ public class HealTest {
     @Test
     public void testPressedAfterActivation() {
         loadGame();
-        heal.applyEffect(game, game.getHero());
-        assertTrue(heal.isPressed());
+        treasure.applyEffect(game, game.getHero());
+        assertTrue(treasure.isPressed());
     }
 
     /**
-     * Le héro gagne un point de vie s'il n'a pas toute sa vie.
+     * Le score augmente de 2 000.
      */
     @Test
-    public void testHeal() {
+    public void testTreasure() {
         loadGame();
 
-        Hero hero = (Hero) game.getHero();
-        hero.loseHP(1);
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, hero);
+        int prevScore = game.getScore();
+        treasure.applyEffect(game, game.getHero());
 
-        assertEquals(prevHP + 1, hero.getHP());
-    }
-
-    /**
-     * Le héro ne gagne pas de point de vie s'il a tous ses points de vie.
-     */
-    @Test
-    public void testFullHeal() {
-        loadGame();
-
-        Hero hero = (Hero) game.getHero();
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, hero);
-
-        assertEquals(prevHP, hero.getHP());
+        assertEquals(prevScore + 2000, game.getScore());
     }
 
     /**
@@ -75,14 +62,12 @@ public class HealTest {
     @Test
     public void testDeadIfPressed() {
         loadGame();
-        Hero hero = (Hero) game.getHero();
-        hero.loseHP(2);
-        heal.applyEffect(game, game.getHero());
+        treasure.applyEffect(game, game.getHero());
 
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, game.getHero());
+        int prevScore = game.getScore();
+        treasure.applyEffect(game, game.getHero());
 
-        assertEquals(prevHP, hero.getHP());
+        assertEquals(prevScore, game.getScore());
     }
 
     /**
@@ -93,13 +78,11 @@ public class HealTest {
         loadGame();
 
         Monster monster = new Monster(game.getMaze().getInitialPositionPlayer(), RandomMove.INSTANCE);
-        Hero hero = (Hero) game.getHero();
-        hero.loseHP(1);
-        int prevHP = hero.getHP();
-        heal.applyEffect(game, monster);
+        int prevScore = game.getScore();
+        treasure.applyEffect(game, monster);
 
-        assertEquals(prevHP, hero.getHP());
-        assertFalse(heal.isPressed());
+        assertEquals(prevScore, game.getScore());
+        assertFalse(treasure.isPressed());
     }
 
     /**
@@ -108,7 +91,7 @@ public class HealTest {
     @Test
     public void testNullGame() {
         Hero hero = new Hero(new Position(1, 1), 3);
-        assertThrows(NullPointerException.class, () -> heal.applyEffect(null, hero));
+        assertThrows(NullPointerException.class, () -> treasure.applyEffect(null, hero));
     }
 
     /**
@@ -117,6 +100,6 @@ public class HealTest {
     @Test
     public void testNullHero() {
         loadGame();
-        assertThrows(NullPointerException.class, () -> heal.applyEffect(game, null));
+        assertThrows(NullPointerException.class, () -> treasure.applyEffect(game, null));
     }
 }

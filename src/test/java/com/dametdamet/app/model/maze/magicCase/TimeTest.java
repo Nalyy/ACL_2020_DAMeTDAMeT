@@ -55,7 +55,7 @@ public class TimeTest {
     }
 
     /**
-     * La case ne s'active pas si elle a été pressée.
+     * La case ne s'active pas si elle a déjà été pressée.
      */
     @Test
     public void testDeadIfPressed() {
