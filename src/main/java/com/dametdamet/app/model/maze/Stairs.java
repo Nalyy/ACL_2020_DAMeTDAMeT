@@ -10,6 +10,8 @@ public class Stairs extends Case{
     }
 
     public void applyEffect(PacmanGame game, Entity entity){
-        game.goToNextLevel();
+        if (entity.isHero()){
+            game.goToNextLevel();
+        }
     }
 }
