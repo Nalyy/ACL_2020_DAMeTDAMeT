@@ -83,9 +83,9 @@ class TpTilesTest {
      */
     @Test
     public void tpRightMonster(){
-        Monster monster = new Monster(maze.getInitialPositionPlayer(), RandomMove.INSTANCE);
-
         Position positionFirstTp = rightLabyCorrectlyRead();
+
+        Monster monster = new Monster(maze.getInitialPositionPlayer(), RandomMove.INSTANCE);
 
         boolean hasTeleported = hasTeleported(positionFirstTp, monster);
         Assertions.assertTrue(hasTeleported);
