@@ -57,22 +57,22 @@ public enum RandomMove implements MoveStrategy {
         Random randomGenerator = new Random();
 
         /* On commence par regarder les commandes possibles à exécuter */
-        // Case de haut
+        // Tile de haut
         position.setY(initialY - 1);
         if (maze.isNotWall(position)) candidates.add(Command.UP);
         position.setY(initialY);  // remise à l'état initial de la position
 
-        // Case de bas
+        // Tile de bas
         position.setY(initialY + 1);
         if (maze.isNotWall(position)) candidates.add(Command.DOWN);
         position.setY(initialY);
 
-        // Case de gauche
+        // Tile de gauche
         position.setX(initialX - 1);
         if (maze.isNotWall(position)) candidates.add(Command.LEFT);
         position.setX(initialX);
 
-        // Case de droite
+        // Tile de droite
         position.setX(initialX + 1);
         if (maze.isNotWall(position)) candidates.add(Command.RIGHT);
         position.setX(initialX);

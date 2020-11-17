@@ -6,6 +6,7 @@ import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.RandomMove;
+import com.dametdamet.app.model.maze.normalTiles.Teleportation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,13 +16,12 @@ import org.junit.jupiter.api.Test;
  */
 class TpTilesTest {
     private Maze maze;
-    AbstractDAOFactory ab = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT);
     private PacmanGame game;
 
     private void loadGame(String sourceFile){
         String[] files = new String[1];
         files[0] = sourceFile;
-        game = new PacmanGame("", files);
+        game = new PacmanGame("no help", files);
         maze = game.getMaze();
     }
 

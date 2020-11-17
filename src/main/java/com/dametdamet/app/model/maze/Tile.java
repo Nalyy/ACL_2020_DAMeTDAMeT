@@ -4,9 +4,8 @@ import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.entity.Entity;
 
 import java.util.Objects;
-import java.util.Random;
 
-public class Case {
+public abstract class Tile {
     private final TypeCase type;
     private int numSprite;
     private boolean pressed;
@@ -16,7 +15,7 @@ public class Case {
      * @param type type de la case initialisé
      * @param numSprite numéro du sprite actuel de la case
      */
-    public Case(TypeCase type,int numSprite){
+    public Tile(TypeCase type, int numSprite){
         this.numSprite = numSprite;
         this.type = type;
         this.pressed = false;
@@ -26,15 +25,13 @@ public class Case {
      * Crée une case de type donné avec un numéro de sprite à 0
      * @param type type de la case initialisé
      */
-    public Case(TypeCase type){
+    public Tile(TypeCase type){
         this.type = type;
         this.numSprite = 0;
         this.pressed = false;
     }
 
-    public void applyEffect(PacmanGame game, Entity entity){
-
-    }
+    public abstract void applyEffect(PacmanGame game, Entity entity);
 
     /**
      * Retourne le type de la case.
@@ -48,7 +45,7 @@ public class Case {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Case aCase = (Case) o;
+        Tile aCase = (Tile) o;
         return type == aCase.type;
     }
 

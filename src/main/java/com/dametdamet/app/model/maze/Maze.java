@@ -2,13 +2,14 @@ package com.dametdamet.app.model.maze;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.magicCase.Treasure;
+import com.dametdamet.app.model.maze.normalTiles.Empty;
+import com.dametdamet.app.model.maze.normalTiles.OutOfBound;
 
 import java.util.*;
 
 public class Maze{
-    private Case[][] maze;
+    private Tile[][] maze;
     private static final int DEFAULT_WIDTH = 20;
     private static final int DEFAULT_HEIGHT = 20;
     public static final int DEFAULT_NB_MONSTERS = 5;
@@ -23,7 +24,7 @@ public class Maze{
      * Initialise un Maze vide
      */
     public Maze(){
-        maze = new Case[DEFAULT_WIDTH][DEFAULT_HEIGHT];
+        maze = new Tile[DEFAULT_WIDTH][DEFAULT_HEIGHT];
         initialPositionMonster = new ArrayList<>();
         positionBonusChest = new Stack<>();
         positionMonsters = new ArrayList<>();
@@ -37,7 +38,7 @@ public class Maze{
      * @param height hauteur du labyrinthe
      */
     public Maze(int width, int height){
-        maze = new Case[width][height];
+        maze = new Tile[width][height];
         initialPositionMonster = new ArrayList<>();
         generate();
         this.setInitialPositionPlayer(new Position(0,0));
@@ -83,7 +84,7 @@ public class Maze{
         return initialPositionMonster.iterator();
     }
 
-    public void setMaze(Case[][] maze){
+    public void setMaze(Tile[][] maze){
         this.maze = maze;
     }
 
@@ -101,7 +102,7 @@ public class Maze{
     private void generate() {
         for (int x = 0; x < this.getWidth(); x++) {
             for (int y = 0; y < this.getHeight(); y++) {
-                maze[x][y] = new Case(TypeCase.EMPTY);
+                maze[x][y] = new Empty();
             }
         }
     }
@@ -111,13 +112,13 @@ public class Maze{
      * @param position position de la case que l'on cherche
      * @return la case correspondante
      */
-    public Case whatIsIn(Position position){
+    public Tile whatIsIn(Position position){
         int x = position.getX();
         int y = position.getY();
 
         boolean isWithin = (x < this.getWidth() && x >= 0) && (y < this.getHeight() && y >= 0);
 
-        return isWithin ? maze[x][y] : new Case(TypeCase.OUTOFBOUND);
+        return isWithin ? maze[x][y] : new OutOfBound();
     }
 
     /**
@@ -138,6 +139,10 @@ public class Maze{
         return whatIsIn(position).getType() != TypeCase.OUTOFBOUND;
     }
 
+    /**
+     * Ajoute une position dans la liste des positions possibles pour les coffres
+     * @param posChest la position que l'on vas rajouter dans la liste
+     */
     public void addNewPositionChest(Position posChest){
         this.positionBonusChest.add(posChest);
         Collections.shuffle(positionBonusChest); // On mélange la liste pour ne pas faire apparaitre en ligne
@@ -173,12 +178,12 @@ public class Maze{
         Stack<Position> emptyTiles = new Stack<>();
 
         /* On commence par construire la liste des cases vides du labyrinthe */
-        for (int i = 0; i < getWidth() ; i++){
-            for (int j = 0; j < getHeight(); j++){
-                position.setX(i);
-                position.setX(j);
+        for (int x = 0; x < getWidth() ; x++){
+            for (int y = 0; y < getHeight(); y++){
+                position.setX(x);
+                position.setY(y);
 
-                Case tile = whatIsIn(position);
+                Tile tile = whatIsIn(position);
 
                 if (tile.getType().equals(TypeCase.EMPTY)){
                     emptyTiles.push(new Position(position));
@@ -221,19 +226,30 @@ public class Maze{
         return position;
     }
 
+    /**
+     * Ajoute un nouveau coffre bonus dans le labyrinthe
+     */
     public void addNewChest() {
-        Position pos;
-        if(positionBonusChest.size() == 0){
-            Random rand = new Random();
-            do{
-                pos = new Position(rand.nextInt()%getWidth(),rand.nextInt()%getHeight());
-            }while (isNotWall(pos));
-            maze[pos.getX()][pos.getY()] = new Treasure();
-        }else{
-            pos = positionBonusChest.pop();
-            if(this.isNotWall(pos)){
-                maze[pos.getX()][pos.getY()] = new Treasure();
-            }
+        Position position = getAChestPosition();
+        if (position!= null){
+            maze[position.getX()][position.getY()] = new Treasure();
         }
+    }
+
+    /**
+     * Permet de retourner une position de la liste des coffres ou une position aléatoire du labyrinthe
+     * @return une position d'une case vide pour le coffre
+     */
+    private Position getAChestPosition(){
+        Position position;
+
+        /* Si il n'y a pas d'enplacement pour les nouveaux coffres, on prend une case vide aléatoire dans le labyrinthe. */
+        if (positionBonusChest.size() == 0 ){
+            position = getAnEmptyCase();
+        }else { /* Sinon, on en prend une aléatoirement dans la liste. */
+            position = positionBonusChest.pop();
+        }
+
+        return position;
     }
 }

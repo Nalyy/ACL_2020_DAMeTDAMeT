@@ -2,7 +2,7 @@ package com.dametdamet.app.model.graphic.factory;
 
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.TypeEntity;
-import com.dametdamet.app.model.maze.Case;
+import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TypeCase;
 
 import javax.imageio.ImageIO;
@@ -118,7 +118,7 @@ public class ImageFactory {
      * @param ca case correspondant à l'image qu'on veut
      * @return l'image correspondant à la case en paramètre
      */
-    public BufferedImage getCaseImage(Case ca){
+    public BufferedImage getCaseImage(Tile ca){
         TypeCase type = ca.getType();
         switch (type){
             case EMPTY:

@@ -2,12 +2,8 @@ package com.dametdamet.app.model.maze.trapCases;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.Hero;
-import com.dametdamet.app.model.entity.TypeEntity;
-import com.dametdamet.app.model.maze.Case;
-import com.dametdamet.app.model.maze.Maze;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DamageTest {
 
-    Case dmg;
+    Tile dmg;
     PacmanGame game;
 
     @BeforeEach
@@ -35,7 +31,7 @@ class DamageTest {
         String[] mazes = new String[1];
         mazes[0]= "maze_vide.txt";
 
-        game = new PacmanGame("helpFilePacman.txt", mazes);
+        game = new PacmanGame("no help", mazes);
 
         Hero hero = ((Hero)game.getHero());
         int heroLife = hero.getHP();
@@ -51,7 +47,7 @@ class DamageTest {
         String[] mazes = new String[1];
         mazes[0]= "maze_rempli.txt";
 
-        game = new PacmanGame("helpFilePacman.txt", mazes);
+        game = new PacmanGame("no help", mazes);
 
         Hero hero = ((Hero)game.getHero());
         int heroLife = hero.getHP();
@@ -71,7 +67,7 @@ class DamageTest {
     void testBoundaryEntityIsNull(){
         String[] mazes = new String[1];
         mazes[0]= "maze_rempli.txt";
-        game = new PacmanGame("helpFilePacman.txt", mazes);
+        game = new PacmanGame("no help", mazes);
 
         assertThrows(NullPointerException.class,() -> dmg.applyEffect(game,null));
     }

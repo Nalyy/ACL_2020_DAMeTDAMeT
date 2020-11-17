@@ -1,10 +1,12 @@
-package com.dametdamet.app.model.maze;
+package com.dametdamet.app.model.maze.normalTiles;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Entity;
+import com.dametdamet.app.model.maze.Tile;
+import com.dametdamet.app.model.maze.TypeCase;
 
-public class Teleportation extends Case {
+public class Teleportation extends Tile {
 
     private Position destination;
 
@@ -15,7 +17,6 @@ public class Teleportation extends Case {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        super.applyEffect(game, entity);
         entity.moveTo(destination);
     }
 

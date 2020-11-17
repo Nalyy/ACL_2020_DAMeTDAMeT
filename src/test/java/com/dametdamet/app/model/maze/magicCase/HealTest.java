@@ -17,7 +17,7 @@ public class HealTest {
     private void loadGame() {
         String[] mazes = new String[1];
         mazes[0] = "maze_magicCase.txt";
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.game = new PacmanGame("no help", mazes);
         this.heal = (Heal) game.getMaze().whatIsIn(new Position(4, 1));
     }
 

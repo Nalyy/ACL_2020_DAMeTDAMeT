@@ -50,16 +50,18 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		init();
 
 		/* Fichier d'aide */
-		BufferedReader helpReader;
-		try {
-			helpReader = new BufferedReader(new FileReader(source));
-			String ligne;
-			while ((ligne = helpReader.readLine()) != null) {
-				System.out.println(ligne);
+		if(!source.equals("no help")) {
+			BufferedReader helpReader;
+			try {
+				helpReader = new BufferedReader(new FileReader(source));
+				String ligne;
+				while ((ligne = helpReader.readLine()) != null) {
+					System.out.println(ligne);
+				}
+				helpReader.close();
+			} catch (IOException e) {
+				System.out.println("Help not available");
 			}
-			helpReader.close();
-		} catch (IOException e) {
-			System.out.println("Help not available");
 		}
 	}
 

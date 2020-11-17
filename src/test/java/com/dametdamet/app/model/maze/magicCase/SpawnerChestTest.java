@@ -29,7 +29,7 @@ public class SpawnerChestTest {
             mazes[0] = "spawnerChest_maze/maze_2_bonusChests.txt";
             posSpawner = new Position(4, 1);
         }
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.game = new PacmanGame("no help", mazes);
         this.spawnerChest = (SpawnerChest) game.getMaze().whatIsIn(posSpawner);
     }
 

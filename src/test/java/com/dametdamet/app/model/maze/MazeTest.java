@@ -1,6 +1,8 @@
 package com.dametdamet.app.model.maze;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.maze.normalTiles.Empty;
+import com.dametdamet.app.model.maze.normalTiles.OutOfBound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,17 +19,17 @@ class MazeTest {
 
     @Test
     void whatIsIn() {
-        assertEquals(maze.whatIsIn(new Position(0, 0)), new Case(TypeCase.EMPTY));
-        assertEquals(maze.whatIsIn(new Position(0, 1)), new Case(TypeCase.EMPTY));
-        assertEquals(maze.whatIsIn(new Position(1, 0)), new Case(TypeCase.EMPTY));
-        assertEquals(maze.whatIsIn(new Position(5, 5)), new Case(TypeCase.EMPTY));
+        assertEquals(maze.whatIsIn(new Position(0, 0)), new Empty());
+        assertEquals(maze.whatIsIn(new Position(0, 1)), new Empty());
+        assertEquals(maze.whatIsIn(new Position(1, 0)), new Empty());
+        assertEquals(maze.whatIsIn(new Position(5, 5)), new Empty());
 
-        assertEquals(maze.whatIsIn(new Position(10, 10)), new Case(TypeCase.OUTOFBOUND));
-        assertEquals(maze.whatIsIn(new Position(0, 10)), new Case(TypeCase.OUTOFBOUND));
-        assertEquals(maze.whatIsIn(new Position(10, 0)), new Case(TypeCase.OUTOFBOUND));
-        assertEquals(maze.whatIsIn(new Position(-1, -1)), new Case(TypeCase.OUTOFBOUND));
-        assertEquals(maze.whatIsIn(new Position(0, -1)), new Case(TypeCase.OUTOFBOUND));
-        assertEquals(maze.whatIsIn(new Position(-1, 0)), new Case(TypeCase.OUTOFBOUND));
+        assertEquals(maze.whatIsIn(new Position(10, 10)), new OutOfBound());
+        assertEquals(maze.whatIsIn(new Position(0, 10)), new OutOfBound());
+        assertEquals(maze.whatIsIn(new Position(10, 0)), new OutOfBound());
+        assertEquals(maze.whatIsIn(new Position(-1, -1)), new OutOfBound());
+        assertEquals(maze.whatIsIn(new Position(0, -1)), new OutOfBound());
+        assertEquals(maze.whatIsIn(new Position(-1, 0)), new OutOfBound());
     }
 
     @Test

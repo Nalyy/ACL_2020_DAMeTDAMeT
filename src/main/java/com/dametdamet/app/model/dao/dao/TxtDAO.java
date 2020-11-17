@@ -6,13 +6,14 @@ import com.dametdamet.app.model.maze.*;
 import com.dametdamet.app.model.maze.magicCase.Heal;
 import com.dametdamet.app.model.maze.magicCase.SpawnerChest;
 import com.dametdamet.app.model.maze.magicCase.Time;
+import com.dametdamet.app.model.maze.normalTiles.Empty;
+import com.dametdamet.app.model.maze.normalTiles.Stairs;
+import com.dametdamet.app.model.maze.normalTiles.Teleportation;
+import com.dametdamet.app.model.maze.normalTiles.Wall;
 import com.dametdamet.app.model.maze.trapCases.Damage;
 import com.dametdamet.app.model.maze.trapCases.SpawnerMonster;
 
 import java.io.*;
-import java.net.URL;
-import java.rmi.server.ExportException;
-import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -90,7 +91,7 @@ public enum TxtDAO implements AbstractFileDAO {
         while((c = fr.read()) != -1){ // On récupère le caractère suivant dans le fichier
             if(c == 13 || c == '\n'){ // 13 car caractère inconnu à la fin de ligne
                 if(c == 13){ // Si on tombe sur le caractère inconnu on skip le '\n' (car '\n' est juste après)
-                    fr.skip(1);
+                    fr.skip(1)
                 }
                 height++;
                 if(maxWidth < width){ // On garde la longueur de la plus grande ligne
@@ -115,7 +116,7 @@ public enum TxtDAO implements AbstractFileDAO {
     private Maze createTabCases(Reader fr, int width, int height) throws IOException {
         // On commence la construction du labyrinthe
         Random randomGenerator = new Random();
-        Case[][] laby = new Case[width][height];
+        Tile[][] laby = new Tile[width][height];
         Position teleportation = null;
         boolean isTPSet = false;
         int c;
@@ -132,7 +133,7 @@ public enum TxtDAO implements AbstractFileDAO {
                 }
                 if(x < width){ // Si on est pas au bout de la ligne on remplis de cases vides
                     for(; x < width ; x++){
-                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                     }
                 }
                 y++;
@@ -141,17 +142,17 @@ public enum TxtDAO implements AbstractFileDAO {
                 switch (c) {
                     case POS_JOUEUR:
                         positionJoueur = new Position(x, y);
-                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
                     case POS_MONSTRE:
                         maze.addInitialMonsterPosition(new Position(x, y));
-                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
                     case EMPTY:
-                        laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
                     case WALL:
-                        laby[x][y] = new Case(TypeCase.WALL,randomGenerator.nextInt(ImageFactory.NB_WALL_IMG));
+                        laby[x][y] = new Wall(randomGenerator.nextInt(ImageFactory.NB_WALL_IMG));
                         break;
                     case STAIRS:
                         laby[x][y] = new Stairs();
@@ -166,7 +167,7 @@ public enum TxtDAO implements AbstractFileDAO {
                         laby[x][y] = new SpawnerChest();
                         break;
                     case POS_CHEST:
-                        laby[x][y] = new Case(TypeCase.EMPTY, randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         maze.addNewPositionChest(new Position(x, y));
                         break;
                     case DAMAGE:
@@ -176,7 +177,7 @@ public enum TxtDAO implements AbstractFileDAO {
                         laby[x][y] = new SpawnerMonster();
                         break;
                     case POS_MONSTERS:
-                        laby[x][y] = new Case(TypeCase.EMPTY,  randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         maze.addNewPositionMonster(new Position(x, y));
                         break;
                     case TELEPORTATION:
@@ -190,7 +191,7 @@ public enum TxtDAO implements AbstractFileDAO {
                             isTPSet = true;
                         } else {
                             // si on a déjà deux cases de téléportation (le maximum), on ignore les suivantes et on met une case vide
-                            laby[x][y] = new Case(TypeCase.EMPTY,  randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                            laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         }
                 }
                 x++;
@@ -199,13 +200,13 @@ public enum TxtDAO implements AbstractFileDAO {
 
         // si on n'a qu'une seule case de téléportation, on met une case vide
         if (teleportation != null && !isTPSet) {
-            laby[teleportation.getX()][teleportation.getY()] = new Case(TypeCase.EMPTY, randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+            laby[teleportation.getX()][teleportation.getY()] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
         }
 
         while(y < height && laby[0][y] == null){ // Gestion du bug quand une ligne n'est pas initialisée
             x = 0;
             for(; x < width ; x++){
-                laby[x][y] = new Case(TypeCase.EMPTY,randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
             }
             y++;
         }

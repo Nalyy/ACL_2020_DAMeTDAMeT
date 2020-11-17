@@ -36,7 +36,7 @@ class SpawnerMonsterTest {
 
         String[] mazes = new String[1];
         mazes[0]= "maze_spawnerMonster_1.txt";
-        game = new PacmanGame("helpFilePacman.txt", mazes);
+        game = new PacmanGame("no help", mazes);
 
         spawnerMonster.applyEffect(game,game.getHero());
         int nbMonster = 0;
@@ -53,7 +53,7 @@ class SpawnerMonsterTest {
     void testRight2(){
         String[] mazes = new String[1];
         mazes[0]= "maze_spawnerMonster_2.txt";
-        game = new PacmanGame("helpFilePacman.txt", mazes);
+        game = new PacmanGame("no help", mazes);
 
         int nbMonsterExpected = 10;
 
@@ -77,13 +77,13 @@ class SpawnerMonsterTest {
 
         String[] mazes = new String[1];
         mazes[0]= "maze_rempli.txt";
-        game = new PacmanGame("helpFilePacman.txt", mazes);
+        game = new PacmanGame("no help", mazes);
 
         spawnerMonster.applyEffect(game,game.getHero());
 
         Iterator<Entity> ite = game.iterator();
 
-        assertEquals(false,ite.hasNext());
+        assertFalse(ite.hasNext());
     }
 
     @Test
@@ -96,7 +96,7 @@ class SpawnerMonsterTest {
 
         String[] mazes = new String[1];
         mazes[0]= "maze_rempli.txt";
-        game = new PacmanGame("helpFilePacman.txt", mazes);
+        game = new PacmanGame("no help", mazes);
 
         assertThrows(NullPointerException.class,() -> spawnerMonster.applyEffect(game,null));
     }

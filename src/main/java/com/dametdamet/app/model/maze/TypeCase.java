@@ -13,5 +13,5 @@ public enum TypeCase {
     DAMAGE,            // D, case piège : blesse le héros
     SPAWNER_MONSTERS,  // S, case piège : fait apparaître un monstre
     MONSTER_SPAWN,     // M, conséquence de case piège : un monstre peut y appaître
-    TELEPORTATION     // P, case de téléportation : téléporte une entité sur l'autre case du même type
+    TELEPORTATION      // P, case de téléportation : téléporte une entité sur l'autre case du même type
 }

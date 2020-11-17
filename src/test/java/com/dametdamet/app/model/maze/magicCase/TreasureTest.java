@@ -18,7 +18,7 @@ public class TreasureTest {
     private void loadGame() {
         String[] mazes = new String[1];
         mazes[0] = "spawnerChest_maze/maze_1_bonusChest.txt";
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.game = new PacmanGame("no help", mazes);
         SpawnerChest spawner = (SpawnerChest) game.getMaze().whatIsIn(new Position(4, 1));
         spawner.applyEffect(game, game.getHero());
         this.treasure = (Treasure) game.getMaze().whatIsIn(new Position(1, 3));

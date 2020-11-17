@@ -18,7 +18,7 @@ public class TimeTest {
     private void loadGame() {
         String[] mazes = new String[1];
         mazes[0] = "maze_magicCase.txt";
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.game = new PacmanGame("no help", mazes);
         this.time = (Time) game.getMaze().whatIsIn(new Position(4, 2));
     }
 

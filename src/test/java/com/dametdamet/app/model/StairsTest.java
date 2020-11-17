@@ -5,7 +5,7 @@ import com.dametdamet.app.model.entity.Hero;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.Maze;
-import com.dametdamet.app.model.maze.Stairs;
+import com.dametdamet.app.model.maze.normalTiles.Stairs;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +19,7 @@ public class StairsTest {
         String[] mazes = new String[2];
         mazes[0] = "stairs_maze/maze_1_stair.txt";
         mazes[1] = "stairs_maze/maze_2_stairs.txt";
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.game = new PacmanGame("no help", mazes);
         this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
     }
 
@@ -46,7 +46,7 @@ public class StairsTest {
         mazes[0] = "stairs_maze/maze_1_stair.txt";
         mazes[1] = "stairs_maze/maze_1_stair.txt";
         mazes[2] = "stairs_maze/maze_1_stair.txt";
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.game = new PacmanGame("", mazes);
         this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
 
         int prevScore = game.getScore();
@@ -88,7 +88,7 @@ public class StairsTest {
         String[] mazes = new String[2];
         mazes[0] = "stairs_maze/maze_1_stair.txt";
         mazes[1] = "maze_monstres_1.txt";
-        this.game = new PacmanGame("helpFilePacman.txt", mazes);
+        this.game = new PacmanGame("no help", mazes);
         this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
 
         int cptFirstMaze = 0;
