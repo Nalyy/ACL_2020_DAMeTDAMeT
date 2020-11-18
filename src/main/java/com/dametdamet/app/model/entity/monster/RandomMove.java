@@ -2,10 +2,8 @@ package com.dametdamet.app.model.entity.monster;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.entity.monster.Monster;
-import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.maze.Maze;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +50,7 @@ public enum RandomMove implements MoveStrategy {
         Position position = monster.getPosition();
         int initialX = position.getX();
         int initialY = position.getY();
-        TypeCase type;
+        TileType type;
         List<Command> candidates = new ArrayList<>(4); // 4 = nombre de commandes possibles
         Random randomGenerator = new Random();
 

@@ -6,7 +6,7 @@ import com.dametdamet.app.model.entity.Entity;
 import java.util.Objects;
 
 public abstract class Tile {
-    private final TypeCase type;
+    private final TileType type;
     private int numSprite;
     private boolean pressed;
 
@@ -15,7 +15,7 @@ public abstract class Tile {
      * @param type type de la case initialisé
      * @param numSprite numéro du sprite actuel de la case
      */
-    public Tile(TypeCase type, int numSprite){
+    public Tile(TileType type, int numSprite){
         this.numSprite = numSprite;
         this.type = type;
         this.pressed = false;
@@ -25,7 +25,7 @@ public abstract class Tile {
      * Crée une case de type donné avec un numéro de sprite à 0
      * @param type type de la case initialisé
      */
-    public Tile(TypeCase type){
+    public Tile(TileType type){
         this.type = type;
         this.numSprite = 0;
         this.pressed = false;
@@ -37,7 +37,7 @@ public abstract class Tile {
      * Retourne le type de la case.
      * @return TypeCase
      */
-    public TypeCase getType(){
+    public TileType getType(){
         return type;
     }
 

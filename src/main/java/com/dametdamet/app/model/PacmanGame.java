@@ -15,7 +15,6 @@ import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.Maze;
-import com.dametdamet.app.model.maze.TypeCase;
 
 /**
  * @author Horatiu Cirstea, Vincent Thomas
@@ -31,13 +30,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private Maze maze;
 	private Timer gameTimer;
 	private int score;
-	private int nbLevel;
+	private int currentLevel;
 
 	private String fileName;
 	private String[] filesNames;
-	private final int NB_MAZES;
+	private final int nbMazesToDo;
 
-	public static int TEMPS_TIMER = 60; // Temps du timer en seconde
+	public static int TIMER_TIME = 60; // Temps du timer en seconde
 
 	/**
 	 * Constructeur avec fichier source pour le help
@@ -45,7 +44,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	public PacmanGame(String source, String[] sourceMaze) {
 		monsters = new ArrayList<>();
 		filesNames = sourceMaze;
-		NB_MAZES = sourceMaze.length;
+		nbMazesToDo = sourceMaze.length;
 
 		init();
 
@@ -69,10 +68,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 * Initialise le jeu comme neuf.
 	 */
 	public void init(){
-		nbLevel = 0;
+		currentLevel = 0;
 		score = 0;
 
-		if (NB_MAZES > 0){
+		if (nbMazesToDo > 0){
 			fileName = filesNames[0];
 		}else {
 			fileName = "";
@@ -90,25 +89,25 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		addMonsters();
 
 		// Lancement du timer
-		gameTimer.top(TEMPS_TIMER * 1000);
+		gameTimer.top(TIMER_TIME * 1000);
 
 		// Le jeu peut se relancer
 		state = GameState.ONGOING;
 	}
 
 	public void goToNextLevel(){
-		nbLevel++;
+		currentLevel++;
 
 		// On ajoute le score de passage de niveau
-		addScore(nbLevel * 1000);
+		addScore(currentLevel * 1000);
 
 		// Si c'était le dernier labyrinthe, on arrête le jeu
-		if (nbLevel >= NB_MAZES){
+		if (currentLevel >= nbMazesToDo){
 			setWon();
 
 		}else {
 			// On charge le prochain labyrinthe
-			fileName = filesNames[nbLevel];
+			fileName = filesNames[currentLevel];
 			loadMaze();
 
 			// On s'occupe des monstres et des héros

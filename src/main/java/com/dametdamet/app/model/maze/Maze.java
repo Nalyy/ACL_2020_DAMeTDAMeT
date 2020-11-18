@@ -2,7 +2,7 @@ package com.dametdamet.app.model.maze;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.maze.magicCase.Treasure;
+import com.dametdamet.app.model.maze.magicTiles.Treasure;
 import com.dametdamet.app.model.maze.normalTiles.Empty;
 import com.dametdamet.app.model.maze.normalTiles.OutOfBound;
 
@@ -127,7 +127,7 @@ public class Maze{
      * @return vrai si la position correspond à une case qui n'est pas un mur et existante.
      */
     public boolean isNotWall(Position position){
-        return whatIsIn(position).getType() != TypeCase.WALL && isNotOutOfBound(position);
+        return whatIsIn(position).getType() != TileType.WALL && isNotOutOfBound(position);
     }
 
     /**
@@ -136,7 +136,7 @@ public class Maze{
      * @return vrai si la position correspond à une case qui est existante.
      */
     public boolean isNotOutOfBound(Position position){
-        return whatIsIn(position).getType() != TypeCase.OUTOFBOUND;
+        return whatIsIn(position).getType() != TileType.OUTOFBOUND;
     }
 
     /**
@@ -185,7 +185,7 @@ public class Maze{
 
                 Tile tile = whatIsIn(position);
 
-                if (tile.getType().equals(TypeCase.EMPTY)){
+                if (tile.getType().equals(TileType.EMPTY)){
                     emptyTiles.push(new Position(position));
                 }
             }

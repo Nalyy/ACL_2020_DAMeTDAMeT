@@ -3,15 +3,15 @@ package com.dametdamet.app.model.dao.dao;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.*;
-import com.dametdamet.app.model.maze.magicCase.Heal;
-import com.dametdamet.app.model.maze.magicCase.SpawnerChest;
-import com.dametdamet.app.model.maze.magicCase.Time;
+import com.dametdamet.app.model.maze.magicTiles.Heal;
+import com.dametdamet.app.model.maze.magicTiles.SpawnerChest;
+import com.dametdamet.app.model.maze.magicTiles.Time;
 import com.dametdamet.app.model.maze.normalTiles.Empty;
 import com.dametdamet.app.model.maze.normalTiles.Stairs;
 import com.dametdamet.app.model.maze.normalTiles.Teleportation;
 import com.dametdamet.app.model.maze.normalTiles.Wall;
-import com.dametdamet.app.model.maze.trapCases.Damage;
-import com.dametdamet.app.model.maze.trapCases.SpawnerMonster;
+import com.dametdamet.app.model.maze.trapTiles.Damage;
+import com.dametdamet.app.model.maze.trapTiles.SpawnerMonster;
 
 import java.io.*;
 import java.util.Random;
@@ -91,7 +91,7 @@ public enum TxtDAO implements AbstractFileDAO {
         while((c = fr.read()) != -1){ // On récupère le caractère suivant dans le fichier
             if(c == 13 || c == '\n'){ // 13 car caractère inconnu à la fin de ligne
                 if(c == 13){ // Si on tombe sur le caractère inconnu on skip le '\n' (car '\n' est juste après)
-                    fr.skip(1)
+                    fr.skip(1);
                 }
                 height++;
                 if(maxWidth < width){ // On garde la longueur de la plus grande ligne

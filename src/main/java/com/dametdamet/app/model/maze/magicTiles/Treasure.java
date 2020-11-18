@@ -1,19 +1,22 @@
-package com.dametdamet.app.model.maze.magicCase;
+package com.dametdamet.app.model.maze.magicTiles;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Tile;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
-public class SpawnerChest extends Tile {
-    public SpawnerChest() {
-        super(TypeCase.SPAWNER_CHEST);
+public class Treasure extends Tile {
+
+    private static final int AMOUT_SCORE = 2000;
+
+    public Treasure() {
+        super(TileType.BONUS);
     }
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
         if(!isPressed() && entity.isHero()){
-            game.spawnNewChest();
+            game.addScore(AMOUT_SCORE);
             setPressed(true);
         }
     }

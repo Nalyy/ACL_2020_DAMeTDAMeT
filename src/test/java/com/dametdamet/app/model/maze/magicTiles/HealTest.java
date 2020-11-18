@@ -1,4 +1,4 @@
-package com.dametdamet.app.model.maze.magicCase;
+package com.dametdamet.app.model.maze.magicTiles;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;

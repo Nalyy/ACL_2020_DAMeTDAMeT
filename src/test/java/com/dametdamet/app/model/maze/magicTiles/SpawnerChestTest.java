@@ -1,11 +1,11 @@
-package com.dametdamet.app.model.maze.magicCase;
+package com.dametdamet.app.model.maze.magicTiles;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Hero;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.RandomMove;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,10 +59,10 @@ public class SpawnerChestTest {
     public void testNewChestSpawns() {
         loadGame(1);
         Position posChest = new Position(1, 3);
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(posChest).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(posChest).getType());
 
         spawnerChest.applyEffect(game, game.getHero());
-        assertEquals(TypeCase.BONUS, game.getMaze().whatIsIn(posChest).getType());
+        assertEquals(TileType.BONUS, game.getMaze().whatIsIn(posChest).getType());
     }
 
     /**
@@ -71,10 +71,10 @@ public class SpawnerChestTest {
     @Test
     public void testNoPosSpawn() {
         loadGame(0);
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(game.getMaze().getInitialPositionPlayer()).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(game.getMaze().getInitialPositionPlayer()).getType());
         spawnerChest.applyEffect(game, game.getHero());
 
-        assertEquals(TypeCase.BONUS, game.getMaze().whatIsIn(game.getMaze().getInitialPositionPlayer()).getType());
+        assertEquals(TileType.BONUS, game.getMaze().whatIsIn(game.getMaze().getInitialPositionPlayer()).getType());
     }
 
     /**
@@ -85,16 +85,16 @@ public class SpawnerChestTest {
         loadGame(2);
         Position posFirstChest = new Position(1, 3);
         Position posSecondChest = new Position(4, 3);
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(posFirstChest).getType());
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(posSecondChest).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(posFirstChest).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(posSecondChest).getType());
         spawnerChest.applyEffect(game, game.getHero());
-        assertTrue(TypeCase.BONUS.equals(game.getMaze().whatIsIn(posFirstChest).getType()) ^ TypeCase.BONUS.equals(game.getMaze().whatIsIn(posSecondChest).getType()));
+        assertTrue(TileType.BONUS.equals(game.getMaze().whatIsIn(posFirstChest).getType()) ^ TileType.BONUS.equals(game.getMaze().whatIsIn(posSecondChest).getType()));
 
         SpawnerChest secondSpawner = (SpawnerChest) game.getMaze().whatIsIn(new Position(4, 2));
         secondSpawner.applyEffect(game, game.getHero());
 
-        assertEquals(TypeCase.BONUS, game.getMaze().whatIsIn(posFirstChest).getType());
-        assertEquals(TypeCase.BONUS, game.getMaze().whatIsIn(posSecondChest).getType());
+        assertEquals(TileType.BONUS, game.getMaze().whatIsIn(posFirstChest).getType());
+        assertEquals(TileType.BONUS, game.getMaze().whatIsIn(posSecondChest).getType());
     }
 
     /**
@@ -105,13 +105,13 @@ public class SpawnerChestTest {
         loadGame(2);
         Position posFirstChest = new Position(1, 3);
         Position posSecondChest = new Position(4, 3);
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(posFirstChest).getType());
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(posSecondChest).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(posFirstChest).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(posSecondChest).getType());
         spawnerChest.applyEffect(game, game.getHero());
-        assertTrue(TypeCase.BONUS.equals(game.getMaze().whatIsIn(posFirstChest).getType()) ^ TypeCase.BONUS.equals(game.getMaze().whatIsIn(posSecondChest).getType()));
+        assertTrue(TileType.BONUS.equals(game.getMaze().whatIsIn(posFirstChest).getType()) ^ TileType.BONUS.equals(game.getMaze().whatIsIn(posSecondChest).getType()));
 
         spawnerChest.applyEffect(game, game.getHero());
-        assertTrue(TypeCase.BONUS.equals(game.getMaze().whatIsIn(posFirstChest).getType()) ^ TypeCase.BONUS.equals(game.getMaze().whatIsIn(posSecondChest).getType()));
+        assertTrue(TileType.BONUS.equals(game.getMaze().whatIsIn(posFirstChest).getType()) ^ TileType.BONUS.equals(game.getMaze().whatIsIn(posSecondChest).getType()));
     }
 
     /**
@@ -121,11 +121,11 @@ public class SpawnerChestTest {
     public void testDeadIfMonster() {
         loadGame(1);
         Position posChest = new Position(1, 3);
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(posChest).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(posChest).getType());
         Monster monster = new Monster(game.getMaze().getInitialPositionPlayer(), RandomMove.INSTANCE);
 
         spawnerChest.applyEffect(game, monster);
-        assertEquals(TypeCase.EMPTY, game.getMaze().whatIsIn(posChest).getType());
+        assertEquals(TileType.EMPTY, game.getMaze().whatIsIn(posChest).getType());
         assertFalse(spawnerChest.isPressed());
     }
 

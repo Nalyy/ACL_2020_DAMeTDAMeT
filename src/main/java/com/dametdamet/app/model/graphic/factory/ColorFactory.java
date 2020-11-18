@@ -2,7 +2,7 @@ package com.dametdamet.app.model.graphic.factory;
 
 import com.dametdamet.app.model.entity.TypeEntity;
 
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
 import java.awt.*;
 
@@ -43,7 +43,7 @@ public enum ColorFactory {
      * @param type type de l'entité à colorier
      * @return la couleur correspondante au type de case en paramètre
      */
-    public Color getCaseColor(TypeCase type){
+    public Color getCaseColor(TileType type){
         switch (type){
             case WALL:
                 return wallColor;

@@ -4,14 +4,14 @@ import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Tile;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
 public class Teleportation extends Tile {
 
     private Position destination;
 
     public Teleportation(Position dest) {
-        super(TypeCase.TELEPORTATION);
+        super(TileType.TELEPORTATION);
         this.destination = dest;
     }
 

@@ -1,10 +1,9 @@
-package com.dametdamet.app.model.maze.trapCases;
+package com.dametdamet.app.model.maze.trapTiles;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.Hero;
-import com.dametdamet.app.model.maze.TypeCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

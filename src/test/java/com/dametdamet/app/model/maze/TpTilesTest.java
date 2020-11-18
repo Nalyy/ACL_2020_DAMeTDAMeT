@@ -2,7 +2,6 @@ package com.dametdamet.app.model.maze;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.RandomMove;
@@ -56,10 +55,10 @@ class TpTilesTest {
         loadGame("tp_maze/tp_right.txt");
 
         Position positionFirstTp = new Position(5, 2);
-        Assertions.assertEquals(maze.whatIsIn(positionFirstTp).getType(), TypeCase.TELEPORTATION);
+        Assertions.assertEquals(maze.whatIsIn(positionFirstTp).getType(), TileType.TELEPORTATION);
 
         Position positionSecondTp = new Position(2, 5);
-        Assertions.assertEquals(maze.whatIsIn(positionSecondTp).getType(), TypeCase.TELEPORTATION);
+        Assertions.assertEquals(maze.whatIsIn(positionSecondTp).getType(), TileType.TELEPORTATION);
 
         Teleportation tpTile = (Teleportation) maze.whatIsIn(positionFirstTp);
         Assertions.assertEquals(tpTile.getDestination(), positionSecondTp);

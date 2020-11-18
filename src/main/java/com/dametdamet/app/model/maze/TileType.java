@@ -1,6 +1,6 @@
 package com.dametdamet.app.model.maze;
 
-public enum TypeCase {
+public enum TileType {
     // Type            // symbole dans fichier, description
     EMPTY,             // 0, la case est vide
     WALL,              // 1, la case est un mur
@@ -12,6 +12,5 @@ public enum TypeCase {
     BONUS,             // B, conséquence de case magique : un coffre bonus peut y apparaître
     DAMAGE,            // D, case piège : blesse le héros
     SPAWNER_MONSTERS,  // S, case piège : fait apparaître un monstre
-    MONSTER_SPAWN,     // M, conséquence de case piège : un monstre peut y appaître
     TELEPORTATION      // P, case de téléportation : téléporte une entité sur l'autre case du même type
 }

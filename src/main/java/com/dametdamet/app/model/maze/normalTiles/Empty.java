@@ -3,14 +3,14 @@ package com.dametdamet.app.model.maze.normalTiles;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Tile;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
 public class Empty extends Tile {
     public Empty() {
-        super(TypeCase.EMPTY);
+        super(TileType.EMPTY);
     }
     public Empty(int numSprite) {
-        super(TypeCase.EMPTY, numSprite);
+        super(TileType.EMPTY, numSprite);
     }
 
     @Override

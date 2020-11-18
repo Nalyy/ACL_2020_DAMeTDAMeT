@@ -1,22 +1,22 @@
-package com.dametdamet.app.model.maze.magicCase;
+package com.dametdamet.app.model.maze.magicTiles;
 
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Tile;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
-public class Treasure extends Tile {
+public class Time extends Tile {
 
-    private static final int AMOUT_SCORE = 2000;
+    private final static int AMOUNT_TIME_MS = 5000;
 
-    public Treasure() {
-        super(TypeCase.BONUS);
+    public Time() {
+        super(TileType.TIME);
     }
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
         if(!isPressed() && entity.isHero()){
-            game.addScore(AMOUT_SCORE);
+            game.addTime(AMOUNT_TIME_MS);
             setPressed(true);
         }
     }

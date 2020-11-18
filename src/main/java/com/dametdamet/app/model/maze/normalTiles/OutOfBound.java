@@ -3,11 +3,11 @@ package com.dametdamet.app.model.maze.normalTiles;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Tile;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
 public class OutOfBound extends Tile {
     public OutOfBound() {
-        super(TypeCase.OUTOFBOUND);
+        super(TileType.OUTOFBOUND);
     }
 
     @Override

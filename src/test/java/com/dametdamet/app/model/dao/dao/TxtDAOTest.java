@@ -4,7 +4,7 @@ import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.maze.Maze;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -40,7 +40,7 @@ class TxtDAOTest {
 
         for (int x = 0; x < maze.getWidth(); x++) {
             for (int y = 0; y < maze.getWidth(); y++) {
-                assertEquals(maze.whatIsIn(new Position(x, y)).getType(), TypeCase.EMPTY);
+                assertEquals(maze.whatIsIn(new Position(x, y)).getType(), TileType.EMPTY);
             }
         }
 
@@ -69,7 +69,7 @@ class TxtDAOTest {
 
         for (int x = 0; x < maze.getWidth(); x++) {
             for (int y = 0; y < maze.getWidth(); y++) {
-                assertEquals(maze.whatIsIn(new Position(x, y)).getType(), TypeCase.WALL);
+                assertEquals(maze.whatIsIn(new Position(x, y)).getType(), TileType.WALL);
             }
         }
         maze.setInitialPositionPlayer(new Position(0, 0));

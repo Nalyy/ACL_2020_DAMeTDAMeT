@@ -3,7 +3,7 @@ package com.dametdamet.app.model.graphic.factory;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.TypeEntity;
 import com.dametdamet.app.model.maze.Tile;
-import com.dametdamet.app.model.maze.TypeCase;
+import com.dametdamet.app.model.maze.TileType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -119,7 +119,7 @@ public class ImageFactory {
      * @return l'image correspondant à la case en paramètre
      */
     public BufferedImage getCaseImage(Tile ca){
-        TypeCase type = ca.getType();
+        TileType type = ca.getType();
         switch (type){
             case EMPTY:
                 if(!(ca.getNumSprite() >= empty.length || ca.getNumSprite() < 0) )
