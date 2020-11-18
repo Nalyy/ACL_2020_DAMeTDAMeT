@@ -46,7 +46,7 @@ public class StairsTest {
         mazes[0] = "stairs_maze/maze_1_stair.txt";
         mazes[1] = "stairs_maze/maze_1_stair.txt";
         mazes[2] = "stairs_maze/maze_1_stair.txt";
-        this.game = new PacmanGame("", mazes);
+        this.game = new PacmanGame("no help", mazes);
         this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
 
         int prevScore = game.getScore();
