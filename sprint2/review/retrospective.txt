@@ -1,0 +1,8 @@
+Point à travailler :
+- On aurait dû faire une branche par fonctionnalité plutôt que par personne pour ne pas mélanger fonctionnalités
+et tests d'autres fonctionnalités
+
+
+Points positif :
+- Les tests ont été réalisés par une autre personne que celle qui a codé la fonctionnalité donc efficaces
+- Travail toujours aussi régulier

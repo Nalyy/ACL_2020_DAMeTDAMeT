@@ -1,0 +1,25 @@
+Sprint 2 :
+    Cases spéciales :
+        Cases magiques : ces cases magiques ont des effets aidant le héros lorsqu'il marche dessus
+            a. le héros récupère un point de vie
+            b. le héros gagne 5 secondes à son timer
+            c. un trésor bonus apparaît aléatoirement sur la carte
+        Cases pièges : ces cases pièges rajoutent des difficultés au héros lorsqu'il marche dessus
+            d. le héros perd un point de vie
+            e. un monstre supplémentaire apparaît aléatoirement sur la carte
+        Case téléportation : cette case permet de passer à une autre sur la carte, et on peut faire le chemin inverse
+            f. le héros peut se téléporter sur l'autre case et revenir
+            g. les monstres peuvent se téléporter sur l'autre case et revenir
+
+    Changement de niveau :
+            h. le héros peut passer à un étage supérieur avec un autre labyrinthe en empruntant des escaliers
+
+    Score :
+            i. le joueur peut augmenter son score en trouvant des trésor bonus
+            j. le joueur peut augmenter son score en passant à l'étage supérieur
+
+    Points de vie :
+            k. le joueur a maintenant des points de vie : s'il les perd tous, la partie est finie 
+
+
+de a. à k. : OK
