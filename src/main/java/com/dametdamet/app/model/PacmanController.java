@@ -1,6 +1,9 @@
 package com.dametdamet.app.model;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.GameController;
@@ -17,13 +20,14 @@ public class PacmanController implements GameController {
 	/**
 	 * commande en cours
 	 */
-	private Command commandEnCours;
+	private List<Command> commandesEnCours;
 	
 	/**
 	 * construction du controleur par defaut le controleur n'a pas de commande
 	 */
 	public PacmanController() {
-		this.commandEnCours = Command.IDLE;
+		commandesEnCours = new ArrayList<>();
+		commandesEnCours.add(Command.IDLE);
 	}
 
 	/**
@@ -33,7 +37,7 @@ public class PacmanController implements GameController {
 	 * @return commande faite par le joueur
 	 */
 	public Command getCommand() {
-		return this.commandEnCours;
+		return commandesEnCours.get(commandesEnCours.size()-1);
 	}
 
 	@Override
@@ -47,43 +51,50 @@ public class PacmanController implements GameController {
 		// si on appuie sur 'q', commande joueur est gauche
 			case 'q':
 			case 'Q':
-				this.commandEnCours = Command.LEFT;
+				if(!commandesEnCours.contains(Command.LEFT))
+				commandesEnCours.add(Command.LEFT);
 				break;
 		// si on appuie sur 'd', commande joueur est droite
 			case 'd':
 			case 'D':
-				this.commandEnCours = Command.RIGHT;
+				if(!commandesEnCours.contains(Command.RIGHT))
+					commandesEnCours.add(Command.RIGHT);
 				break;
 
 		// si on appuie sur 's', commande joueur est bas
 			case 's' :
 			case 'S':
-				this.commandEnCours = Command.DOWN;
+				if(!commandesEnCours.contains(Command.DOWN))
+					commandesEnCours.add(Command.DOWN);
 				break;
 
 		// si on appuie sur 'z', commande joueur est haut
 			case 'z':
 			case 'Z':
-				this.commandEnCours = Command.UP;
+				if(!commandesEnCours.contains(Command.UP))
+					commandesEnCours.add(Command.UP);
 				break;
 
 				/* OPTIONS ÉTAT DU JEU */
 		// si on appuie sur 'r', le jeu recommence
 			case 'r':
 			case 'R':
-				this.commandEnCours = Command.RETRY;
+				if(!commandesEnCours.contains(Command.RETRY))
+					commandesEnCours.add(Command.RETRY);
 				break;
 
 		// si on appuie sur 'p', le jeu est en pause
 			case 'p':
 			case 'P':
-				this.commandEnCours = Command.PAUSE;
+				if(!commandesEnCours.contains(Command.PAUSE))
+					commandesEnCours.add(Command.PAUSE);
 				break;
 
 		// si on appuie sur 'c', le jeu se ferme
 			case 'c':
 			case 'C':
-				this.commandEnCours = Command.CLOSE;
+				if(!commandesEnCours.contains(Command.CLOSE))
+					commandesEnCours.add(Command.CLOSE);
 				break;
 		}
 
@@ -94,7 +105,51 @@ public class PacmanController implements GameController {
 	 * met a jour les commandes quand le joueur relache une touche
 	 */
 	public void keyReleased(KeyEvent e) {
-		this.commandEnCours = Command.IDLE;
+
+		switch (e.getKeyChar()) {
+			/* DÉPLACEMENTS PERSONNAGE */
+			// si on appuie sur 'q', commande joueur est gauche
+			case 'q':
+			case 'Q':
+				commandesEnCours.remove(Command.LEFT);
+				break;
+			// si on appuie sur 'd', commande joueur est droite
+			case 'd':
+			case 'D':
+				commandesEnCours.remove(Command.RIGHT);
+				break;
+
+			// si on appuie sur 's', commande joueur est bas
+			case 's' :
+			case 'S':
+				commandesEnCours.remove(Command.DOWN);
+				break;
+
+			// si on appuie sur 'z', commande joueur est haut
+			case 'z':
+			case 'Z':
+				commandesEnCours.remove(Command.UP);
+				break;
+
+			/* OPTIONS ÉTAT DU JEU */
+			// si on appuie sur 'r', le jeu recommence
+			case 'r':
+			case 'R':
+				commandesEnCours.remove(Command.RETRY);
+				break;
+
+			// si on appuie sur 'p', le jeu est en pause
+			case 'p':
+			case 'P':
+				commandesEnCours.remove(Command.PAUSE);
+				break;
+
+			// si on appuie sur 'c', le jeu se ferme
+			case 'c':
+			case 'C':
+				commandesEnCours.remove(Command.CLOSE);
+				break;
+		}
 	}
 
 	@Override
