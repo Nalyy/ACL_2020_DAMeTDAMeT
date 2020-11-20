@@ -169,6 +169,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			return;
 		}
 
+		/* On a besoin de traduire la commande en direction à partir d'ici*/
+		Direction directionHero = getDirectionFromCommand(command);
+
 		/*
 		Si le timer est fini, alors le jeu est fini
 		*/
@@ -180,7 +183,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		// Héros
 		if (command != Command.IDLE) {
 			Position initPosHero = hero.getPosition();
-			Position targetPosHero = getTargetPosition(initPosHero, command);
+			Position targetPosHero = getTargetPosition(initPosHero, directionHero);
 
 			if (maze.isNotWall(targetPosHero)) {
 				hero.moveTo(targetPosHero);
@@ -236,7 +239,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private void moveMonsters(){
 		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
-		Command nextCommand;
+		Direction nextDirection;
 
 		// Monstres
 		for (Entity m : monsters){
@@ -244,12 +247,12 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 			// Déplacement du monstre
 			initialPosition = monster.getPosition();
-			nextCommand = monster.getNextCommand();
-			targetPosition = getTargetPosition(initialPosition, nextCommand);
+			nextDirection = monster.getNextDirection();
+			targetPosition = getTargetPosition(initialPosition, nextDirection);
 
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
 			monster.moveTo(targetPosition);
-			if (!nextCommand.equals(Command.IDLE)) {
+			if (!nextDirection.equals(Direction.IDLE)) {
 				maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
 			}
 
@@ -264,13 +267,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 * Donne la nouvelle position si exécution de cmd.
 	 *
 	 * @param position la position de départ
-	 * @param command la commande à exécuter
+	 * @param direction la direction à exécuter
 	 * @return une nouvelle position modifiée selon command
 	 */
-	private Position getTargetPosition(Position position, Command command){
+	private Position getTargetPosition(Position position, Direction direction){
 		int x = position.getX();
 		int y = position.getY();
-		switch (command){
+		switch (direction){
 			case UP:
 				y = y - 1;
 				break;
@@ -403,5 +406,28 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	public void addMonster(Position position){
 		Monster monster = new Monster(position, RandomMove.INSTANCE);
 		monsters.add(monster);
+	}
+
+	private Direction getDirectionFromCommand(Command command){
+		Direction direction = null;
+		switch (command){
+			case UP:
+				direction = Direction.UP;
+				break;
+			case DOWN:
+				direction = Direction.DOWN;
+				break;
+			case LEFT:
+				direction = Direction.LEFT;
+				break;
+			case RIGHT:
+				direction = Direction.RIGHT;
+				break;
+			case IDLE:
+			default:
+				direction = Direction.IDLE;
+
+		}
+		return direction;
 	}
 }

@@ -1,6 +1,7 @@
 package com.dametdamet.app.model.entity.monster;
 
 import com.dametdamet.app.engine.Command;
+import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.TileType;
@@ -38,11 +39,11 @@ public enum RandomMove implements MoveStrategy {
     }
 
     @Override
-    public Command getNextCommand(Monster monster){
+    public Direction getNextDirection(Monster monster){
         Objects.requireNonNull(maze, "La stratégie appliquée au monstre n'a pas de labyrinthe associé.");
 
         // On vérifie si le monstre a le droit de se re-déplacer tout de suite.
-        if (!monster.isFinishedTimer()) return Command.IDLE;
+        if (!monster.isFinishedTimer()) return Direction.IDLE;
 
         // Si oui, on reset son timer pour le prochain déplacement et on lui donne sa direction.
         monster.resetTimer();
@@ -51,32 +52,32 @@ public enum RandomMove implements MoveStrategy {
         int initialX = position.getX();
         int initialY = position.getY();
         TileType type;
-        List<Command> candidates = new ArrayList<>(4); // 4 = nombre de commandes possibles
+        List<Direction> candidates = new ArrayList<>(4); // 4 = nombre de commandes possibles
         Random randomGenerator = new Random();
 
         /* On commence par regarder les commandes possibles à exécuter */
         // Tile de haut
         position.setY(initialY - 1);
-        if (maze.isNotWall(position)) candidates.add(Command.UP);
+        if (maze.isNotWall(position)) candidates.add(Direction.UP);
         position.setY(initialY);  // remise à l'état initial de la position
 
         // Tile de bas
         position.setY(initialY + 1);
-        if (maze.isNotWall(position)) candidates.add(Command.DOWN);
+        if (maze.isNotWall(position)) candidates.add(Direction.DOWN);
         position.setY(initialY);
 
         // Tile de gauche
         position.setX(initialX - 1);
-        if (maze.isNotWall(position)) candidates.add(Command.LEFT);
+        if (maze.isNotWall(position)) candidates.add(Direction.LEFT);
         position.setX(initialX);
 
         // Tile de droite
         position.setX(initialX + 1);
-        if (maze.isNotWall(position)) candidates.add(Command.RIGHT);
+        if (maze.isNotWall(position)) candidates.add(Direction.RIGHT);
         position.setX(initialX);
 
         int boundForRandom = candidates.size() ;
-        return candidates.isEmpty() ? Command.IDLE : candidates.get(randomGenerator.nextInt(boundForRandom));
+        return candidates.isEmpty() ? Direction.IDLE : candidates.get(randomGenerator.nextInt(boundForRandom));
     }
 
 }

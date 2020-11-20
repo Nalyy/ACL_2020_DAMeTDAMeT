@@ -51,8 +51,8 @@ public class Monster extends Entity {
      *
      * @return Command la prochaine direction que le monstre va prendre
      */
-    public Command getNextCommand(){
-           return strategy.getNextCommand(this);
+    public Direction getNextDirection(){
+           return strategy.getNextDirection(this);
     }
 
     /**
