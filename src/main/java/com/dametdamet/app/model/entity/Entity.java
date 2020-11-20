@@ -9,7 +9,7 @@ import java.util.Collection;
 public abstract class Entity {
     private Position position;
 
-    private EntityType type;
+    protected EntityType type;
 
     public Entity(Position position, EntityType type){
         this.position = position;
@@ -18,7 +18,7 @@ public abstract class Entity {
 
     /**
      * Remplace la position avec la nouvelle position.
-     * @param position
+     * @param position la nouvelle position
      */
     public void moveTo(Position position){
         this.position.setX(position.getX());

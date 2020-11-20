@@ -21,11 +21,16 @@ public enum EntityType {
         )),
 
     MONSTER(new ArrayList<>(Arrays.asList(TileType.WALL, TileType.OUTOFBOUND)),
-            new ArrayList<>(Arrays.asList(
+            new ArrayList<>(Collections.singletonList(
                     TileType.TELEPORTATION
             )
             )
-    );
+    ),
+
+    GHOST(new ArrayList<>(Collections.singletonList(TileType.OUTOFBOUND)),
+            new ArrayList<>()
+    )
+    ;
 
     private Collection<TileType> cantGoTo;
     private Collection<TileType> canTrigger;

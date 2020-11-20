@@ -43,6 +43,11 @@ public class Monster extends Entity {
 
     }
 
+    public Monster(Position position, MoveStrategy strategy, EntityType type){
+        this(position, strategy);
+        this.type = type;
+    }
+
     /**
      * Retourne le prochain mouvement que le monstre veut faire.
      *

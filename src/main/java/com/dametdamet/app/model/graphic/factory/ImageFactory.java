@@ -47,6 +47,7 @@ public class ImageFactory {
     private final BufferedImage entityNotFound;
     private final BufferedImage hero;
     private final BufferedImage monster;
+    private final BufferedImage ghost;
 
     private final BufferedImage heart_full;
     private final BufferedImage heart_empty;
@@ -94,6 +95,9 @@ public class ImageFactory {
 
         //image MONSTER
         monster = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/monster01.png"));
+
+        //image GHOST
+        ghost = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/monster02.png"));
 
         //image entity notFound
         entityNotFound = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/entity_not_found.png"));
@@ -163,6 +167,8 @@ public class ImageFactory {
                 return hero;
             case MONSTER:
                 return monster;
+            case GHOST:
+                return ghost;
             default:
                 return entityNotFound;
         }
