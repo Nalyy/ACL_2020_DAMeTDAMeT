@@ -17,7 +17,9 @@ public class Teleportation extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        entity.moveTo(destination);
+        if (entity.canTrigger(this)){
+            entity.moveTo(destination);
+        }
     }
 
     public Position getDestination(){

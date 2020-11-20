@@ -15,6 +15,7 @@ import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.maze.Maze;
+import com.dametdamet.app.model.maze.Tile;
 
 /**
  * @author Horatiu Cirstea, Vincent Thomas
@@ -185,10 +186,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			Position initPosHero = hero.getPosition();
 			Position targetPosHero = getTargetPosition(initPosHero, directionHero);
 
-			if (maze.isNotWall(targetPosHero)) {
+			Tile tile = maze.whatIsIn(targetPosHero);
+			if (hero.canGoTo(tile)){
 				hero.moveTo(targetPosHero);
-				maze.whatIsIn(hero.getPosition()).applyEffect(this, hero);
-
+				tile.applyEffect(this, hero);
 			}
 		}
 

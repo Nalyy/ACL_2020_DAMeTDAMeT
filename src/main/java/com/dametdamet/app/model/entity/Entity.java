@@ -1,13 +1,17 @@
 package com.dametdamet.app.model.entity;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.maze.Tile;
+import com.dametdamet.app.model.maze.TileType;
+
+import java.util.Collection;
 
 public abstract class Entity {
     private Position position;
 
-    private TypeEntity type;
+    private EntityType type;
 
-    public Entity(Position position,TypeEntity type){
+    public Entity(Position position, EntityType type){
         this.position = position;
         this.type = type;
     }
@@ -30,11 +34,21 @@ public abstract class Entity {
         return position;
     }
 
-    public TypeEntity getType() {
+    public EntityType getType() {
         return type;
     }
 
-    public boolean isHero(){
-        return TypeEntity.HERO.equals(type);
+    public boolean canGoTo(Tile tile){
+        Collection<TileType> limitationTiles = this.type.getLimitations();
+        TileType tileType = tile.getType();
+
+        return !limitationTiles.contains(tileType);
+    }
+
+    public boolean canTrigger(Tile tile){
+        Collection<TileType> tilesToTrigger = type.getTriggers();
+        TileType tileType = tile.getType();
+
+        return tilesToTrigger.contains(tileType);
     }
 }

@@ -13,7 +13,7 @@ public class Hero extends Entity {
 
 
     public Hero(Position position,int maxHp) {
-        super(position, TypeEntity.HERO);
+        super(position, EntityType.HERO);
         invicibiltyTimer = new Timer();
         hp = maxHp;
         this.maxHp = maxHp;

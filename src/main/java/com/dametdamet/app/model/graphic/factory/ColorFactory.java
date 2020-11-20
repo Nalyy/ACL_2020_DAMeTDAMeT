@@ -1,6 +1,6 @@
 package com.dametdamet.app.model.graphic.factory;
 
-import com.dametdamet.app.model.entity.TypeEntity;
+import com.dametdamet.app.model.entity.EntityType;
 
 import com.dametdamet.app.model.maze.TileType;
 
@@ -27,7 +27,7 @@ public enum ColorFactory {
      * @param type type de l'entité à colorier
      * @return la couleur correspondante au type d'entité en paramètre
      */
-    public Color getEntityColor(TypeEntity type){
+    public Color getEntityColor(EntityType type){
         switch (type){
             case HERO:
                 return heroColor;

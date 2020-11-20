@@ -15,7 +15,7 @@ public class Heal extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        if(!isPressed() && entity.isHero()){
+        if(!isPressed() && entity.canTrigger(this)){
             game.healHero(AMOUNT_HEAL);
             setPressed(true);
         }

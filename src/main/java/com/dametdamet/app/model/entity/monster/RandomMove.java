@@ -4,6 +4,7 @@ import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.maze.Maze;
+import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
 
 import java.util.ArrayList;
@@ -58,22 +59,25 @@ public enum RandomMove implements MoveStrategy {
         /* On commence par regarder les commandes possibles à exécuter */
         // Tile de haut
         position.setY(initialY - 1);
-        if (maze.isNotWall(position)) candidates.add(Direction.UP);
+        Tile tile = maze.whatIsIn(position);
+        if (monster.canGoTo(tile)) candidates.add(Direction.UP);
         position.setY(initialY);  // remise à l'état initial de la position
 
         // Tile de bas
         position.setY(initialY + 1);
-        if (maze.isNotWall(position)) candidates.add(Direction.DOWN);
+        tile = maze.whatIsIn(position);
+        if (monster.canGoTo(tile)) candidates.add(Direction.DOWN);
         position.setY(initialY);
 
         // Tile de gauche
         position.setX(initialX - 1);
-        if (maze.isNotWall(position)) candidates.add(Direction.LEFT);
-        position.setX(initialX);
+        tile = maze.whatIsIn(position);
+        if (monster.canGoTo(tile)) candidates.add(Direction.LEFT); position.setX(initialX);
 
         // Tile de droite
         position.setX(initialX + 1);
-        if (maze.isNotWall(position)) candidates.add(Direction.RIGHT);
+        tile = maze.whatIsIn(position);
+        if (monster.canGoTo(tile)) candidates.add(Direction.RIGHT);
         position.setX(initialX);
 
         int boundForRandom = candidates.size() ;

@@ -3,7 +3,7 @@ package com.dametdamet.app.model.entity.monster;
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.*;
 import com.dametdamet.app.model.entity.Entity;
-import com.dametdamet.app.model.entity.TypeEntity;
+import com.dametdamet.app.model.entity.EntityType;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public class Monster extends Entity {
      * @param strategy la stratégie de déplacement du monstre
      */
     public Monster(Position position, MoveStrategy strategy){
-        super(position, TypeEntity.MONSTER);
+        super(position, EntityType.MONSTER);
 
         // Lance une erreur si la stratégie donnée est null
         Objects.requireNonNull(strategy, "La stratégie donnée à la construction du monstre est null.");

@@ -1,7 +1,7 @@
 package com.dametdamet.app.model.graphic.factory;
 
 import com.dametdamet.app.model.entity.Entity;
-import com.dametdamet.app.model.entity.TypeEntity;
+import com.dametdamet.app.model.entity.EntityType;
 import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
 
@@ -157,7 +157,7 @@ public class ImageFactory {
      * @return l'image correspondante à l'entité en paramètre
      */
     public BufferedImage getEntityImage(Entity entity){
-        TypeEntity type = entity.getType();
+        EntityType type = entity.getType();
         switch (type){
             case HERO:
                 return hero;
