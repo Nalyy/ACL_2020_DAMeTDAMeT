@@ -428,21 +428,34 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			case IDLE:
 			default:
 				direction = Direction.IDLE;
-
 		}
 		return direction;
 	}
 
+	/**
+	 * retire l'entité (si il y est) de la liste des monstres
+	 * @param entity entité à retirer
+	 */
 	private void destroyMonster(Entity entity){
 		monsters.remove(entity);
 	}
 
-
+	/**
+	 * inflige des dégâts à l'entity
+	 * @param entity entity
+	 * @param hpAmount montant de dégât
+	 */
 	public void hurtEntity(Entity entity,int hpAmount){
 		entity.loseHP(hpAmount);
 	}
 
+	/**
+	 * soigne l'entité
+	 * @param entity entité
+	 * @param hpAmount montant du soin
+	 */
 	public void healEntity(Entity entity,int hpAmount){
 		entity.gainHP(hpAmount);
 	}
+
 }

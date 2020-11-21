@@ -16,13 +16,15 @@ public enum EntityType {
                                         TileType.SPAWNER_CHEST,
                                         TileType.SPAWNER_MONSTERS,
                                         TileType.TELEPORTATION,
-                                        TileType.TIME
+                                        TileType.TIME,
+                                        TileType.DYNAMITE
                  )
         )),
 
     MONSTER(new ArrayList<>(Arrays.asList(TileType.WALL, TileType.OUTOFBOUND)),
             new ArrayList<>(Arrays.asList(
-                    TileType.TELEPORTATION
+                    TileType.TELEPORTATION,
+                    TileType.DYNAMITE
             )
             )
     );

@@ -11,6 +11,7 @@ import com.dametdamet.app.model.maze.normalTiles.Stairs;
 import com.dametdamet.app.model.maze.normalTiles.Teleportation;
 import com.dametdamet.app.model.maze.normalTiles.Wall;
 import com.dametdamet.app.model.maze.trapTiles.Damage;
+import com.dametdamet.app.model.maze.trapTiles.Dynamite;
 import com.dametdamet.app.model.maze.trapTiles.SpawnerMonster;
 
 import java.io.*;
@@ -34,11 +35,13 @@ public enum TxtDAO implements AbstractFileDAO {
     private static final char POS_CHEST = 'B';
 
     private static final char DAMAGE = 'D';
+    private static final char DYNAMITE = 'E';
 
     private static final char SPAWNER_MONSTERS = 'S';
     private static final char POS_MONSTERS = 'M';
 
     private static final char TELEPORTATION = 'P';
+
 
     @Override
     public Maze load(String nomFichier) {
@@ -172,6 +175,9 @@ public enum TxtDAO implements AbstractFileDAO {
                         break;
                     case DAMAGE:
                         laby[x][y] = new Damage();
+                        break;
+                    case DYNAMITE:
+                        laby[x][y] = new Dynamite(new Position(x,y));
                         break;
                     case SPAWNER_MONSTERS:
                         laby[x][y] = new SpawnerMonster();
