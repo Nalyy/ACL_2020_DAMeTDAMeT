@@ -141,14 +141,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		}
 	}
 
-	public void healHero(int amount){
-		hero.gainHP(amount);
-	}
-
-	public void hurtHero(int amount){
-		hero.loseHP(amount);
-	}
-
 	/**
 	 * faire evoluer le jeu suite a une commande
 	 * 
@@ -241,6 +233,8 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
 		Direction nextDirection;
+		Collection<Entity> monsterToRemove = new ArrayList<>();
+
 
 		// Monstres
 		for (Entity m : monsters){
@@ -261,6 +255,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			if (targetPosition.equals(heroPosition)) {
 				hero.loseHP(1);
 			}
+
+			if(monster.getHP() == 0){
+				monsterToRemove.add(monster);
+			}
+		}
+		for(Entity e:monsterToRemove){
+			destroyMonster(e);
 		}
 	}
 
@@ -430,5 +431,18 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 		}
 		return direction;
+	}
+
+	private void destroyMonster(Entity entity){
+		monsters.remove(entity);
+	}
+
+
+	public void hurtEntity(Entity entity,int hpAmount){
+		entity.loseHP(hpAmount);
+	}
+
+	public void healEntity(Entity entity,int hpAmount){
+		entity.gainHP(hpAmount);
 	}
 }
