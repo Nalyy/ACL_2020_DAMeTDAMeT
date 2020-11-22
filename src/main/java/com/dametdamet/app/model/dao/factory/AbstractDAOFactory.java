@@ -1,6 +1,7 @@
 package com.dametdamet.app.model.dao.factory;
 
-import com.dametdamet.app.model.dao.dao.AbstractFileDAO;
+import com.dametdamet.app.model.dao.dao.leaderboard.AbstractFileLeaderboardDAO;
+import com.dametdamet.app.model.dao.dao.maze.AbstractMazeDAO;
 
 public abstract class AbstractDAOFactory {
 
@@ -10,7 +11,8 @@ public abstract class AbstractDAOFactory {
      * Permet de récupérer la classe qui gère la lecture de fichier
      * @return Une classe qui gère la lecture de fichier
      */
-    public abstract AbstractFileDAO getFileDAO();
+    public abstract AbstractMazeDAO getMazeDAO();
+    public abstract AbstractFileLeaderboardDAO getLeaderboardDAO();
 
     /**
      * Permet de récupérer la factory pour la DAO

@@ -1,4 +1,4 @@
-package com.dametdamet.app.model.dao.dao;
+package com.dametdamet.app.model.dao.dao.maze;
 
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
@@ -17,7 +17,7 @@ import java.io.*;
 import java.util.Random;
 
 
-public enum TxtDAO implements AbstractFileDAO {
+public enum TxtDAO implements AbstractMazeDAO {
 
     INSTANCE;
 
@@ -62,7 +62,6 @@ public enum TxtDAO implements AbstractFileDAO {
             laby = createTabCases(fr, widthHeight[0], widthHeight[1]);
 
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("Erreur lecture fichier : " + e.getMessage());
         } finally { // Code appelé à la fin (même en cas d'exception)
             if (fr != null) {

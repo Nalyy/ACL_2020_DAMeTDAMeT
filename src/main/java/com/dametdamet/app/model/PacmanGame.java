@@ -3,6 +3,7 @@ package com.dametdamet.app.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,6 +15,8 @@ import com.dametdamet.app.model.entity.*;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
+import com.dametdamet.app.model.leaderboard.Leaderboard;
+import com.dametdamet.app.model.leaderboard.Score;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.Tile;
 
@@ -37,15 +40,27 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private String[] filesNames;
 	private final int nbMazesToDo;
 
+	private Leaderboard leaderboard;
+	private boolean hasUpdatedLeaderboard = false;
+	private final String fileNameLeaderboard;
+
 	public static int TIMER_TIME = 60; // Temps du timer en seconde
+
+	public PacmanGame(String source, String[] sourceMaze){
+		this(source, "", sourceMaze);
+	}
 
 	/**
 	 * Constructeur avec fichier source pour le help
 	 */
-	public PacmanGame(String source, String[] sourceMaze) {
+	public PacmanGame(String source, String sourceLeaderboard, String[] sourceMaze) {
 		monsters = new ArrayList<>();
 		filesNames = sourceMaze;
 		nbMazesToDo = sourceMaze.length;
+
+		fileNameLeaderboard = sourceLeaderboard;
+
+		loadLeaderboard();
 
 		init();
 
@@ -120,9 +135,20 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 	private void loadMaze(){
 		if(fileName != null && !fileName.equals(""))
-			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getFileDAO().load(fileName);
+			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getMazeDAO().load(fileName);
 		else
 			maze = new Maze();
+	}
+
+	/**
+	 * Charge un Leaderboard en fonction du nom de fichier donné
+	 */
+	private void loadLeaderboard(){
+		if(fileNameLeaderboard != null && !fileNameLeaderboard.equals("")){
+			leaderboard = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getLeaderboardDAO().load(fileNameLeaderboard);
+		}else{
+			leaderboard = new Leaderboard();
+		}
 	}
 
 	/**
@@ -159,6 +185,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		/!\ Il faut bien que cette vérification soit faite APRÈS le check de la commande
 		 */
 		if (isPaused() || isFinished() || isWon() || isClosed()){
+			saveLeaderBoard();
 			return;
 		}
 
@@ -374,6 +401,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		return score;
 	}
 
+	public Leaderboard getLeaderboard(){
+		return leaderboard;
+	}
+
 	/**
 	 * @return le timer du jeu
 	 */
@@ -411,7 +442,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	private Direction getDirectionFromCommand(Command command){
-		Direction direction = null;
+		Direction direction;
 		switch (command){
 			case UP:
 				direction = Direction.UP;
@@ -444,5 +475,19 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 	public void healEntity(Entity entity,int hpAmount){
 		entity.gainHP(hpAmount);
+	}
+
+	/**
+	 * Sauvegarde le leaderboard dans un fichier si la partie est terminée.
+	 */
+	private void saveLeaderBoard(){
+		if(isFinished() || isWon() || isClosed()){
+			if(!hasUpdatedLeaderboard){
+				hasUpdatedLeaderboard = true;
+				leaderboard.add(new Score(LocalDate.now().toString(), score));
+				if(fileNameLeaderboard != null && !fileNameLeaderboard.equals(""))
+					AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getLeaderboardDAO().save(leaderboard, fileNameLeaderboard);
+			}
+		}
 	}
 }
