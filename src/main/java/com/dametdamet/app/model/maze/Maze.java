@@ -252,4 +252,5 @@ public class Maze{
 
         return position;
     }
+
 }

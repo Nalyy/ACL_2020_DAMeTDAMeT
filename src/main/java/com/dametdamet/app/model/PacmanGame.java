@@ -11,9 +11,7 @@ import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
 import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 import com.dametdamet.app.model.entity.*;
-import com.dametdamet.app.model.entity.monster.Monster;
-import com.dametdamet.app.model.entity.monster.MoveStrategy;
-import com.dametdamet.app.model.entity.monster.RandomMove;
+import com.dametdamet.app.model.entity.monster.*;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.Tile;
 
@@ -85,6 +83,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		gameTimer = new Timer();
 		gameTimer.pause();
 
+		/* Initialisation des stratégies */
+		RandomMove.INSTANCE.setGame(this);
+		RunnerMove.INSTANCE.setGame(this);
+
 		// Re-création du monde
 		monsters.clear();
 		addMonsters();
@@ -129,8 +131,8 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 * Ajoute les monstres au jeu.
 	 */
 	private void addMonsters(){
-		MoveStrategy moveStrategy = RandomMove.INSTANCE;
-		RandomMove.INSTANCE.setMaze(maze);
+		MoveStrategy moveStrategy = AStarMove.INSTANCE;
+		AStarMove.INSTANCE.setGame(this);
 
 		Iterator<Position> initialPositionMonster = maze.getIteratorMonsterPositions();
 
