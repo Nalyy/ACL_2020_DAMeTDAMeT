@@ -83,13 +83,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		gameTimer = new Timer();
 		gameTimer.pause();
 
-		/* Initialisation des stratégies */
+		/* Toutes les stratégies doivent être initalisées avec le jeu */
 		RandomMove.INSTANCE.setGame(this);
 		RunnerMove.INSTANCE.setGame(this);
+		AStarMove.INSTANCE.setGame(this);
 
 		// Re-création du monde
 		monsters.clear();
-		addMonsters();
+		initMonsters();
 
 		// Lancement du timer
 		gameTimer.top(TIMER_TIME * 1000);
@@ -116,7 +117,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			// On s'occupe des monstres et des héros
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
-			addMonsters();
+			initMonsters();
 		}
 	}
 
@@ -130,16 +131,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	/**
 	 * Ajoute les monstres au jeu.
 	 */
-	private void addMonsters(){
-		MoveStrategy moveStrategy = AStarMove.INSTANCE;
-		AStarMove.INSTANCE.setGame(this);
+	private void initMonsters(){
 
 		Iterator<Position> initialPositionMonster = maze.getIteratorMonsterPositions();
 
 		// Création des monstres à mettre dans la liste
 		while (initialPositionMonster.hasNext()){
 			// On met le nouveau monstre dans la liste en lui assignant une position initiale
-			monsters.add(new Monster(new Position(initialPositionMonster.next()), moveStrategy));
+			monsters.add(new Monster(new Position(initialPositionMonster.next()), RunnerMove.INSTANCE));
 		}
 	}
 
@@ -291,13 +290,6 @@ public class PacmanGame implements Game, Iterable<Entity> {
 				break;
 		}
 		return new Position(x, y);
-	}
-
-	/**
-	 * Indiquer si le jeu est fini
-	 */
-	private void setFinished(boolean b){
-		state = (b ? GameState.LOST : GameState.ONGOING);
 	}
 
 	/**

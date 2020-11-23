@@ -6,10 +6,12 @@ import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.EntityType;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Monster extends Entity {
     private MoveStrategy strategy;
     private Timer timer;
+    private Direction direction;
     private long millisecondsToWait = 400; // par défaut, chaque monstre bouge après 0.5 secondes d'attente
 
     /**
@@ -34,12 +36,37 @@ public class Monster extends Entity {
         // Lance une erreur si position initiale incorrecte
         assert strategy.isInMaze(position) : "La position initiale est hors du labyrinthe.";
 
-        // Si tout ok, on accepte de lui donner la stratégie pour qu'il puisse se construire.
+        // Si tout est ok...
+        // On lui donne une direction initiale
+        setRandomDirection();
+
+        // On accepte de lui donner la stratégie pour qu'il puisse se construire.
         this.strategy = strategy;
 
         // On donne son timer au monstre et on le démarre.
         timer = new Timer();
         resetTimer();
+
+    }
+
+    private void setRandomDirection(){
+        Random randomGenerator = new Random();
+        int random = randomGenerator.nextInt(4);
+
+        switch (random){
+            case 0:
+                this.direction = Direction.UP;
+                break;
+            case 1:
+                this.direction = Direction.DOWN;
+                break;
+            case 2:
+                this.direction = Direction.LEFT;
+                break;
+            case 3:
+                this.direction = Direction.RIGHT;
+                break;
+        }
 
     }
 
@@ -52,7 +79,23 @@ public class Monster extends Entity {
      * @return Command la prochaine direction que le monstre va prendre
      */
     public Direction getNextDirection(){
-           return strategy.getNextDirection(this);
+        Direction direction = strategy.getNextDirection(this);
+        this.direction = direction;
+        return direction;
+    }
+
+    /**
+     * @return la direction actuelle du monstre
+     */
+    public Direction getDirection(){
+        return direction;
+    }
+
+    /**
+     * @param direction la nouvelle direction du monstre
+     */
+    public void setDirection(Direction direction){
+        this.direction = direction;
     }
 
     /**
