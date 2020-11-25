@@ -112,8 +112,11 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		}else {
 			// On charge le prochain labyrinthe
 			fileName = filesNames[currentLevel];
+
+			// On change notre maze
 			loadMaze();
 
+			initMazeOfStrategies();
 			// On s'occupe des monstres et des héros
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
@@ -129,17 +132,25 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	/**
-	 * Ajoute les monstres au jeu.
+	 * Crée et ajoute les monstres au jeu.
 	 */
 	private void initMonsters(){
-
 		Iterator<Position> initialPositionMonster = maze.getIteratorMonsterPositions();
 
 		// Création des monstres à mettre dans la liste
 		while (initialPositionMonster.hasNext()){
 			// On met le nouveau monstre dans la liste en lui assignant une position initiale
-			monsters.add(new Monster(new Position(initialPositionMonster.next()), RunnerMove.INSTANCE));
+			monsters.add(new Monster(new Position(initialPositionMonster.next()), AStarMove.INSTANCE));
 		}
+	}
+
+	/**
+	 * Initialise toutes les stratégies avec le labyrinthe actuel.
+	 */
+	private void initMazeOfStrategies(){
+		RandomMove.INSTANCE.setMaze(maze);
+		AStarMove.INSTANCE.setMaze(maze);
+		RunnerMove.INSTANCE.setMaze(maze);
 	}
 
 	public void healHero(int amount){
@@ -253,16 +264,39 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			targetPosition = getTargetPosition(initialPosition, nextDirection);
 
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
-			monster.moveTo(targetPosition);
-			if (!nextDirection.equals(Direction.IDLE)) {
-				maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
+			if(!conflictWithEntity(targetPosition)){
+				monster.moveTo(targetPosition);
+
+				if (!nextDirection.equals(Direction.IDLE)) {
+					maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
+				}
 			}
 
-			// Test collision avec le héro
+			// Test collision avec le héros
 			if (targetPosition.equals(heroPosition)) {
 				hero.loseHP(1);
 			}
 		}
+	}
+
+	private boolean conflictWithEntity(Position positionToGo){
+		boolean conflict = false;
+
+		/* On regarde si un monstre se trouve par ici */
+		for (Entity monster : this){
+			if (monster.getPosition().equals(positionToGo)){
+				conflict = true;
+				break;
+			}
+		}
+
+		/* Si aucun soucis avec les monstres, on regarde si soucis avec le héros */
+		if (!conflict){
+			conflict = positionToGo.equals(hero.getPosition());
+		}
+
+		return conflict;
+
 	}
 
 	/**

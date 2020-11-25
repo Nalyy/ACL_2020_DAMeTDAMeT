@@ -43,6 +43,11 @@ public enum AStarMove implements MoveStrategy{
     }
 
     @Override
+    public void setMaze(Maze maze) {
+        this.maze = maze;
+    }
+
+    @Override
     public Direction getNextDirection(Monster monster) {
         Objects.requireNonNull(game, "La stratégie appliquée à l'ennemi n'a pas de jeu associé.");
         Objects.requireNonNull(maze, "La stratégie appliquée à l'ennemi n'a pas de labyrinthe associé.");

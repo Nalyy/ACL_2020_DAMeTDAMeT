@@ -37,4 +37,6 @@ public interface MoveStrategy {
      */
     boolean isInMaze(Position position);
 
+    void setMaze(Maze maze);
+
 }

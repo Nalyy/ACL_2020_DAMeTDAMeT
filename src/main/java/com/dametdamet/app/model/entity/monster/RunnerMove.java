@@ -72,4 +72,9 @@ public enum RunnerMove implements MoveStrategy{
 
         return isWithinWitdh && isWithinHeight;
     }
+
+    @Override
+    public void setMaze(Maze maze) {
+        this.maze = maze;
+    }
 }
