@@ -1,6 +1,5 @@
 package com.dametdamet.app.model.entity.monster;
 
-import com.dametdamet.app.engine.Game;
 import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;

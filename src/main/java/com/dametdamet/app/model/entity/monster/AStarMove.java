@@ -146,6 +146,11 @@ public enum AStarMove implements MoveStrategy{
         Position start = monster.getPosition();
         while (!tile.getPosition().equals(start)){
             tile = tile.getParent();
+            if (tile==null) return new AStarTile(
+                    monster.getPosition(),
+                    maze.whatIsIn(monster.getPosition()),
+                    monster
+            );
             path.add(tile);
         }
 
