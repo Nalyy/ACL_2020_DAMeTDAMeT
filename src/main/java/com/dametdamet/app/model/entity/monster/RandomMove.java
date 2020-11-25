@@ -1,8 +1,8 @@
 package com.dametdamet.app.model.entity.monster;
 
-import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
@@ -40,14 +40,14 @@ public enum RandomMove implements MoveStrategy {
     }
 
     @Override
-    public Direction getNextDirection(Monster monster){
+    public Direction getNextDirection(Entity monster){
         Objects.requireNonNull(maze, "La stratégie appliquée au monstre n'a pas de labyrinthe associé.");
 
         // On vérifie si le monstre a le droit de se re-déplacer tout de suite.
-        if (!monster.isFinishedTimer()) return Direction.IDLE;
+        if (!((Monster)monster).isFinishedTimer()) return Direction.IDLE;
 
         // Si oui, on reset son timer pour le prochain déplacement et on lui donne sa direction.
-        monster.resetTimer();
+        ((Monster)monster).resetTimer();
 
         Position position = monster.getPosition();
         int initialX = position.getX();

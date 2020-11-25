@@ -25,6 +25,11 @@ public enum EntityType {
                     TileType.TELEPORTATION
             )
             )
+    ),
+
+    PROJECTILE(new ArrayList<>(Arrays.asList(TileType.WALL, TileType.OUTOFBOUND)),
+            new ArrayList<>(Arrays.asList()
+            )
     );
 
     private Collection<TileType> cantGoTo;

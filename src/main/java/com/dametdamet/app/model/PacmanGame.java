@@ -11,6 +11,8 @@ import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
 import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 import com.dametdamet.app.model.entity.*;
+import com.dametdamet.app.model.entity.attack.Projectile;
+import com.dametdamet.app.model.entity.attack.ProjectileMove;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
@@ -24,10 +26,11 @@ import com.dametdamet.app.model.maze.Tile;
  *         versions suivantes.
  * 
  */
-public class PacmanGame implements Game, Iterable<Entity> {
+public class PacmanGame implements Game {
 	private GameState state;
 	private Hero hero;
 	private Collection<Entity> monsters;
+	private Collection<Entity> projectiles;
 	private Maze maze;
 	private Timer gameTimer;
 	private int score;
@@ -44,6 +47,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	public PacmanGame(String source, String[] sourceMaze) {
 		monsters = new ArrayList<>();
+		projectiles = new ArrayList<>();
 		filesNames = sourceMaze;
 		nbMazesToDo = sourceMaze.length;
 
@@ -88,6 +92,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		// Re-création du monde
 		monsters.clear();
 		addMonsters();
+		projectiles.clear();
+		MoveStrategy projStrategy = ProjectileMove.INSTANCE;
+		ProjectileMove.INSTANCE.setMaze(this.maze);
 
 		// Lancement du timer
 		gameTimer.top(TIMER_TIME * 1000);
@@ -111,10 +118,12 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			fileName = filesNames[currentLevel];
 			loadMaze();
 
-			// On s'occupe des monstres et des héros
+			// On s'occupe des monstres, des héros et des projectiles
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
 			addMonsters();
+			projectiles.clear();
+			ProjectileMove.INSTANCE.setMaze(this.maze);
 		}
 	}
 
@@ -162,33 +171,31 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			return;
 		}
 
-		/* On a besoin de traduire la commande en direction à partir d'ici*/
-		Direction directionHero = getDirectionFromCommand(command);
+		Direction directionHero;
+		if (isAttack(command)) {
+			directionHero = getDirectionFromCommand(Command.IDLE);
+			addProjectile(getDirFromAttackCommand(command));
+		} else {
+			directionHero = getDirectionFromCommand(command);
+		}
+
+		// Héros
+		moveHero(directionHero);
+
+		// Monstres
+		moveMonsters();
+
+		// Projectiles
+		moveProjectiles();
+
+		if(hero.getHP() == 0){
+			setFinished();
+		}
 
 		/*
 		Si le timer est fini, alors le jeu est fini
 		*/
 		if (gameTimer.isFinished()){
-			setFinished();
-		}
-
-
-		// Héros
-		if (command != Command.IDLE) {
-			Position initPosHero = hero.getPosition();
-			Position targetPosHero = getTargetPosition(initPosHero, directionHero);
-
-			Tile tile = maze.whatIsIn(targetPosHero);
-			if (hero.canGoTo(tile)){
-				hero.moveTo(targetPosHero);
-				tile.applyEffect(this, hero);
-			}
-		}
-
-		// Monstres
-		moveMonsters();
-
-		if(hero.getHP() == 0){
 			setFinished();
 		}
 	}
@@ -223,6 +230,31 @@ public class PacmanGame implements Game, Iterable<Entity> {
 				state = GameState.PAUSED;
 				gameTimer.pause();
 			}
+		}
+	}
+
+	/**
+	 * Vérifie si la commande courante est une attaque.
+	 * @param command la commande courante
+	 */
+	private boolean isAttack(Command command) {
+		return (command == Command.ATTACK_LEFT
+				|| command == Command.ATTACK_RIGHT
+				|| command == Command.ATTACK_DOWN
+				|| command == Command.ATTACK_UP);
+	}
+
+	/**
+	 * Déplace le héro selon une direction.
+	 */
+	private void moveHero(Direction direction) {
+		Position initPosHero = hero.getPosition();
+		Position targetPosHero = getTargetPosition(initPosHero, direction);
+
+		Tile tile = maze.whatIsIn(targetPosHero);
+		if (hero.canGoTo(tile)){
+			hero.moveTo(targetPosHero);
+			tile.applyEffect(this, hero);
 		}
 	}
 
@@ -262,6 +294,43 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		}
 		for(Entity e:monsterToRemove){
 			destroyMonster(e);
+		}
+	}
+
+	/**
+	 * Déplace les projectiles et vérifie s'il y a collision avec les monstres.
+	 * Quand un projectile atteint un monstre, il est détruit et le monstre perd un point de vie.
+	 */
+	private void moveProjectiles() {
+		Direction nextDirection;
+		Collection<Entity> projToRemove = new ArrayList<>();
+
+		for (Entity p : projectiles) {
+			Projectile projectile = (Projectile) p;
+
+			nextDirection = projectile.getNextDirection();
+			if (!nextDirection.equals(Direction.IDLE)) {
+				Position positionProj = getTargetPosition(projectile.getPosition(), nextDirection);
+				projectile.moveTo(positionProj);
+
+				// Collisions avec les monstres
+				for (Entity m : monsters) {
+					if (positionProj.equals(m.getPosition())) {
+						// si un projectile atteint un monstre, le monstre est tué, le projectile détruit, et le joueur gagne des points
+						hurtEntity(m, 1);
+						projToRemove.add(projectile);
+						addScore(100);
+					}
+				}
+
+			} else {
+				// Si le projectile ne peut plus avancer, on le détruit.
+				projToRemove.add(projectile);
+			}
+		}
+
+		for(Entity p : projToRemove){
+			destroyProjectile(p);
 		}
 	}
 
@@ -384,9 +453,14 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	/**
 	 * @return l'itérateur sur les monstres
 	 */
-	@Override
-	public Iterator<Entity> iterator() {
-		return monsters.iterator();
+	public Iterator<Entity> getMonstersIterator() { return monsters.iterator();
+	}
+
+	/**
+	 * @return l'itérateur sur les projectiles
+	 */
+	public Iterator<Entity> getProjectilesIterator() {
+		return projectiles.iterator();
 	}
 
 	public void addScore(int scoreToAdd){
@@ -410,8 +484,15 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		monsters.add(monster);
 	}
 
+	private void addProjectile(Direction direction) {
+		Position posHero = hero.getPosition();
+		Position position = new Position(posHero.getX(), posHero.getY());
+		Projectile projectile = new Projectile(position, direction, ProjectileMove.INSTANCE);
+		projectiles.add(projectile);
+	}
+
 	private Direction getDirectionFromCommand(Command command){
-		Direction direction = null;
+		Direction direction;
 		switch (command){
 			case UP:
 				direction = Direction.UP;
@@ -433,10 +514,34 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		return direction;
 	}
 
+	private Direction getDirFromAttackCommand(Command command) {
+		Command newCommand;
+		switch (command) {
+			case ATTACK_UP:
+				newCommand = Command.UP;
+				break;
+			case ATTACK_DOWN:
+				newCommand = Command.DOWN;
+				break;
+			case ATTACK_LEFT:
+				newCommand = Command.LEFT;
+				break;
+			case ATTACK_RIGHT:
+				newCommand = Command.RIGHT;
+				break;
+			default:
+				newCommand = Command.IDLE;
+		}
+		return getDirectionFromCommand(newCommand);
+	}
+
 	private void destroyMonster(Entity entity){
 		monsters.remove(entity);
 	}
 
+	private void destroyProjectile(Entity entity){
+		projectiles.remove(entity);
+	}
 
 	public void hurtEntity(Entity entity,int hpAmount){
 		entity.loseHP(hpAmount);

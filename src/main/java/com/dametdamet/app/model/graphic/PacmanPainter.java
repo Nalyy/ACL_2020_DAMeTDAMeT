@@ -2,6 +2,7 @@ package com.dametdamet.app.model.graphic;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 import com.dametdamet.app.engine.GamePainter;
 import com.dametdamet.app.model.entity.Entity;
@@ -52,6 +53,7 @@ public class PacmanPainter implements GamePainter {
 			drawMaze(im);
 			drawHero(im);
 			drawMonsters(im);
+			drawProjectiles(im);
 			drawHUD(im);
 		} else {
 			drawScreenGameState(im);
@@ -100,7 +102,9 @@ public class PacmanPainter implements GamePainter {
 	 */
 	private void drawMonsters(BufferedImage im){
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
-		for (Entity monster: pacmanGame) {
+		Iterator<Entity> monstersIterator = pacmanGame.getMonstersIterator();
+		while (monstersIterator.hasNext()) {
+			Entity monster = monstersIterator.next();
 			Position position = monster.getPosition();
 
 			//on récupère l'image du monstre
@@ -108,7 +112,25 @@ public class PacmanPainter implements GamePainter {
 
 			//on dessine l'image du monstre
 			crayon.drawImage(imageMonster,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
+		}
+	}
 
+	/**
+	 * dessine les projectiles sur l'image en paramètre
+	 * @param im image sur laquelle on dessine les projectiles
+	 */
+	private void drawProjectiles(BufferedImage im){
+		Graphics2D crayon = (Graphics2D) im.getGraphics();
+		Iterator<Entity> projectilesIterator = pacmanGame.getProjectilesIterator();
+		while (projectilesIterator.hasNext()) {
+			Entity projectile = projectilesIterator.next();
+			Position position = projectile.getPosition();
+
+			//on récupère l'image du projectile
+			BufferedImage imageProjectile = ImageFactory.getInstance().getEntityImage(projectile);
+
+			//on dessine l'image du projectile
+			crayon.drawImage(imageProjectile,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
 		}
 	}
 

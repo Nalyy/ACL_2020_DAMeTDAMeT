@@ -41,7 +41,9 @@ class SpawnerMonsterTest {
         int nbMonster = 0;
         int nbMonsterExpected = 1;
 
-        for (Entity entity:game) {
+        Iterator<Entity> monstersIterator = game.getMonstersIterator();
+        while (monstersIterator.hasNext()) {
+            Entity entity = monstersIterator.next();
             nbMonster++;
             assertEquals(new Position(1,1),entity.getPosition());
         }
@@ -63,7 +65,9 @@ class SpawnerMonsterTest {
 
         int nbMonster = 0;
 
-        for (Entity entity:game) {
+        Iterator<Entity> monstersIterator = game.getMonstersIterator();
+        while (monstersIterator.hasNext()) {
+            Entity entity = monstersIterator.next();
             nbMonster++;
             assertEquals(new Position(0,0),entity.getPosition());
         }
@@ -80,7 +84,7 @@ class SpawnerMonsterTest {
 
         spawnerMonster.applyEffect(game,game.getHero());
 
-        Iterator<Entity> ite = game.iterator();
+        Iterator<Entity> ite = game.getMonstersIterator();
 
         assertFalse(ite.hasNext());
     }
