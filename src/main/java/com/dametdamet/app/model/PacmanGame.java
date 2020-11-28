@@ -33,6 +33,7 @@ public class PacmanGame implements Game {
 	private Collection<Entity> projectiles;
 	private Maze maze;
 	private Timer gameTimer;
+	private Timer projectileTimer;
 	private int score;
 	private int currentLevel;
 
@@ -95,6 +96,7 @@ public class PacmanGame implements Game {
 		projectiles.clear();
 		MoveStrategy projStrategy = ProjectileMove.INSTANCE;
 		ProjectileMove.INSTANCE.setMaze(this.maze);
+		projectileTimer = new Timer();
 
 		// Lancement du timer
 		gameTimer.top(TIMER_TIME * 1000);
@@ -124,6 +126,7 @@ public class PacmanGame implements Game {
 			addMonsters();
 			projectiles.clear();
 			ProjectileMove.INSTANCE.setMaze(this.maze);
+			projectileTimer = new Timer();
 		}
 	}
 
@@ -174,7 +177,9 @@ public class PacmanGame implements Game {
 		Direction directionHero;
 		if (isAttack(command)) {
 			directionHero = getDirectionFromCommand(Command.IDLE);
-			addProjectile(getDirFromAttackCommand(command));
+			if (projectileTimer.isFinished()) {
+				addProjectile(getDirFromAttackCommand(command));
+			}
 		} else {
 			directionHero = getDirectionFromCommand(command);
 		}
@@ -491,6 +496,7 @@ public class PacmanGame implements Game {
 		Position position = new Position(posHero);
 		Projectile projectile = new Projectile(position, direction, ProjectileMove.INSTANCE);
 		projectiles.add(projectile);
+		projectileTimer.top(750);
 	}
 
 	private Direction getDirectionFromCommand(Command command){
