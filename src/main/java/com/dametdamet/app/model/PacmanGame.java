@@ -248,13 +248,15 @@ public class PacmanGame implements Game {
 	 * Déplace le héro selon une direction.
 	 */
 	private void moveHero(Direction direction) {
-		Position initPosHero = hero.getPosition();
-		Position targetPosHero = getTargetPosition(initPosHero, direction);
+		if (direction != Direction.IDLE) {
+			Position initPosHero = hero.getPosition();
+			Position targetPosHero = getTargetPosition(initPosHero, direction);
 
-		Tile tile = maze.whatIsIn(targetPosHero);
-		if (hero.canGoTo(tile)){
-			hero.moveTo(targetPosHero);
-			tile.applyEffect(this, hero);
+			Tile tile = maze.whatIsIn(targetPosHero);
+			if (hero.canGoTo(tile)) {
+				hero.moveTo(targetPosHero);
+				tile.applyEffect(this, hero);
+			}
 		}
 	}
 
