@@ -486,7 +486,7 @@ public class PacmanGame implements Game {
 
 	private void addProjectile(Direction direction) {
 		Position posHero = hero.getPosition();
-		Position position = new Position(posHero.getX(), posHero.getY());
+		Position position = new Position(posHero);
 		Projectile projectile = new Projectile(position, direction, ProjectileMove.INSTANCE);
 		projectiles.add(projectile);
 	}

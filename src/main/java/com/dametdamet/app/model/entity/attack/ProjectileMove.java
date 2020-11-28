@@ -27,7 +27,7 @@ public enum ProjectileMove implements MoveStrategy {
         Objects.requireNonNull(maze, "La stratégie appliquée au projectile n'a pas de labyrinthe associé.");
 
         Position posEntity = entity.getPosition();
-        Position position = new Position(posEntity.getX(), posEntity.getY());
+        Position position = new Position(posEntity);
         Direction direction = ((Projectile)entity).getDirection();
 
         switch (direction) {
