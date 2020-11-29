@@ -2,6 +2,9 @@ package com.dametdamet.app.model.graphic.factory;
 
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.EntityType;
+import com.dametdamet.app.model.graphic.ExplosionEffect;
+import com.dametdamet.app.model.graphic.GraphicalEffect;
+import com.dametdamet.app.model.graphic.GraphicalEffectType;
 import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
 
@@ -20,11 +23,12 @@ public class ImageFactory {
     public final static int NB_TREASURE_IMG = 2;
     public final static int NB_SPECIAL_IMG = 2;
     public final static int NB_WALL_IMG = 5;
+    public final static int NB_EXPLOSION_IMG = ExplosionEffect.NUM_SPRITE_MAX;
     private final static String PATH = "/images";
     private final static String CASE_PATH = PATH + "/case";
     private final static String ENTITY_PATH = PATH + "/entity";
     private final static String HUD_PATH = PATH + "/hud";
-
+    private final static String EFFECT_PATH = PATH + "/effect";
 
     private static ImageFactory instance;
 
@@ -41,9 +45,13 @@ public class ImageFactory {
     private final BufferedImage[] treasure;
     private final BufferedImage[] wall;
     private final BufferedImage[] special;
+    private final BufferedImage[] explosion;
     private final BufferedImage stairs;
     private final BufferedImage teleportation;
     private final BufferedImage special_dynamite_pressed;
+    private final BufferedImage special_heal_pressed;
+    private final BufferedImage special_time_pressed;
+
 
     private final BufferedImage entityNotFound;
     private final BufferedImage hero;
@@ -58,6 +66,7 @@ public class ImageFactory {
         treasure = new BufferedImage[NB_TREASURE_IMG];
         wall = new BufferedImage[NB_WALL_IMG];
         special = new BufferedImage[NB_SPECIAL_IMG];
+        explosion = new BufferedImage[NB_EXPLOSION_IMG];
 
         /// RÉCUPÉRATION DES IMAGES DES CASES ///
         //images EMPTY
@@ -79,6 +88,12 @@ public class ImageFactory {
 
         //image DYNAMITE
         special_dynamite_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_dynamite_pressed.png"));
+
+        //image HEAL
+        special_heal_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_heal_pressed.png"));
+
+        //image TIME
+        special_time_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_time_pressed.png"));
 
         // image TELEPORTATION
         teleportation = ImageIO.read(getClass().getResource(CASE_PATH+"/caseTP.png"));
@@ -111,6 +126,10 @@ public class ImageFactory {
         heart_empty = ImageIO.read(getClass().getResourceAsStream(HUD_PATH+"/heart_empty.png"));
         ///                ///
 
+        ///RÉCUPÉRATION DES IMAGES DES EFFETS///
+        for(int i = 0;i < NB_EXPLOSION_IMG;i++){
+            explosion[i] = ImageIO.read(getClass().getResourceAsStream((EFFECT_PATH+"/explosion" + (i<10 ? "0":"") + i + ".png")));
+        }
     }
 
     public static ImageFactory getInstance() {
@@ -141,17 +160,21 @@ public class ImageFactory {
                 if(!(ca.getNumSprite() >= wall.length || ca.getNumSprite() < 0))
                     return wall[ca.getNumSprite()];
                 break;
+
             case DYNAMITE:
                 if(ca.getNumSprite() > 0)
                     return special_dynamite_pressed;
+            case TIME:
+                if(ca.getNumSprite() > 0)
+                    return special_time_pressed;
+            case HEAL:
+                if(ca.getNumSprite() > 0)
+                    return special_heal_pressed;
             case SPAWNER_CHEST:
             case SPAWNER_MONSTERS:
             case DAMAGE:
-            case HEAL:
-            case TIME:
                 if(!(ca.getNumSprite() >= special.length || ca.getNumSprite() < 0))
                     return special[ca.getNumSprite()];
-                break;
             default:
                 break;
         }
@@ -186,6 +209,15 @@ public class ImageFactory {
                 return heart_full;
             case "heart_empty":
                 return heart_empty;
+            default:
+                return caseNotFound;
+        }
+    }
+
+    public BufferedImage getEffectImage(GraphicalEffect effect){
+        switch (effect.getType()){
+            case EXPLOSION:
+                return explosion[effect.getNum_sprite()];
             default:
                 return caseNotFound;
         }

@@ -10,7 +10,7 @@ import com.dametdamet.app.model.maze.TileType;
 public class Dynamite extends Tile {
 
     private final static int AMOUNT_DMG = 1;
-    private final static int EXPLOSION_RANGE = 1;
+    public final static int EXPLOSION_RANGE = 1;
 
 
     private Position position;
@@ -23,6 +23,7 @@ public class Dynamite extends Tile {
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
         if(entity.canTrigger(this) && !isPressed()){
+            game.addExplosion(position);
             for (Entity e: game) {
                 if(e.isInRadius(position,EXPLOSION_RANGE)) {
                     game.hurtEntity(e, AMOUNT_DMG);

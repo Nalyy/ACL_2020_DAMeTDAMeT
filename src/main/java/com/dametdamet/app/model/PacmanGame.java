@@ -14,6 +14,8 @@ import com.dametdamet.app.model.entity.*;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
+import com.dametdamet.app.model.graphic.ExplosionEffect;
+import com.dametdamet.app.model.graphic.GraphicalEffect;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.Tile;
 
@@ -28,6 +30,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	private GameState state;
 	private Hero hero;
 	private Collection<Entity> monsters;
+	private Collection<GraphicalEffect> graphicalEffects;
 	private Maze maze;
 	private Timer gameTimer;
 	private int score;
@@ -44,6 +47,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	 */
 	public PacmanGame(String source, String[] sourceMaze) {
 		monsters = new ArrayList<>();
+		graphicalEffects = new ArrayList<>();
 		filesNames = sourceMaze;
 		nbMazesToDo = sourceMaze.length;
 
@@ -88,6 +92,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		// Re-création du monde
 		monsters.clear();
 		addMonsters();
+		graphicalEffects.clear();
 
 		// Lancement du timer
 		gameTimer.top(TIMER_TIME * 1000);
@@ -188,6 +193,10 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		// Monstres
 		moveMonsters();
 
+
+		//Effets
+		updateGraphicalEffects();
+
 		if(hero.getHP() == 0){
 			setFinished();
 		}
@@ -219,9 +228,13 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			if(isPaused()){
 				state = GameState.ONGOING;
 				gameTimer.continueTimer();
+				continueEffects();
+				hero.continueInvicibiltyTimer();
 			}else {
 				state = GameState.PAUSED;
 				gameTimer.pause();
+				pauseEffects();
+				hero.pauseInvicibiltyTimer();
 			}
 		}
 	}
@@ -458,4 +471,39 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		entity.gainHP(hpAmount);
 	}
 
+	private void updateGraphicalEffects(){
+		Collection<GraphicalEffect> effects_to_destroy = new ArrayList<>();
+		for(GraphicalEffect effect:graphicalEffects){
+			effect.update();
+			if(effect.isFinished()) effects_to_destroy.add(effect);
+		}
+
+		for(GraphicalEffect effect: effects_to_destroy){
+			destroyEffect(effect);
+		}
+	}
+
+	private void pauseEffects(){
+		for(GraphicalEffect effect:graphicalEffects){
+			effect.pauseTimer();
+		}
+	}
+
+	private void continueEffects(){
+		for(GraphicalEffect effect:graphicalEffects){
+			effect.continueTimer();
+		}
+	}
+
+	private void destroyEffect(GraphicalEffect effect){
+		graphicalEffects.remove(effect);
+	}
+
+	public void addExplosion(Position position){
+		graphicalEffects.add(new ExplosionEffect(position));
+	}
+
+	public Collection<GraphicalEffect> getGraphicalEffects() {
+		return graphicalEffects;
+	}
 }
