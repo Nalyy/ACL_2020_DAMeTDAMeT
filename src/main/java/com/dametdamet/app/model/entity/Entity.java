@@ -1,5 +1,6 @@
 package com.dametdamet.app.model.entity;
 
+import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.Timer;
 import com.dametdamet.app.model.maze.Tile;
@@ -9,6 +10,7 @@ import java.util.Collection;
 
 public abstract class Entity {
     private Position position;
+    private Direction direction;
 
     private EntityType type;
 
@@ -41,6 +43,18 @@ public abstract class Entity {
      */
     public Position getPosition() {
         return position;
+    }
+
+    /**
+     * Retourne la direction.
+     * @return direction
+     */
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public EntityType getType() {

@@ -178,7 +178,9 @@ public class PacmanGame implements Game {
 		if (isAttack(command)) {
 			directionHero = getDirectionFromCommand(Command.IDLE);
 			if (projectileTimer.isFinished()) {
-				addProjectile(getDirFromAttackCommand(command));
+				Direction directionAttack = getDirFromAttackCommand(command);
+				addProjectile(directionAttack);
+				hero.setDirection(directionAttack);
 			}
 		} else {
 			directionHero = getDirectionFromCommand(command);
@@ -254,6 +256,7 @@ public class PacmanGame implements Game {
 	 */
 	private void moveHero(Direction direction) {
 		if (direction != Direction.IDLE) {
+			hero.setDirection(direction);
 			Position initPosHero = hero.getPosition();
 			Position targetPosHero = getTargetPosition(initPosHero, direction);
 
