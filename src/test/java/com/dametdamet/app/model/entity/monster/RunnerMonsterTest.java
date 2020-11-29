@@ -1,11 +1,34 @@
 package com.dametdamet.app.model.entity.monster;
 
+import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RunnerMonsterTest {
+
+    /**
+     * Le monstre avance dans sa direction s'il le peut.
+     */
+    @Test
+    public void testSameDirection() {
+        PacmanGame game = new PacmanGame("no help", new String[0]);
+        Monster m = new Monster(new Position(1,1), RunnerMove.INSTANCE);
+        Direction direction = m.getDirection();
+        assertEquals(direction, m.getNextDirection());
+    }
+
+    /**
+     * Le monstre change de direction s'il ne peut pas avancer.
+     */
+    @Test
+    public void testDirectionChanges() {
+        PacmanGame game = new PacmanGame("no help", new String[0]);
+        Monster m = new Monster(new Position(0,0), RunnerMove.INSTANCE);
+        m.setDirection(Direction.UP);
+        assertNotEquals(Direction.UP, m.getNextDirection());
+    }
 
     /**
      * Le monstre ne peut pas être nul.
