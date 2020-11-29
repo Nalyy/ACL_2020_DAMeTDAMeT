@@ -7,6 +7,8 @@ import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.TileType;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,36 +104,7 @@ class TxtDAOTest {
 
         assertEquals(new Position(maze.getWidth()-1, maze.getHeight()-1), maze.getInitialPositionPlayer());
 
-
-        maze = ab.getFileDAO().load("maze_monstres.txt");
-
-        /*
-        Test avec un labyrinthe complètement rempli :
-        Contenu :
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-         */
-
-        Iterator<Position> positions = maze.getIteratorMonsterPositions();
-
-        for (int y = 0; y < maze.getWidth(); y++) {
-            for (int x = 0; x < maze.getWidth(); x++) {
-                assertEquals(positions.next(), new Position(x, y));
-            }
-        }
+        Iterator<Position> positions;
 
 
         maze = ab.getFileDAO().load("maze_monstres_1.txt");
@@ -184,9 +157,14 @@ class TxtDAOTest {
 
         positions = maze.getIteratorMonsterPositions();
 
-        assertEquals(positions.next(), new Position(0, 0));
-        assertEquals(positions.next(), new Position(6, 6));
-        assertEquals(positions.next(), new Position(6, 7));
-        assertEquals(positions.next(), new Position(maze.getWidth()-1, maze.getWidth()-1));
+        ArrayList<Position> list = new ArrayList<>();
+        list.add(new Position(0, 0));
+        list.add(new Position(6, 6));
+        list.add(new Position(6, 7));
+        list.add(new Position(maze.getWidth()-1, maze.getWidth()-1));
+
+        while(positions.hasNext()){
+            assertTrue(list.contains(positions.next()));
+        }
     }
 }
