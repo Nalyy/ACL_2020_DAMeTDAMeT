@@ -4,7 +4,6 @@ import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.EntityType;
 import com.dametdamet.app.model.graphic.ExplosionEffect;
 import com.dametdamet.app.model.graphic.GraphicalEffect;
-import com.dametdamet.app.model.graphic.GraphicalEffectType;
 import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
 
@@ -51,6 +50,10 @@ public class ImageFactory {
     private final BufferedImage special_dynamite_pressed;
     private final BufferedImage special_heal_pressed;
     private final BufferedImage special_time_pressed;
+    private final BufferedImage special_damage_pressed;
+    private final BufferedImage special_spawner_monster_pressed;
+    private final BufferedImage special_spawner_treasure_pressed;
+
 
 
     private final BufferedImage entityNotFound;
@@ -94,6 +97,15 @@ public class ImageFactory {
 
         //image TIME
         special_time_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_time_pressed.png"));
+
+        //image damage
+        special_damage_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_damage_pressed.png"));
+
+        //image spanwer monster
+        special_spawner_monster_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_spawner_monster_pressed.png"));
+
+        //image spawner treasure
+        special_spawner_treasure_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_spawner_treasure_pressed.png"));
 
         // image TELEPORTATION
         teleportation = ImageIO.read(getClass().getResource(CASE_PATH+"/caseTP.png"));
@@ -160,7 +172,9 @@ public class ImageFactory {
                 if(!(ca.getNumSprite() >= wall.length || ca.getNumSprite() < 0))
                     return wall[ca.getNumSprite()];
                 break;
-
+            case DAMAGE:
+                if(ca.getNumSprite() > 0)
+                    return special_damage_pressed;
             case DYNAMITE:
                 if(ca.getNumSprite() > 0)
                     return special_dynamite_pressed;
@@ -171,10 +185,13 @@ public class ImageFactory {
                 if(ca.getNumSprite() > 0)
                     return special_heal_pressed;
             case SPAWNER_CHEST:
+                if(ca.getNumSprite() > 0)
+                    return special_spawner_treasure_pressed;
             case SPAWNER_MONSTERS:
-            case DAMAGE:
-                if(!(ca.getNumSprite() >= special.length || ca.getNumSprite() < 0))
-                    return special[ca.getNumSprite()];
+                if(ca.getNumSprite() > 0)
+                    return special_spawner_monster_pressed;
+                if(ca.getNumSprite() == 0)
+                    return special[0];
             default:
                 break;
         }
