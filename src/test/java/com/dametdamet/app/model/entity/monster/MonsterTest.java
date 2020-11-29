@@ -61,7 +61,7 @@ public class MonsterTest {
         assertTrue(monster2.canGoTo(new Teleportation(new Position(0,0))));
         assertFalse(monster2.canGoTo(new OutOfBound()));
     }
-/*
+
     @Test
     void boundaryTestMonsterCanGo(){
         assertFalse(monster.canGoTo(null));
@@ -73,5 +73,5 @@ public class MonsterTest {
         assertFalse(monster.canTrigger(null));
         assertFalse(monster2.canTrigger(null));
     }
-*/
+
 }

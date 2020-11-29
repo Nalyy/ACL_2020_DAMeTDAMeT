@@ -32,8 +32,8 @@ public enum EntityType {
     )
     ;
 
-    private Collection<TileType> cantGoTo;
-    private Collection<TileType> canTrigger;
+    private final Collection<TileType> cantGoTo;
+    private final Collection<TileType> canTrigger;
 
 
     EntityType(Collection<TileType> cantGoTo, Collection<TileType> canTrigger) {
