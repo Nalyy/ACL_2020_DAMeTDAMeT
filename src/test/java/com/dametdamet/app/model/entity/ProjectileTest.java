@@ -21,10 +21,10 @@ public class ProjectileTest {
     void setUp() {
         Maze maze = new Maze();
         ProjectileMove.INSTANCE.setMaze(maze);
-        projDown = new Projectile(new Position(0, 0), Direction.DOWN, ProjectileMove.INSTANCE) ;
-        projUp = new Projectile(new Position(0, maze.getHeight()-1), Direction.UP, ProjectileMove.INSTANCE) ;
-        projRight = new Projectile(new Position(0, 0), Direction.RIGHT, ProjectileMove.INSTANCE) ;
-        projLeft = new Projectile(new Position(maze.getWidth()-1, 0), Direction.LEFT, ProjectileMove.INSTANCE) ;
+        projDown = new Projectile(new Position(0, 0), Direction.DOWN, ProjectileMove.INSTANCE);
+        projUp = new Projectile(new Position(0, maze.getHeight()-1), Direction.UP, ProjectileMove.INSTANCE);
+        projRight = new Projectile(new Position(0, 0), Direction.RIGHT, ProjectileMove.INSTANCE);
+        projLeft = new Projectile(new Position(maze.getWidth()-1, 0), Direction.LEFT, ProjectileMove.INSTANCE);
     }
 
     @Test
@@ -46,13 +46,4 @@ public class ProjectileTest {
     void rightGetNextDirectionLeft(){
         assertEquals(Direction.LEFT, projLeft.getNextDirection(), "");
     }
-
-
-    /*
-    Tests à faire
-    moveProjectile (les projectils vont dans la bonne direction)
-    moveProjectile et tue un monstre
-    moveprojectile et tue un monstre avec un monstre derrière
-    moveProjectile avec check de position
-     */
 }

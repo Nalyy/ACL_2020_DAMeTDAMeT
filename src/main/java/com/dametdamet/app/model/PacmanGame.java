@@ -93,7 +93,6 @@ public class PacmanGame implements Game {
 		monsters.clear();
 		addMonsters();
 		projectiles.clear();
-		MoveStrategy projStrategy = ProjectileMove.INSTANCE;
 		ProjectileMove.INSTANCE.setMaze(this.maze);
 
 		// Lancement du timer
@@ -182,11 +181,12 @@ public class PacmanGame implements Game {
 		// Héros
 		moveHero(directionHero);
 
+		// Projectiles
+		moveProjectiles();
+
 		// Monstres
 		moveMonsters();
 
-		// Projectiles
-		moveProjectiles();
 
 		if(hero.getHP() == 0){
 			setFinished();
@@ -265,8 +265,6 @@ public class PacmanGame implements Game {
 		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
 		Direction nextDirection;
-		Collection<Entity> monsterToRemove = new ArrayList<>();
-
 
 		// Monstres
 		for (Entity m : monsters){
@@ -287,14 +285,8 @@ public class PacmanGame implements Game {
 			if (targetPosition.equals(heroPosition)) {
 				hero.loseHP(1);
 			}
+		}
 
-			if(monster.getHP() == 0){
-				monsterToRemove.add(monster);
-			}
-		}
-		for(Entity e:monsterToRemove){
-			destroyMonster(e);
-		}
 	}
 
 	/**
@@ -304,6 +296,8 @@ public class PacmanGame implements Game {
 	private void moveProjectiles() {
 		Direction nextDirection;
 		Collection<Entity> projToRemove = new ArrayList<>();
+		Collection<Entity> monsterToRemove = new ArrayList<>();
+
 
 		for (Entity p : projectiles) {
 			Projectile projectile = (Projectile) p;
@@ -320,8 +314,14 @@ public class PacmanGame implements Game {
 						hurtEntity(m, 1);
 						projToRemove.add(projectile);
 						addScore(100);
+
+						if(m.getHP() == 0){
+							monsterToRemove.add(m);
+						}
 					}
 				}
+
+
 
 			} else {
 				// Si le projectile ne peut plus avancer, on le détruit.
@@ -331,6 +331,9 @@ public class PacmanGame implements Game {
 
 		for(Entity p : projToRemove){
 			destroyProjectile(p);
+		}
+		for(Entity e:monsterToRemove){
+			destroyMonster(e);
 		}
 	}
 
