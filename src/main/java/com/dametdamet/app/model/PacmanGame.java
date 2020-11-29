@@ -140,7 +140,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 		// Création des monstres à mettre dans la liste
 		while (initialPositionMonster.hasNext()){
 			// On met le nouveau monstre dans la liste en lui assignant une position initiale
-			monsters.add(new Monster(new Position(initialPositionMonster.next()), AStarMove.INSTANCE));
+			monsters.add(new Monster(new Position(initialPositionMonster.next()), RunnerMove.INSTANCE));
 		}
 	}
 
@@ -270,6 +270,9 @@ public class PacmanGame implements Game, Iterable<Entity> {
 				if (!nextDirection.equals(Direction.IDLE)) {
 					maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
 				}
+				// Si il n'a pas pu se déplacer, on reset sa direction
+			}else{
+				monster.setDirection(Direction.IDLE);
 			}
 
 			// Test collision avec le héros
