@@ -7,12 +7,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RunnerMonsterTest {
 
-    // Tests getNextDirection
-
-    // Tests getPositionTo
+    /**
+     * Le monstre ne peut pas être nul.
+     */
+    @Test
+    public void testNullMonster() {
+        assertThrows(NullPointerException.class, ()->RunnerMove.INSTANCE.getNextDirection(null));
+    }
 
     /**
-     * La direction du monstre ne peut pas être null.
+     * La direction du monstre ne peut pas être nulle.
      */
     @Test
     public void testNullDirection() {
@@ -31,9 +35,8 @@ public class RunnerMonsterTest {
         assertThrows(NullPointerException.class, ()->new Monster(null, RunnerMove.INSTANCE));
     }
 
-    // Tests boundary
     /**
-     * Le labyrinthe de la strategy ne peut pas être nulle.
+     * Le labyrinthe de la strategy ne peut pas être nul.
      */
     @Test
     public void testNullMaze() {
