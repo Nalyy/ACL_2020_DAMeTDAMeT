@@ -188,11 +188,14 @@ public class PacmanGame implements Game {
 		// Héros
 		moveHero(directionHero);
 
+		// Monstres
+		moveMonsters();
+
 		// Projectiles
 		moveProjectiles();
 
-		// Monstres
-		moveMonsters();
+
+		killMonsters();
 
 
 		if(hero.getHP() == 0){
@@ -204,6 +207,19 @@ public class PacmanGame implements Game {
 		*/
 		if (gameTimer.isFinished()){
 			setFinished();
+		}
+	}
+
+	private void killMonsters() {
+		Collection<Entity> monsterToRemove = new ArrayList<>();
+
+		for (Entity e : monsters) {
+			if(e.getHP() == 0){
+				monsterToRemove.add(e);
+			}
+		}
+		for(Entity e : monsterToRemove){
+			destroyMonster(e);
 		}
 	}
 
@@ -306,33 +322,38 @@ public class PacmanGame implements Game {
 	private void moveProjectiles() {
 		Direction nextDirection;
 		Collection<Entity> projToRemove = new ArrayList<>();
-		Collection<Entity> monsterToRemove = new ArrayList<>();
-
+		boolean toRemove = false;
 
 		for (Entity p : projectiles) {
 			Projectile projectile = (Projectile) p;
 
 			nextDirection = projectile.getNextDirection();
 			if (!nextDirection.equals(Direction.IDLE)) {
-				Position positionProj = getTargetPosition(projectile.getPosition(), nextDirection);
-				projectile.moveTo(positionProj);
-
 				// Collisions avec les monstres
 				for (Entity m : monsters) {
-					if (positionProj.equals(m.getPosition())) {
+					if (projectile.getPosition().equals(m.getPosition())) {
 						// si un projectile atteint un monstre, le monstre est tué, le projectile détruit, et le joueur gagne des points
 						hurtEntity(m, 1);
+						toRemove = true;
 						projToRemove.add(projectile);
 						addScore(100);
-
-						if(m.getHP() == 0){
-							monsterToRemove.add(m);
-						}
 					}
 				}
 
+				if(!toRemove){
+					Position positionProj = getTargetPosition(projectile.getPosition(), nextDirection);
+					projectile.moveTo(positionProj);
 
-
+					// Collisions avec les monstres
+					for (Entity m : monsters) {
+						if (positionProj.equals(m.getPosition())) {
+							// si un projectile atteint un monstre, le monstre est tué, le projectile détruit, et le joueur gagne des points
+							hurtEntity(m, 1);
+							projToRemove.add(projectile);
+							addScore(100);
+						}
+					}
+				}
 			} else {
 				// Si le projectile ne peut plus avancer, on le détruit.
 				projToRemove.add(projectile);
@@ -341,9 +362,6 @@ public class PacmanGame implements Game {
 
 		for(Entity p : projToRemove){
 			destroyProjectile(p);
-		}
-		for(Entity e:monsterToRemove){
-			destroyMonster(e);
 		}
 	}
 
