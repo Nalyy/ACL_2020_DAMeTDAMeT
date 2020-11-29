@@ -21,9 +21,14 @@ public enum EntityType {
         )),
 
     MONSTER(new ArrayList<>(Arrays.asList(TileType.WALL, TileType.OUTOFBOUND)),
-            new ArrayList<>(Collections.singletonList(
+            new ArrayList<>(Arrays.asList(
                     TileType.TELEPORTATION
             )
+            )
+    ),
+
+    PROJECTILE(new ArrayList<>(Arrays.asList(TileType.WALL, TileType.OUTOFBOUND)),
+            new ArrayList<>(Arrays.asList()
             )
     ),
 

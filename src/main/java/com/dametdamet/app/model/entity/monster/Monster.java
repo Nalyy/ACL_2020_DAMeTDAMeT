@@ -6,6 +6,7 @@ import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.EntityType;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Monster extends Entity {
     private MoveStrategy strategy;
@@ -34,7 +35,11 @@ public class Monster extends Entity {
         // Lance une erreur si position initiale incorrecte
         assert strategy.isInMaze(position) : "La position initiale est hors du labyrinthe.";
 
-        // Si tout ok, on accepte de lui donner la stratégie pour qu'il puisse se construire.
+        // Si tout est ok...
+        // On lui donne une direction initiale
+        setRandomDirection();
+
+        // On accepte de lui donner la stratégie pour qu'il puisse se construire.
         this.strategy = strategy;
 
         // On donne son timer au monstre et on le démarre.
@@ -48,6 +53,27 @@ public class Monster extends Entity {
         this.type = type;
     }
 
+    private void setRandomDirection(){
+        Random randomGenerator = new Random();
+        int random = randomGenerator.nextInt(4);
+
+        switch (random){
+            case 0:
+                setDirection(Direction.UP);
+                break;
+            case 1:
+                setDirection(Direction.DOWN);
+                break;
+            case 2:
+                setDirection(Direction.LEFT);
+                break;
+            case 3:
+                setDirection(Direction.RIGHT);
+                break;
+        }
+
+    }
+
     /**
      * Retourne le prochain mouvement que le monstre veut faire.
      *
@@ -57,7 +83,11 @@ public class Monster extends Entity {
      * @return Command la prochaine direction que le monstre va prendre
      */
     public Direction getNextDirection(){
-           return strategy.getNextDirection(this);
+        Direction direction = strategy.getNextDirection(this);
+        if (direction != Direction.IDLE) {
+            setDirection(direction);
+        }
+        return direction;
     }
 
     /**

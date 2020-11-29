@@ -1,9 +1,8 @@
 package com.dametdamet.app.model.entity.monster;
 
-import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.Position;
-import com.dametdamet.app.model.entity.monster.Monster;
+import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Maze;
 
 public interface MoveStrategy {
@@ -16,10 +15,10 @@ public interface MoveStrategy {
 
     /**
      * Retourne la prochaine commande que le monstre va faire.
-     * @param monster le monstre qui va exécuter la commande
-     * @return Command.IDLE, LEFT, RIGHT, UP, DOWN selon la prochaine direction du monstre.
+     * @param entity l'entité qui va exécuter la commande
+     * @return Direction.IDLE, LEFT, RIGHT, UP, DOWN selon la prochaine direction du monstre.
      */
-    Direction getNextDirection(Monster monster);
+    Direction getNextDirection(Entity entity);
 
     /**
      * Vérifie si la stratégie a bien un labyrinthe où travailler.

@@ -2,11 +2,12 @@ package com.dametdamet.app.model;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.GameController;
+
+import static java.awt.event.KeyEvent.*;
 
 
 /**
@@ -46,7 +47,7 @@ public class PacmanController implements GameController {
 	 */
 	public void keyPressed(KeyEvent e) {
 
-		switch (e.getKeyChar()) {
+		switch (e.getKeyCode()) {
 			/* DÉPLACEMENTS PERSONNAGE */
 		// si on appuie sur 'q', commande joueur est gauche
 			case 'q':
@@ -73,6 +74,35 @@ public class PacmanController implements GameController {
 			case 'Z':
 				if(!commandesEnCours.contains(Command.UP))
 					commandesEnCours.add(Command.UP);
+				break;
+
+			/* ATTAQUES DU JOUEUR */
+		// si on appuie sur 'j' ou la flèche directionnelle de gauche, la direction de l'attaque sera gauche
+			case VK_LEFT:
+			case VK_J:
+				if(!commandesEnCours.contains(Command.ATTACK_LEFT))
+					commandesEnCours.add(Command.ATTACK_LEFT);
+				break;
+
+		// si on appuie sur 'l' ou la flèche directionnelle de droite, la direction de l'attaque sera droite
+			case VK_RIGHT:
+			case VK_L:
+				if(!commandesEnCours.contains(Command.ATTACK_RIGHT))
+					commandesEnCours.add(Command.ATTACK_RIGHT);
+				break;
+
+		// si on appuie sur 'k' ou la flèche directionnelle du bas, la direction de l'attaque sera bas
+			case VK_DOWN:
+			case VK_K:
+				if(!commandesEnCours.contains(Command.ATTACK_DOWN))
+					commandesEnCours.add(Command.ATTACK_DOWN);
+				break;
+
+		// si on appuie sur 'i' ou la flèche directionnelle du haut, la direction de l'attaque sera haut
+			case VK_UP:
+			case VK_I:
+				if(!commandesEnCours.contains(Command.ATTACK_UP))
+					commandesEnCours.add(Command.ATTACK_UP);
 				break;
 
 				/* OPTIONS ÉTAT DU JEU */
@@ -106,7 +136,7 @@ public class PacmanController implements GameController {
 	 */
 	public void keyReleased(KeyEvent e) {
 
-		switch (e.getKeyChar()) {
+		switch (e.getKeyCode()) {
 			/* DÉPLACEMENTS PERSONNAGE */
 			// si on appuie sur 'q', commande joueur est gauche
 			case 'q':
@@ -129,6 +159,31 @@ public class PacmanController implements GameController {
 			case 'z':
 			case 'Z':
 				commandesEnCours.remove(Command.UP);
+				break;
+
+			/* ATTAQUES DU JOUEUR */
+			// si on appuie sur 'j' ou la flèche directionnelle de gauche, la direction de l'attaque sera gauche
+			case VK_LEFT:
+			case VK_J:
+				commandesEnCours.remove(Command.ATTACK_LEFT);
+				break;
+
+			// si on appuie sur 'l' ou la flèche directionnelle de droite, la direction de l'attaque sera droite
+			case VK_RIGHT:
+			case VK_L:
+				commandesEnCours.remove(Command.ATTACK_RIGHT);
+				break;
+
+			// si on appuie sur 'k' ou la flèche directionnelle du bas, la direction de l'attaque sera bas
+			case VK_DOWN:
+			case VK_K:
+				commandesEnCours.remove(Command.ATTACK_DOWN);
+				break;
+
+			// si on appuie sur 'i' ou la flèche directionnelle du haut, la direction de l'attaque sera haut
+			case VK_UP:
+			case VK_I:
+				commandesEnCours.remove(Command.ATTACK_UP);
 				break;
 
 			/* OPTIONS ÉTAT DU JEU */
