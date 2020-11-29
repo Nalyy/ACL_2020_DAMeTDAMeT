@@ -87,7 +87,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 
 		// Re-création du monde
 		monsters.clear();
-		addMonsters();
+		addEnnemies();
 
 		// Lancement du timer
 		gameTimer.top(TIMER_TIME * 1000);
@@ -114,7 +114,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 			// On s'occupe des monstres et des héros
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
-			addMonsters();
+			addEnnemies();
 		}
 	}
 
@@ -128,16 +128,30 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	/**
 	 * Ajoute les monstres au jeu.
 	 */
-	private void addMonsters(){
-		MoveStrategy moveStrategy = RandomMove.INSTANCE;
+	private void addEnnemies(){
 		RandomMove.INSTANCE.setMaze(maze);
+		addMonsters();
+		addGhosts();
 
+	}
+
+	private void addMonsters(){
 		Iterator<Position> initialPositionMonster = maze.getIteratorMonsterPositions();
 
 		// Création des monstres à mettre dans la liste
 		while (initialPositionMonster.hasNext()){
 			// On met le nouveau monstre dans la liste en lui assignant une position initiale
-			monsters.add(new Monster(new Position(initialPositionMonster.next()), moveStrategy));
+			monsters.add(new Monster(new Position(initialPositionMonster.next()), RandomMove.INSTANCE));
+		}
+	}
+
+	private void addGhosts(){
+		Iterator<Position> initialPositionsGhosts = maze.getIteratorGhostPositions();
+
+		// Création des fantômes à mettre dans la liste
+		while (initialPositionsGhosts.hasNext()){
+			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
+			monsters.add(new Monster(new Position(initialPositionsGhosts.next()), RandomMove.INSTANCE, EntityType.GHOST));
 		}
 	}
 
@@ -411,7 +425,7 @@ public class PacmanGame implements Game, Iterable<Entity> {
 	}
 
 	private Direction getDirectionFromCommand(Command command){
-		Direction direction = null;
+		Direction direction;
 		switch (command){
 			case UP:
 				direction = Direction.UP;

@@ -6,11 +6,12 @@ import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public abstract class Entity {
     private Position position;
 
-    private EntityType type;
+    protected EntityType type;
 
 
     protected int maxHp = 1;
@@ -27,7 +28,7 @@ public abstract class Entity {
 
     /**
      * Remplace la position avec la nouvelle position.
-     * @param position
+     * @param position la nouvelle position
      */
     public void moveTo(Position position){
         this.position.setX(position.getX());
@@ -48,6 +49,7 @@ public abstract class Entity {
     }
 
     public boolean canGoTo(Tile tile){
+        if(tile == null) return false;
         Collection<TileType> limitationTiles = this.type.getLimitations();
         TileType tileType = tile.getType();
 
@@ -55,6 +57,7 @@ public abstract class Entity {
     }
 
     public boolean canTrigger(Tile tile){
+        if(tile == null) return false;
         Collection<TileType> tilesToTrigger = type.getTriggers();
         TileType tileType = tile.getType();
 

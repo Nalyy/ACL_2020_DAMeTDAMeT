@@ -1,6 +1,7 @@
 package com.dametdamet.app.model.dao.dao;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.EntityType;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.*;
 import com.dametdamet.app.model.maze.magicTiles.Heal;
@@ -27,6 +28,7 @@ public enum TxtDAO implements AbstractFileDAO {
 
     private static final char POS_JOUEUR = 'X';
     private static final char POS_MONSTRE = 'Y';
+    private static final char POS_FANTOME = 'G';
 
     private static final char HEAL = 'H';
     private static final char TIME = 'T';
@@ -145,9 +147,12 @@ public enum TxtDAO implements AbstractFileDAO {
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
                     case POS_MONSTRE:
-                        maze.addInitialMonsterPosition(new Position(x, y));
+                        maze.addInitialMonsterPosition(new Position(x, y), EntityType.MONSTER);
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
+                    case POS_FANTOME:
+                        maze.addInitialMonsterPosition(new Position(x,y), EntityType.GHOST);
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                     case EMPTY:
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
