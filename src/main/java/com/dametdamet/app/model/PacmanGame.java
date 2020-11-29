@@ -33,6 +33,7 @@ public class PacmanGame implements Game {
 	private Collection<Entity> projectiles;
 	private Maze maze;
 	private Timer gameTimer;
+	private Timer projectileTimer;
 	private int score;
 	private int currentLevel;
 
@@ -94,6 +95,7 @@ public class PacmanGame implements Game {
 		addMonsters();
 		projectiles.clear();
 		ProjectileMove.INSTANCE.setMaze(this.maze);
+		projectileTimer = new Timer();
 
 		// Lancement du timer
 		gameTimer.top(TIMER_TIME * 1000);
@@ -123,6 +125,7 @@ public class PacmanGame implements Game {
 			addMonsters();
 			projectiles.clear();
 			ProjectileMove.INSTANCE.setMaze(this.maze);
+			projectileTimer = new Timer();
 		}
 	}
 
@@ -173,7 +176,11 @@ public class PacmanGame implements Game {
 		Direction directionHero;
 		if (isAttack(command)) {
 			directionHero = getDirectionFromCommand(Command.IDLE);
-			addProjectile(getDirFromAttackCommand(command));
+			if (projectileTimer.isFinished()) {
+				Direction directionAttack = getDirFromAttackCommand(command);
+				addProjectile(directionAttack);
+				hero.setDirection(directionAttack);
+			}
 		} else {
 			directionHero = getDirectionFromCommand(command);
 		}
@@ -248,13 +255,16 @@ public class PacmanGame implements Game {
 	 * Déplace le héro selon une direction.
 	 */
 	private void moveHero(Direction direction) {
-		Position initPosHero = hero.getPosition();
-		Position targetPosHero = getTargetPosition(initPosHero, direction);
+		if (direction != Direction.IDLE) {
+			hero.setDirection(direction);
+			Position initPosHero = hero.getPosition();
+			Position targetPosHero = getTargetPosition(initPosHero, direction);
 
-		Tile tile = maze.whatIsIn(targetPosHero);
-		if (hero.canGoTo(tile)){
-			hero.moveTo(targetPosHero);
-			tile.applyEffect(this, hero);
+			Tile tile = maze.whatIsIn(targetPosHero);
+			if (hero.canGoTo(tile)) {
+				hero.moveTo(targetPosHero);
+				tile.applyEffect(this, hero);
+			}
 		}
 	}
 
@@ -492,6 +502,7 @@ public class PacmanGame implements Game {
 		Position position = new Position(posHero);
 		Projectile projectile = new Projectile(position, direction, ProjectileMove.INSTANCE);
 		projectiles.add(projectile);
+		projectileTimer.top(750);
 	}
 
 	private Direction getDirectionFromCommand(Command command){
