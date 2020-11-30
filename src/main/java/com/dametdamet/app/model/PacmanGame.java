@@ -363,6 +363,7 @@ public class PacmanGame implements Game {
 		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
 		Direction nextDirection;
+		Collection<Entity> monsterToRemove = new ArrayList<>();
 
 		// Monstres
 		for (Entity m : monsters){
@@ -455,13 +456,14 @@ public class PacmanGame implements Game {
 			if (monster.getPosition().equals(positionToGo)){
 				conflict = true;
 				break;
-			}
+
+
 		}
+
 
 		/* Si aucun soucis avec les monstres, on regarde si soucis avec le héros */
 		if (!conflict){
 			conflict = positionToGo.equals(hero.getPosition());
-		}
 
 		return conflict;
 
@@ -590,7 +592,8 @@ public class PacmanGame implements Game {
 	/**
 	 * @return l'itérateur sur les monstres
 	 */
-	public Iterator<Entity> getMonstersIterator() { return monsters.iterator();
+	public Iterator<Entity> getMonstersIterator() {
+		return monsters.iterator();
 	}
 
 	/**

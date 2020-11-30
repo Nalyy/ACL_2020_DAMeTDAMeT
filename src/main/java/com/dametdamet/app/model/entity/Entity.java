@@ -127,4 +127,15 @@ public abstract class Entity {
     public Timer getInvicibiltyTimer() {
         return invicibiltyTimer;
     }
+
+    public boolean isInRadius(Position positionRadius,int sizeRadius){
+        Position min = new Position(positionRadius.getX()-sizeRadius,positionRadius.getY()-sizeRadius);
+        Position max = new Position(positionRadius.getX()+sizeRadius,positionRadius.getY()+sizeRadius);
+
+        return position.getX() >= min.getX() &&
+                position.getY() >= min.getY() &&
+                position.getX() <= max.getX() &&
+                position.getY() <= max.getY();
+
+    }
 }

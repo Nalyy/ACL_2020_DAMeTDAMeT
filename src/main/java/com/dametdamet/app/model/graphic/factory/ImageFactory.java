@@ -43,6 +43,7 @@ public class ImageFactory {
     private final BufferedImage[] special;
     private final BufferedImage stairs;
     private final BufferedImage teleportation;
+    private final BufferedImage special_dynamite_pressed;
 
     private final BufferedImage entityNotFound;
     /*
@@ -83,6 +84,9 @@ public class ImageFactory {
         for(int i = 1 ; i < NB_SPECIAL_IMG  + 1; i++){
             special[i - 1] = ImageIO.read(getClass().getResourceAsStream((CASE_PATH+"/special" + (i<10 ? "0":"") + i + ".png")));
         }
+
+        //image DYNAMITE
+        special_dynamite_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_dynamite_pressed.png"));
 
         // image TELEPORTATION
         teleportation = ImageIO.read(getClass().getResource(CASE_PATH+"/caseTP.png"));
@@ -141,6 +145,8 @@ public class ImageFactory {
                 if(!(ca.getNumSprite() >= empty.length || ca.getNumSprite() < 0) )
                 return empty[ca.getNumSprite()];
                 break;
+            case TELEPORTATION:
+                return teleportation;
             case STAIRS:
                 return stairs;
             case BONUS:
@@ -151,8 +157,9 @@ public class ImageFactory {
                 if(!(ca.getNumSprite() >= wall.length || ca.getNumSprite() < 0))
                     return wall[ca.getNumSprite()];
                 break;
-            case TELEPORTATION:
-                return teleportation;
+            case DYNAMITE:
+                if(ca.getNumSprite() > 0)
+                    return special_dynamite_pressed;
             case SPAWNER_CHEST:
             case SPAWNER_MONSTERS:
             case DAMAGE:
