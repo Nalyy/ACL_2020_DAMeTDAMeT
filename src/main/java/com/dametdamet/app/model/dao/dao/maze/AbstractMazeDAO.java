@@ -1,8 +1,8 @@
-package com.dametdamet.app.model.dao.dao;
+package com.dametdamet.app.model.dao.dao.maze;
 
 import com.dametdamet.app.model.maze.Maze;
 
-public interface AbstractFileDAO {
+public interface AbstractMazeDAO {
 
     /**
      * Charge à partir d'un fichier un tableau à 2 dimensions de Cases

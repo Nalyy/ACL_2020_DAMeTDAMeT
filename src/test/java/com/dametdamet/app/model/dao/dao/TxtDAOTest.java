@@ -19,7 +19,7 @@ class TxtDAOTest {
     void load() {
         AbstractDAOFactory ab = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT);
 
-        Maze maze = ab.getFileDAO().load("maze_vide.txt");
+        Maze maze = ab.getMazeDAO().load("maze_vide.txt");
         /*
         Test avec un labyrinthe vide :
         Contenu :
@@ -47,7 +47,7 @@ class TxtDAOTest {
         }
 
 
-        maze = ab.getFileDAO().load("maze_rempli.txt");
+        maze = ab.getMazeDAO().load("maze_rempli.txt");
 
         /*
         Test avec un labyrinthe complètement rempli :
@@ -78,7 +78,7 @@ class TxtDAOTest {
 
         assertEquals(new Position(0, 0), maze.getInitialPositionPlayer());
 
-        maze = ab.getFileDAO().load("maze_rempli_2.txt");
+        maze = ab.getMazeDAO().load("maze_rempli_2.txt");
 
         /*
         Test avec un labyrinthe complètement rempli :
@@ -106,8 +106,38 @@ class TxtDAOTest {
 
         Iterator<Position> positions;
 
+        maze = ab.getMazeDAO().load("maze_monstres.txt");
 
-        maze = ab.getFileDAO().load("maze_monstres_1.txt");
+        /*
+        Test avec un labyrinthe complètement rempli :
+        Contenu :
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+        YYYYYYYYYYYYYYY
+         */
+
+        Iterator<Position> positions = maze.getIteratorMonsterPositions();
+
+        for (int y = 0; y < maze.getWidth(); y++) {
+            for (int x = 0; x < maze.getWidth(); x++) {
+                assertEquals(positions.next(), new Position(x, y));
+            }
+        }
+
+
+        maze = ab.getMazeDAO().load("maze_monstres_1.txt");
 
         /*
         Test avec un labyrinthe complètement rempli :
@@ -133,7 +163,7 @@ class TxtDAOTest {
 
         assertEquals(positions.next(), new Position(maze.getWidth()-1, maze.getWidth()-1));
 
-        maze = ab.getFileDAO().load("maze_monstres_2.txt");
+        maze = ab.getMazeDAO().load("maze_monstres_2.txt");
 
         /*
         Test avec un labyrinthe complètement rempli :

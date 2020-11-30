@@ -10,6 +10,7 @@ import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Hero;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
+import com.dametdamet.app.model.leaderboard.Score;
 import com.dametdamet.app.model.maze.Maze;
 
 /**
@@ -27,6 +28,7 @@ public class PacmanPainter implements GamePainter {
 	protected final int WIDTH;
 	protected final int HEIGHT;
 	protected final int HEIGHT_HUD;
+	protected final int HEIGHT_LEADERBOARD;
 
 	/**
 	 * appelle constructeur parent
@@ -40,6 +42,7 @@ public class PacmanPainter implements GamePainter {
 		this.WIDTH = width;
 		this.HEIGHT = height;
 		this.HEIGHT_HUD = (int)( 0.1 * height);
+		this.HEIGHT_LEADERBOARD = (int)(0.05 * height);
 	}
 
 	/**
@@ -68,31 +71,40 @@ public class PacmanPainter implements GamePainter {
 	private void drawScreenGameState(BufferedImage im) {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 
+
 		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
 
-		int heightText = (getHeight() / 2) + (crayon.getFontMetrics().getAscent() / 2);
-		int heightTextScore = heightText + crayon.getFontMetrics().getAscent();
+		int heightText = (crayon.getFontMetrics().getHeight());
+		int widthText = getWidth()/2 - getWidth()/6;
+		int heightTextScore = heightText + crayon.getFontMetrics().getHeight();
+
+		int heightTextLeaderboard = heightTextScore + crayon.getFontMetrics().getHeight();
 
 		if (pacmanGame.isFinished()) {
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("Retry ?", 0, heightText);
-			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+			drawMenu(crayon, " Retry ? ", widthText, heightText, heightTextScore, heightTextLeaderboard);
 		} else if (pacmanGame.isPaused()) {
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("Pause", 0, heightText);
-			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
-
+			drawMenu(crayon, "  Pause  ", widthText, heightText, heightTextScore, heightTextLeaderboard);
 		} else if (pacmanGame.isWon()) {
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("You won !", 0, heightText);
-			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+			drawMenu(crayon, "You won !", widthText, heightText, heightTextScore, heightTextLeaderboard);
+		}
+	}
 
+	private void drawMenu(Graphics2D crayon, String text, int widthText, int heightText, int heightTextScore, int heightTextLeaderboard){
+
+		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
+		crayon.setColor(Color.BLACK);
+		crayon.fillRect(0, 0, getWidth(), getHeight());
+		crayon.setColor(Color.WHITE);
+		crayon.drawString(text, widthText, heightText);
+		crayon.drawString("Score:" + pacmanGame.getScore(),0,heightTextScore);
+
+		crayon.setFont(new Font("Serial", Font.PLAIN, HEIGHT_LEADERBOARD));
+		Iterator<Score> it = pacmanGame.getLeaderboard().iterator();
+		int i = 1;
+		crayon.drawString("Leaderboard : ",0,heightTextLeaderboard);
+		while (it.hasNext()){
+			crayon.drawString(i + ": " + it.next().toString(),0,heightTextLeaderboard + i*crayon.getFontMetrics().getHeight());
+			i++;
 		}
 	}
 
