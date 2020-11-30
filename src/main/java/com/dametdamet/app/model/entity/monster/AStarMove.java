@@ -3,6 +3,7 @@ package com.dametdamet.app.model.entity.monster;
 import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Maze;
 
 import java.util.*;
@@ -48,7 +49,7 @@ public enum AStarMove implements MoveStrategy{
     }
 
     @Override
-    public Direction getNextDirection(Monster monster) {
+    public Direction getNextDirection(Entity monster) {
         Objects.requireNonNull(game, "La stratégie appliquée à l'ennemi n'a pas de jeu associé.");
         Objects.requireNonNull(maze, "La stratégie appliquée à l'ennemi n'a pas de labyrinthe associé.");
 
@@ -56,7 +57,7 @@ public enum AStarMove implements MoveStrategy{
         toBeSeen = new ArrayList<>();
         alreadySeen = new ArrayList<>();
 
-        this.monster = monster;
+        this.monster = (Monster)monster;
         Position hero = game.getHero().getPosition();
         Objects.requireNonNull(hero, "Il n'y a pas de héros que le monstre peut suivre.");
 

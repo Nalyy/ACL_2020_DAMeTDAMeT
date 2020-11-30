@@ -86,7 +86,10 @@ public class Monster extends Entity {
     public Direction getNextDirection(){
         Direction direction = strategy.getNextDirection(this);
 
-        setDirection(direction);
+        if (direction != Direction.IDLE){
+            setDirection(direction);
+        }
+
 
         return direction;
     }

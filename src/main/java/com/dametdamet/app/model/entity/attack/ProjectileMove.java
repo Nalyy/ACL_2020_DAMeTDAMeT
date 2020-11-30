@@ -1,6 +1,7 @@
 package com.dametdamet.app.model.entity.attack;
 
 import com.dametdamet.app.model.Direction;
+import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
@@ -16,6 +17,11 @@ public enum ProjectileMove implements MoveStrategy {
     @Override
     public void setMaze(Maze maze) { this.maze = maze; }
 
+    @Override
+    public void setGame(PacmanGame game) {
+        maze = game.getMaze();
+    }
+
     /**
      * Retourne la direction du projectile s'il peut aller sur la case suivante,
      * Direction.IDLE sinon.
@@ -28,7 +34,7 @@ public enum ProjectileMove implements MoveStrategy {
 
         Position posEntity = entity.getPosition();
         Position position = new Position(posEntity);
-        Direction direction = ((Projectile)entity).getDirection();
+        Direction direction = entity.getDirection();
 
         switch (direction) {
             case UP:

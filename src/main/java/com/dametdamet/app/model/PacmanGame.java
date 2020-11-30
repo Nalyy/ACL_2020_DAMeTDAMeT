@@ -152,7 +152,6 @@ public class PacmanGame implements Game {
 			projectiles.clear();
 			ProjectileMove.INSTANCE.setMaze(this.maze);
 			projectileTimer = new Timer();
-			initMonsters();
 		}
 	}
 
@@ -447,8 +446,12 @@ public class PacmanGame implements Game {
 	private boolean conflictWithEntity(Position positionToGo){
 		boolean conflict = false;
 
+		Iterator<Entity> iterator = this.getMonstersIterator();
+
 		/* On regarde si un monstre se trouve par ici */
-		for (Entity monster : this){
+		while (iterator.hasNext()) {
+			Entity monster = iterator.next();
+
 			if (monster.getPosition().equals(positionToGo)){
 				conflict = true;
 				break;
@@ -627,7 +630,7 @@ public class PacmanGame implements Game {
 	}
 
 	private Direction getDirectionFromCommand(Command command){
-		Direction direction = null;
+		Direction direction;
 		switch (command){
 			case UP:
 				direction = Direction.UP;
