@@ -11,6 +11,7 @@ import java.util.Random;
 public class Monster extends Entity {
     private MoveStrategy strategy;
     private Timer timer;
+    private Direction direction;
     private long millisecondsToWait = 400; // par défaut, chaque monstre bouge après 0.5 secondes d'attente
 
     /**
@@ -84,10 +85,24 @@ public class Monster extends Entity {
      */
     public Direction getNextDirection(){
         Direction direction = strategy.getNextDirection(this);
-        if (direction != Direction.IDLE) {
-            setDirection(direction);
-        }
+
+        setDirection(direction);
+
         return direction;
+    }
+
+    /**
+     * @return la direction actuelle du monstre
+     */
+    public Direction getDirection(){
+        return direction;
+    }
+
+    /**
+     * @param direction la nouvelle direction du monstre
+     */
+    public void setDirection(Direction direction){
+        this.direction = direction;
     }
 
     /**

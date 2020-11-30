@@ -36,6 +36,22 @@ public class Position {
         this.y = y;
     }
 
+    public Position getPositionToRight(){
+        return new Position(x+1, y);
+    }
+
+    public Position getPositionToLeft(){
+        return new Position(x-1, y);
+    }
+
+    public Position getPositionToUp(){
+        return new Position(x, y - 1);
+    }
+
+    public Position getPositionToDown(){
+        return new Position(x, y + 1);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

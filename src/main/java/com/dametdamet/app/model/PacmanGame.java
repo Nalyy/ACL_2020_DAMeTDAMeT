@@ -19,6 +19,7 @@ import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.leaderboard.Leaderboard;
 import com.dametdamet.app.model.leaderboard.Score;
+import com.dametdamet.app.model.entity.monster.*;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.Tile;
 
@@ -105,6 +106,11 @@ public class PacmanGame implements Game {
 		gameTimer = new Timer();
 		gameTimer.pause();
 
+		/* Toutes les stratégies doivent être initalisées avec le jeu */
+		RandomMove.INSTANCE.setGame(this);
+		RunnerMove.INSTANCE.setGame(this);
+		AStarMove.INSTANCE.setGame(this);
+
 		// Re-création du monde
 		monsters.clear();
 		addEnnemies();
@@ -133,15 +139,20 @@ public class PacmanGame implements Game {
 		}else {
 			// On charge le prochain labyrinthe
 			fileName = filesNames[currentLevel];
+
+			// On change notre maze
 			loadMaze();
 
 			// On s'occupe des monstres, des héros et des projectiles
+			initMazeOfStrategies();
+			// On s'occupe des monstres et des héros
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
 			addEnnemies();
 			projectiles.clear();
 			ProjectileMove.INSTANCE.setMaze(this.maze);
 			projectileTimer = new Timer();
+			initMonsters();
 		}
 	}
 
@@ -164,7 +175,7 @@ public class PacmanGame implements Game {
 	}
 
 	/**
-	 * Ajoute les monstres au jeu.
+	 * Crée et ajoute les monstres au jeu.
 	 */
 	private void addEnnemies(){
 		RandomMove.INSTANCE.setMaze(maze);
@@ -183,15 +194,34 @@ public class PacmanGame implements Game {
 		}
 	}
 
-	private void addGhosts(){
-		Iterator<Position> initialPositionsGhosts = maze.getIteratorGhostPositions();
+	/**
+	 * Initialise toutes les stratégies avec le labyrinthe actuel.
+	 */
+	private void initMazeOfStrategies(){
+		RandomMove.INSTANCE.setMaze(maze);
+		AStarMove.INSTANCE.setMaze(maze);
+		RunnerMove.INSTANCE.setMaze(maze);
+	}
 
+	private void addGhosts() {
+		Iterator<Position> initialPositionsGhosts = maze.getIteratorGhostPositions();
 		// Création des fantômes à mettre dans la liste
 		while (initialPositionsGhosts.hasNext()){
 			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
 			monsters.add(new Monster(new Position(initialPositionsGhosts.next()), RandomMove.INSTANCE, EntityType.GHOST));
 		}
 	}
+
+
+	public void healHero(int amount){
+		hero.gainHP(amount);
+	}
+
+	public void hurtHero(int amount) {
+		hero.loseHP(amount);
+	}
+
+
 
 	/**
 	 * faire evoluer le jeu suite a une commande
@@ -226,6 +256,7 @@ public class PacmanGame implements Game {
 		} else {
 			directionHero = getDirectionFromCommand(command);
 		}
+
 
 		// Héros
 		moveHero(directionHero);
@@ -344,12 +375,18 @@ public class PacmanGame implements Game {
 			targetPosition = getTargetPosition(initialPosition, nextDirection);
 
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
-			monster.moveTo(targetPosition);
-			if (!nextDirection.equals(Direction.IDLE)) {
-				maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
+			if(!conflictWithEntity(targetPosition)){
+				monster.moveTo(targetPosition);
+
+				if (!nextDirection.equals(Direction.IDLE)) {
+					maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
+				}
+				// Si il n'a pas pu se déplacer, on reset sa direction
+			}else{
+				monster.setDirection(Direction.IDLE);
 			}
 
-			// Test collision avec le héro
+			// Test collision avec le héros
 			if (targetPosition.equals(heroPosition)) {
 				hero.loseHP(1);
 			}
@@ -405,6 +442,26 @@ public class PacmanGame implements Game {
 		for(Entity p : projToRemove){
 			destroyProjectile(p);
 		}
+	}
+
+	private boolean conflictWithEntity(Position positionToGo){
+		boolean conflict = false;
+
+		/* On regarde si un monstre se trouve par ici */
+		for (Entity monster : this){
+			if (monster.getPosition().equals(positionToGo)){
+				conflict = true;
+				break;
+			}
+		}
+
+		/* Si aucun soucis avec les monstres, on regarde si soucis avec le héros */
+		if (!conflict){
+			conflict = positionToGo.equals(hero.getPosition());
+		}
+
+		return conflict;
+
 	}
 
 	/**
@@ -570,7 +627,7 @@ public class PacmanGame implements Game {
 	}
 
 	private Direction getDirectionFromCommand(Command command){
-		Direction direction;
+		Direction direction = null;
 		switch (command){
 			case UP:
 				direction = Direction.UP;

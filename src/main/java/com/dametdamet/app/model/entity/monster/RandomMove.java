@@ -1,6 +1,8 @@
 package com.dametdamet.app.model.entity.monster;
 
+import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.Direction;
+import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.maze.Maze;
@@ -17,8 +19,8 @@ public enum RandomMove implements MoveStrategy {
     private Maze maze;
 
     @Override
-    public void setMaze(Maze maze){
-        this.maze = maze;
+    public void setGame(PacmanGame game) {
+        maze = game.getMaze(); // juste besoin du labyrinthe pour cette stratégie
     }
 
     @Override
@@ -26,18 +28,7 @@ public enum RandomMove implements MoveStrategy {
         return maze!=null;
     }
 
-    @Override
-    public boolean isInMaze(Position position) {
-        int x = position.getX();
-        int y = position.getY();
-        int width = maze.getWidth();
-        int height = maze.getHeight();
-
-        boolean isWithinWitdh = (x >= 0) && (x < width);
-        boolean isWithinHeight = (y >= 0) && (y < height);
-
-        return isWithinWitdh && isWithinHeight;
-    }
+    public void setMaze(Maze maze){ this.maze = maze; }
 
     @Override
     public Direction getNextDirection(Entity monster){
@@ -84,4 +75,17 @@ public enum RandomMove implements MoveStrategy {
         return candidates.isEmpty() ? Direction.IDLE : candidates.get(randomGenerator.nextInt(boundForRandom));
     }
 
+
+    @Override
+    public boolean isInMaze(Position position) {
+        int x = position.getX();
+        int y = position.getY();
+        int width = maze.getWidth();
+        int height = maze.getHeight();
+
+        boolean isWithinWitdh = (x >= 0) && (x < width);
+        boolean isWithinHeight = (y >= 0) && (y < height);
+
+        return isWithinWitdh && isWithinHeight;
+    }
 }
