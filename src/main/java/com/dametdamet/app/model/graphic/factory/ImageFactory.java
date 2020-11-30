@@ -26,6 +26,8 @@ public class ImageFactory {
     private final static String HUD_PATH = PATH + "/hud";
 
 
+
+
     private static ImageFactory instance;
 
     static {
@@ -45,8 +47,13 @@ public class ImageFactory {
     private final BufferedImage teleportation;
 
     private final BufferedImage entityNotFound;
+    /*
     private final BufferedImage hero;
     private final BufferedImage monster;
+    */
+    private final BufferedImage hero[];
+    private final BufferedImage monster[];
+    private  final BufferedImage ghost[];
 
     private final BufferedImage heart_full;
     private final BufferedImage heart_empty;
@@ -57,6 +64,9 @@ public class ImageFactory {
         treasure = new BufferedImage[NB_TREASURE_IMG];
         wall = new BufferedImage[NB_WALL_IMG];
         special = new BufferedImage[NB_SPECIAL_IMG];
+        hero = new BufferedImage[4];
+        monster = new BufferedImage[4];
+        ghost = new BufferedImage[4];
 
         /// RÉCUPÉRATION DES IMAGES DES CASES ///
         //images EMPTY
@@ -90,11 +100,19 @@ public class ImageFactory {
 
         ///RÉCUPÉRATION DES IMAGES DES ENTITÉS///
         //image HERO
-        hero = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/hero01.png"));
+        for(int i = 0;i < 4;i++){
+            hero[i] = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/hero_sprite0"+i+".png"));
+        }
 
         //image MONSTER
-        monster = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/monster01.png"));
+        for(int i = 0;i < 4;i++){
+            monster[i] = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/monster_sprite0"+i+".png"));
+        }
 
+        //image GHOST
+        for(int i = 0;i < 4;i++){
+            ghost[i] = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/ghost_sprite0"+i+".png"));
+        }
         //image entity notFound
         entityNotFound = ImageIO.read(getClass().getResourceAsStream(ENTITY_PATH+"/entity_not_found.png"));
         ///                ///
@@ -158,11 +176,29 @@ public class ImageFactory {
      */
     public BufferedImage getEntityImage(Entity entity){
         EntityType type = entity.getType();
+        int numSprite = 0;
+        switch (entity.getDirection()){
+
+            case UP:
+                numSprite = 2;
+                break;
+            case LEFT:
+                numSprite = 1;
+                break;
+            case RIGHT:
+                numSprite = 3;
+                break;
+            default:
+            case DOWN:
+                numSprite = 0;
+                break;
+        }
+
         switch (type){
             case HERO:
-                return hero;
+                return hero[numSprite];
             case MONSTER:
-                return monster;
+                return monster[numSprite];
             default:
                 return entityNotFound;
         }
