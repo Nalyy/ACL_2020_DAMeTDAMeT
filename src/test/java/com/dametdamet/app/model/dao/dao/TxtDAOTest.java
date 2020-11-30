@@ -106,37 +106,6 @@ class TxtDAOTest {
 
         Iterator<Position> positions;
 
-        maze = ab.getMazeDAO().load("maze_monstres.txt");
-
-        /*
-        Test avec un labyrinthe complètement rempli :
-        Contenu :
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-        YYYYYYYYYYYYYYY
-         */
-
-        Iterator<Position> positions = maze.getIteratorMonsterPositions();
-
-        for (int y = 0; y < maze.getWidth(); y++) {
-            for (int x = 0; x < maze.getWidth(); x++) {
-                assertEquals(positions.next(), new Position(x, y));
-            }
-        }
-
-
         maze = ab.getMazeDAO().load("maze_monstres_1.txt");
 
         /*
