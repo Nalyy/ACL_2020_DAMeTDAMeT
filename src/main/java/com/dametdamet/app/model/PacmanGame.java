@@ -612,7 +612,7 @@ public class PacmanGame implements Game {
 	}
 
 	public void addMonster(Position position){
-		Monster monster = new Monster(position, RandomMove.INSTANCE);
+		Monster monster = new Monster(position, AStarMove.INSTANCE);
 		monsters.add(monster);
 	}
 
