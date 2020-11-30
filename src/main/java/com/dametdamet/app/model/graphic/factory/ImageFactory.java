@@ -197,6 +197,8 @@ public class ImageFactory {
                 return hero[numSprite];
             case MONSTER:
                 return monster[numSprite];
+            case GHOST:
+                return ghost[numSprite];
             default:
                 return entityNotFound;
         }
