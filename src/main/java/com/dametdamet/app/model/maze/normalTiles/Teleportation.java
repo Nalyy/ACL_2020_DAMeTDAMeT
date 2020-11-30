@@ -8,7 +8,7 @@ import com.dametdamet.app.model.maze.TileType;
 
 public class Teleportation extends Tile {
 
-    private Position destination;
+    private final Position destination;
 
     public Teleportation(Position dest) {
         super(TileType.TELEPORTATION);

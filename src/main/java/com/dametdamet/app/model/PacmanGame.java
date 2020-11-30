@@ -33,8 +33,8 @@ import com.dametdamet.app.model.maze.Tile;
 public class PacmanGame implements Game {
 	private GameState state;
 	private Hero hero;
-	private Collection<Entity> monsters;
-	private Collection<Entity> projectiles;
+	private final Collection<Entity> monsters;
+	private final Collection<Entity> projectiles;
 	private Maze maze;
 	private Timer gameTimer;
 	private Timer projectileTimer;
@@ -42,7 +42,7 @@ public class PacmanGame implements Game {
 	private int currentLevel;
 
 	private String fileName;
-	private String[] filesNames;
+	private final String[] filesNames;
 	private final int nbMazesToDo;
 
 	private Leaderboard leaderboard;
@@ -145,6 +145,7 @@ public class PacmanGame implements Game {
 
 			// On s'occupe des monstres, des héros et des projectiles
 			initMazeOfStrategies();
+
 			// On s'occupe des monstres et des héros
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
@@ -209,15 +210,6 @@ public class PacmanGame implements Game {
 			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
 			monsters.add(new Monster(new Position(initialPositionsGhosts.next()), RandomMove.INSTANCE, EntityType.GHOST));
 		}
-	}
-
-
-	public void healHero(int amount){
-		hero.gainHP(amount);
-	}
-
-	public void hurtHero(int amount) {
-		hero.loseHP(amount);
 	}
 
 
@@ -444,7 +436,7 @@ public class PacmanGame implements Game {
 		}
 	}
 
-	private boolean conflictWithEntity(Position positionToGo){
+	private boolean conflictWithEntity(Position positionToGo) {
 		boolean conflict = false;
 
 		Iterator<Entity> iterator = this.getMonstersIterator();
@@ -453,21 +445,21 @@ public class PacmanGame implements Game {
 		while (iterator.hasNext()) {
 			Entity monster = iterator.next();
 
-			if (monster.getPosition().equals(positionToGo)){
+			if (monster.getPosition().equals(positionToGo)) {
 				conflict = true;
 				break;
 
 
+			}
 		}
 
+			/* Si aucun soucis avec les monstres, on regarde si soucis avec le héros */
+			if (!conflict) conflict = positionToGo.equals(hero.getPosition());
 
-		/* Si aucun soucis avec les monstres, on regarde si soucis avec le héros */
-		if (!conflict){
-			conflict = positionToGo.equals(hero.getPosition());
+			return conflict;
 
-		return conflict;
+		}
 
-	}
 
 	/**
 	 * Donne la nouvelle position si exécution de cmd.
@@ -706,3 +698,4 @@ public class PacmanGame implements Game {
 		}
 	}
 }
+

@@ -21,7 +21,7 @@ import com.dametdamet.app.model.maze.Maze;
  */
 public class PacmanPainter implements GamePainter {
 
-	private PacmanGame pacmanGame;
+	private final PacmanGame pacmanGame;
 	/**
 	 * la taille des cases
 	 */

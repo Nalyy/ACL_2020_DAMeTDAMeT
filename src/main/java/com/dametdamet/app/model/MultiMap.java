@@ -4,7 +4,7 @@ import java.util.*;
 
 public class MultiMap<K, V> {
 
-    private Map<K, Set<V>> associations;
+    private final Map<K, Set<V>> associations;
 
     public MultiMap(){
         associations = new HashMap<>();

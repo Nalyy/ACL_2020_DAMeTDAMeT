@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 public abstract class Entity {
-    private Position position;
+    private final Position position;
     private Direction direction;
 
     protected EntityType type;

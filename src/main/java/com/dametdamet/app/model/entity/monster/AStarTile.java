@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class AStarTile implements Iterable<AStarTile>{
-    private Position position;
-    private Tile tile;
-    private Entity entity;
+    private final Position position;
+    private final Tile tile;
+    private final Entity entity;
     private AStarTile parent;
     private int g;
     private int f;
-    private int cost; // coût pour s'y rendre : MAX si l'entité ne peut pas s'y déplacer
-    private List<AStarTile> neighbours;
+    private final int cost; // coût pour s'y rendre : MAX si l'entité ne peut pas s'y déplacer
+    private final List<AStarTile> neighbours;
 
     private final int CUSTOM_MAX = 9999;    // voir l'explication dans le constructeur pour
                                             // la non-utilisation de Integer.MAX_VALUE
@@ -78,14 +78,14 @@ public class AStarTile implements Iterable<AStarTile>{
      * @return la distance à vol d'oiseau entre la position de cette case et celle donnée.
      */
     public int  getDistanceTo(Position goal){
-        int ev =
+        return
                 (int)
                         Math.sqrt(
                                 Math.pow(position.getX() - goal.getX(), 2)
                                         +
                                         Math.pow(position.getY() - goal.getY(), 2)
                         );
-        return ev;
+
     }
 
     /**

@@ -18,7 +18,7 @@ public class Maze{
     public static final int DEFAULT_NB_MONSTERS = 5;
 
     private Position initialPositionPlayer;
-    private MultiMap<EntityType, Position> initialPositionsEnnemies;
+    private final MultiMap<EntityType, Position> initialPositionsEnnemies;
 
     private Stack<Position> positionBonusChest;
     private List<Position> positionMonsters;

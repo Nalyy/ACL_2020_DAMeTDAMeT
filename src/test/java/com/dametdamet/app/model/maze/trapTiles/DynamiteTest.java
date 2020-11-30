@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 /** Ces tests sont valables si la range de la case Dynamite est de 1 */
 public class DynamiteTest {
 
@@ -55,18 +57,22 @@ public class DynamiteTest {
 
         /* Au début, le jeu contient 7 monstres vivants */
         int compteur = 0;
-        for (Entity m : game ){
+
+        Iterator<Entity> iterator = game.getMonstersIterator();
+        while(iterator.hasNext()){
+            Entity entity = iterator.next();
             compteur++;
-            Assertions.assertTrue(m.getHP()>0);
+            Assertions.assertTrue(entity.getHP()>0);
         }
 
         Assertions.assertEquals(7, compteur);
 
         triggerTrap();
 
+        iterator = game.getMonstersIterator();
         /* Tous les monstres sont censés ne plus avoir de pv */
-        for (Entity m : game ){
-            Assertions.assertEquals(m.getHP(), 0);
+        while(iterator.hasNext()){
+            Assertions.assertEquals(iterator.next().getHP(), 0);
         }
     }
 
@@ -94,8 +100,10 @@ public class DynamiteTest {
         setMazeOutOfRange();
         triggerTrap();
 
-        for (Entity m : game){
-            Assertions.assertEquals(m.getMaxHp(), m.getHP());
+        Iterator<Entity> iterator = game.getMonstersIterator();
+        while(iterator.hasNext()){
+            Entity monster = iterator.next();
+            Assertions.assertEquals(monster.getMaxHp(), monster.getHP());
         }
     }
 
@@ -110,14 +118,19 @@ public class DynamiteTest {
         Assertions.assertEquals(hero.getMaxHp()-1, hero.getHP());
     }
 
+    /**
+     * Idem que au-dessus
+     */
     @Test
     public void errorMonsters(){
         triggerTrap();
         triggerTrap();
         triggerTrap();
 
-        for (Entity m: game){
-            Assertions.assertEquals(m.getMaxHp()-1, m.getHP());
+        Iterator<Entity> iterator = game.getMonstersIterator();
+        while(iterator.hasNext()){
+            Entity monster = iterator.next();
+            Assertions.assertEquals(monster.getMaxHp()-1, monster.getHP());
         }
     }
 

@@ -9,8 +9,8 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Monster extends Entity {
-    private MoveStrategy strategy;
-    private Timer timer;
+    private final MoveStrategy strategy;
+    private final Timer timer;
     private Direction direction;
     private long millisecondsToWait = 400; // par défaut, chaque monstre bouge après 0.5 secondes d'attente
 

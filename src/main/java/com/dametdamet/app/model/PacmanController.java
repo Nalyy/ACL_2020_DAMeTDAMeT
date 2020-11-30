@@ -21,7 +21,7 @@ public class PacmanController implements GameController {
 	/**
 	 * commande en cours
 	 */
-	private List<Command> commandesEnCours;
+	private final List<Command> commandesEnCours;
 	
 	/**
 	 * construction du controleur par defaut le controleur n'a pas de commande
@@ -41,10 +41,10 @@ public class PacmanController implements GameController {
 		return commandesEnCours.get(commandesEnCours.size()-1);
 	}
 
-	@Override
 	/**
 	 * met a jour les commandes en fonctions des touches appuyees
 	 */
+	@Override
 	public void keyPressed(KeyEvent e) {
 
 		switch (e.getKeyCode()) {
@@ -130,10 +130,10 @@ public class PacmanController implements GameController {
 
 	}
 
-	@Override
 	/**
 	 * met a jour les commandes quand le joueur relache une touche
 	 */
+	@Override
 	public void keyReleased(KeyEvent e) {
 
 		switch (e.getKeyCode()) {
@@ -207,10 +207,10 @@ public class PacmanController implements GameController {
 		}
 	}
 
-	@Override
 	/**
 	 * ne fait rien
 	 */
+	@Override
 	public void keyTyped(KeyEvent e) {
 
 	}

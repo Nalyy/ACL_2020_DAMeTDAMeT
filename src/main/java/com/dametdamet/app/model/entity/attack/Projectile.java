@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Projectile extends Entity {
 
-    private MoveStrategy strategy;
+    private final MoveStrategy strategy;
 
     /**
      * Construit un projectile.

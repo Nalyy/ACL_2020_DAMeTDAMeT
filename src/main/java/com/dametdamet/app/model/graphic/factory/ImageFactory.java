@@ -50,9 +50,9 @@ public class ImageFactory {
     private final BufferedImage hero;
     private final BufferedImage monster;
     */
-    private final BufferedImage hero[];
-    private final BufferedImage monster[];
-    private  final BufferedImage ghost[];
+    private final BufferedImage[] hero;
+    private final BufferedImage[] monster;
+    private  final BufferedImage[] ghost;
 
     private final BufferedImage heart_full;
     private final BufferedImage heart_empty;
@@ -181,7 +181,7 @@ public class ImageFactory {
      */
     public BufferedImage getEntityImage(Entity entity){
         EntityType type = entity.getType();
-        int numSprite = 0;
+        int numSprite ;
         switch (entity.getDirection()){
 
             case UP:
