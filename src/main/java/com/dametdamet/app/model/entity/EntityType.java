@@ -29,6 +29,14 @@ public enum EntityType {
             )
     ),
 
+    RUNNER(new ArrayList<>(Arrays.asList(TileType.WALL, TileType.OUTOFBOUND)),
+            new ArrayList<>(Arrays.asList(
+                    TileType.TELEPORTATION,
+                    TileType.DYNAMITE
+            )
+            )
+    ),
+
     PROJECTILE(new ArrayList<>(Arrays.asList(TileType.WALL, TileType.OUTOFBOUND)),
             new ArrayList<>(Arrays.asList()
             )

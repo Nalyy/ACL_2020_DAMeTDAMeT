@@ -83,11 +83,8 @@ public class Maze{
         this.initialPositionsEnnemies.put(entity, initialPositionMonster);
     }
 
-    public Iterator<Position> getIteratorMonsterPositions(){
-        return initialPositionsEnnemies.getIteratorOf(EntityType.MONSTER);
-    }
-    public Iterator<Position> getIteratorGhostPositions() {
-        return initialPositionsEnnemies.getIteratorOf(EntityType.GHOST);
+    public Iterator<Position> getIteratorPositions(EntityType e){
+        return initialPositionsEnnemies.getIteratorOf(e);
     }
 
     public void setMaze(Tile[][] maze){

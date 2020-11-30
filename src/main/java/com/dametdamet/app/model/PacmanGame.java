@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
+
 import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 import com.dametdamet.app.model.entity.*;
 import com.dametdamet.app.model.entity.attack.Projectile;
@@ -17,6 +18,8 @@ import com.dametdamet.app.model.entity.attack.ProjectileMove;
 import com.dametdamet.app.model.entity.monster.Monster;
 import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
+import com.dametdamet.app.model.graphic.ExplosionEffect;
+import com.dametdamet.app.model.graphic.GraphicalEffect;
 import com.dametdamet.app.model.leaderboard.Leaderboard;
 import com.dametdamet.app.model.leaderboard.Score;
 import com.dametdamet.app.model.entity.monster.*;
@@ -35,6 +38,7 @@ public class PacmanGame implements Game {
 	private Hero hero;
 	private final Collection<Entity> monsters;
 	private final Collection<Entity> projectiles;
+	private final Collection<GraphicalEffect> graphicalEffects;
 	private Maze maze;
 	private Timer gameTimer;
 	private Timer projectileTimer;
@@ -61,6 +65,7 @@ public class PacmanGame implements Game {
 	public PacmanGame(String source, String sourceLeaderboard, String[] sourceMaze) {
 		monsters = new ArrayList<>();
 		projectiles = new ArrayList<>();
+		graphicalEffects = new ArrayList<>();
 		filesNames = sourceMaze;
 		nbMazesToDo = sourceMaze.length;
 
@@ -113,6 +118,7 @@ public class PacmanGame implements Game {
 
 		// Re-création du monde
 		monsters.clear();
+		graphicalEffects.clear();
 		addEnnemies();
 		projectiles.clear();
 		ProjectileMove.INSTANCE.setMaze(this.maze);
@@ -181,11 +187,11 @@ public class PacmanGame implements Game {
 		RandomMove.INSTANCE.setMaze(maze);
 		addMonsters();
 		addGhosts();
-
+		addRunner();
 	}
 
 	private void addMonsters(){
-		Iterator<Position> initialPositionMonster = maze.getIteratorMonsterPositions();
+		Iterator<Position> initialPositionMonster = maze.getIteratorPositions(EntityType.MONSTER);
 
 		// Création des monstres à mettre dans la liste
 		while (initialPositionMonster.hasNext()){
@@ -204,7 +210,7 @@ public class PacmanGame implements Game {
 	}
 
 	private void addGhosts() {
-		Iterator<Position> initialPositionsGhosts = maze.getIteratorGhostPositions();
+		Iterator<Position> initialPositionsGhosts = maze.getIteratorPositions(EntityType.GHOST);
 		// Création des fantômes à mettre dans la liste
 		while (initialPositionsGhosts.hasNext()){
 			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
@@ -212,7 +218,14 @@ public class PacmanGame implements Game {
 		}
 	}
 
-
+	private void addRunner() {
+		Iterator<Position> initialPositionsRunner = maze.getIteratorPositions(EntityType.RUNNER);
+		// Création des fantômes à mettre dans la liste
+		while (initialPositionsRunner.hasNext()){
+			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
+			monsters.add(new Monster(new Position(initialPositionsRunner.next()), RunnerMove.INSTANCE, EntityType.RUNNER));
+		}
+	}
 
 	/**
 	 * faire evoluer le jeu suite a une commande
@@ -258,9 +271,10 @@ public class PacmanGame implements Game {
 		// Projectiles
 		moveProjectiles();
 
-
 		killMonsters();
 
+		//Effets
+		updateGraphicalEffects();
 
 		if(hero.getHP() == 0){
 			setFinished();
@@ -313,9 +327,13 @@ public class PacmanGame implements Game {
 			if(isPaused()){
 				state = GameState.ONGOING;
 				gameTimer.continueTimer();
+				continueEffects();
+				hero.continueInvicibiltyTimer();
 			}else {
 				state = GameState.PAUSED;
 				gameTimer.pause();
+				pauseEffects();
+				hero.pauseInvicibiltyTimer();
 			}
 		}
 	}
@@ -357,6 +375,7 @@ public class PacmanGame implements Game {
 		Direction nextDirection;
 		Collection<Entity> monsterToRemove = new ArrayList<>();
 
+
 		// Monstres
 		for (Entity m : monsters){
 			Monster monster = (Monster) m;
@@ -367,15 +386,13 @@ public class PacmanGame implements Game {
 			targetPosition = getTargetPosition(initialPosition, nextDirection);
 
 			// La MoveStrategy du monstre s'assure que le monstre peut bouger à cette case
-			if(!conflictWithEntity(targetPosition)){
+			if(!conflictWithEntity(targetPosition)) {
 				monster.moveTo(targetPosition);
 
 				if (!nextDirection.equals(Direction.IDLE)) {
 					maze.whatIsIn(monster.getPosition()).applyEffect(this, monster);
 				}
 				// Si il n'a pas pu se déplacer, on reset sa direction
-			}else{
-				monster.setDirection(Direction.IDLE);
 			}
 
 			// Test collision avec le héros
@@ -642,7 +659,6 @@ public class PacmanGame implements Game {
 			case IDLE:
 			default:
 				direction = Direction.IDLE;
-
 		}
 		return direction;
 	}
@@ -672,14 +688,25 @@ public class PacmanGame implements Game {
 		monsters.remove(entity);
 	}
 
+
 	private void destroyProjectile(Entity entity){
 		projectiles.remove(entity);
 	}
 
+	/**
+	 * inflige des dégâts à l'entity
+	 * @param entity entity
+	 * @param hpAmount montant de dégât
+	 */
 	public void hurtEntity(Entity entity,int hpAmount){
 		entity.loseHP(hpAmount);
 	}
 
+	/**
+	 * soigne l'entité
+	 * @param entity entité
+	 * @param hpAmount montant du soin
+	 */
 	public void healEntity(Entity entity,int hpAmount){
 		entity.gainHP(hpAmount);
 	}
@@ -697,5 +724,39 @@ public class PacmanGame implements Game {
 			}
 		}
 	}
-}
+	private void updateGraphicalEffects(){
+		Collection<GraphicalEffect> effects_to_destroy = new ArrayList<>();
+		for(GraphicalEffect effect:graphicalEffects){
+			effect.update();
+			if(effect.isFinished()) effects_to_destroy.add(effect);
+		}
 
+		for(GraphicalEffect effect: effects_to_destroy){
+			destroyEffect(effect);
+		}
+	}
+
+	private void pauseEffects(){
+		for(GraphicalEffect effect:graphicalEffects){
+			effect.pauseTimer();
+		}
+	}
+
+	private void continueEffects(){
+		for(GraphicalEffect effect:graphicalEffects){
+			effect.continueTimer();
+		}
+	}
+
+	private void destroyEffect(GraphicalEffect effect){
+		graphicalEffects.remove(effect);
+	}
+
+	public void addExplosion(Position position){
+		graphicalEffects.add(new ExplosionEffect(position));
+	}
+
+	public Collection<GraphicalEffect> getGraphicalEffects() {
+		return graphicalEffects;
+	}
+}

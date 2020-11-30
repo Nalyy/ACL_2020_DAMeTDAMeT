@@ -3,6 +3,7 @@ package com.dametdamet.app.model.dao.dao;
 import com.dametdamet.app.model.dao.factory.AbstractDAOFactory;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.EntityType;
 import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.TileType;
 import org.junit.jupiter.api.Test;
@@ -128,7 +129,7 @@ class TxtDAOTest {
         00000000000000Y
          */
 
-        positions = maze.getIteratorMonsterPositions();
+        positions = maze.getIteratorPositions(EntityType.MONSTER);
 
         assertEquals(positions.next(), new Position(maze.getWidth()-1, maze.getWidth()-1));
 
@@ -154,7 +155,7 @@ class TxtDAOTest {
         00000000000000Y
          */
 
-        positions = maze.getIteratorMonsterPositions();
+        positions = maze.getIteratorPositions(EntityType.MONSTER);
 
         ArrayList<Position> list = new ArrayList<>();
         list.add(new Position(0, 0));

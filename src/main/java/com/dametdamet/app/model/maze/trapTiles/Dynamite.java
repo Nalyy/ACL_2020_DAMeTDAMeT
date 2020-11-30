@@ -12,7 +12,7 @@ import java.util.Iterator;
 public class Dynamite extends Tile {
 
     private final static int AMOUNT_DMG = 1;
-    private final static int EXPLOSION_RANGE = 1;
+    public final static int EXPLOSION_RANGE = 1;
 
 
     private final Position position;
@@ -26,6 +26,7 @@ public class Dynamite extends Tile {
     public void applyEffect(PacmanGame game, Entity entity) {
         if(entity.canTrigger(this) && !isPressed()){
 
+            game.addExplosion(position);
             // On parcourt les monstres pour voir s'ils sont touchés par la dynamite
             Iterator<Entity> iterator = game.getMonstersIterator();
             while (iterator.hasNext()) {

@@ -57,6 +57,7 @@ public class PacmanPainter implements GamePainter {
 			drawHero(im);
 			drawMonsters(im);
 			drawProjectiles(im);
+			drawEffects(im);
 			drawHUD(im);
 		} else {
 			drawScreenGameState(im);
@@ -70,7 +71,6 @@ public class PacmanPainter implements GamePainter {
 	 */
 	private void drawScreenGameState(BufferedImage im) {
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
-
 
 		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
 
@@ -237,6 +237,19 @@ public class PacmanPainter implements GamePainter {
 
 
 
+	}
+
+	private void drawEffects(BufferedImage im){
+		Graphics2D crayon = (Graphics2D) im.getGraphics();
+
+		for(GraphicalEffect effect:pacmanGame.getGraphicalEffects()) {
+			//on récupère l'image de l'effet
+			BufferedImage imageHero = ImageFactory.getInstance().getEffectImage(effect);
+
+			//on dessine l'image de l'effet
+
+			crayon.drawImage(imageHero,effect.getPosition().getX()*getRatioWidth(),effect.getPosition().getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth() * effect.getWidth(),getRatioHeight() * effect.getHeight(),null);
+		}
 	}
 
 	@Override

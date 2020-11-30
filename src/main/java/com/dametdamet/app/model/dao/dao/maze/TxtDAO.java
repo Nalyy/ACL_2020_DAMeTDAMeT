@@ -30,6 +30,7 @@ public enum TxtDAO implements AbstractMazeDAO {
     private static final char POS_JOUEUR = 'X';
     private static final char POS_MONSTRE = 'Y';
     private static final char POS_FANTOME = 'G';
+    private static final char POS_RUNNER = 'R';
 
     private static final char HEAL = 'H';
     private static final char TIME = 'T';
@@ -40,7 +41,7 @@ public enum TxtDAO implements AbstractMazeDAO {
     private static final char DYNAMITE = 'E';
 
     private static final char SPAWNER_MONSTERS = 'S';
-    private static final char POS_MONSTERS = 'M';
+    private static final char SPAWNER_POS_MONSTERS = 'M';
 
     private static final char TELEPORTATION = 'P';
 
@@ -155,6 +156,12 @@ public enum TxtDAO implements AbstractMazeDAO {
                     case POS_FANTOME:
                         maze.addInitialMonsterPosition(new Position(x,y), EntityType.GHOST);
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        break;
+                    case POS_RUNNER:
+                        maze.addInitialMonsterPosition(new Position(x,y), EntityType.RUNNER);
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        break;
+                    default:
                     case EMPTY:
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
@@ -186,7 +193,7 @@ public enum TxtDAO implements AbstractMazeDAO {
                     case SPAWNER_MONSTERS:
                         laby[x][y] = new SpawnerMonster();
                         break;
-                    case POS_MONSTERS:
+                    case SPAWNER_POS_MONSTERS:
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         maze.addNewPositionMonster(new Position(x, y));
                         break;
@@ -203,6 +210,7 @@ public enum TxtDAO implements AbstractMazeDAO {
                             // si on a déjà deux cases de téléportation (le maximum), on ignore les suivantes et on met une case vide
                             laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         }
+                        break;
                 }
                 x++;
             }

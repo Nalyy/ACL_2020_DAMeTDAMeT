@@ -138,4 +138,12 @@ public abstract class Entity {
                 position.getY() <= max.getY();
 
     }
+
+    public void pauseInvicibiltyTimer(){
+        invicibiltyTimer.pause();
+    }
+
+    public void continueInvicibiltyTimer(){
+        invicibiltyTimer.continueTimer();
+    }
 }
