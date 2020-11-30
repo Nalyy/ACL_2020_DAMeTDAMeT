@@ -22,14 +22,14 @@ public class DynamiteTest {
 
     @BeforeEach
     public void setUp(){
-        game = new PacmanGame("", new String[]{"maze_dynamite.txt"});
+        game = new PacmanGame("no help", new String[]{"maze_dynamite.txt"});
         maze = game.getMaze();
         hero = (Hero) game.getHero();
         dynamitePosition = new Position(3, 1);
     }
 
     public void setMazeOutOfRange(){
-        game = new PacmanGame("", new String[]{"maze_dynamiteOutRange.txt"});
+        game = new PacmanGame("no help", new String[]{"maze_dynamiteOutRange.txt"});
         maze = game.getMaze();
         hero = (Hero) game.getHero();
         // La position de la dynamite est identique

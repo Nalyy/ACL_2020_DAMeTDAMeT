@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class AStarMonsterTest {
 
-    PacmanGame game = new PacmanGame("", new String[]{"maze_astar.txt"});
+    PacmanGame game = new PacmanGame("no help", new String[]{"maze_astar.txt"});
 
     @Test
     public void testRight(){
