@@ -8,6 +8,8 @@ import com.dametdamet.app.model.maze.Maze;
 import com.dametdamet.app.model.maze.normalTiles.Stairs;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StairsTest {
@@ -92,12 +94,18 @@ public class StairsTest {
         this.stairs = (Stairs) game.getMaze().whatIsIn(new Position(2, 1));
 
         int cptFirstMaze = 0;
-        for (Entity entity : game) {
+        Iterator<Entity> monstersIterator = game.getMonstersIterator();
+        while (monstersIterator.hasNext()) {
+            monstersIterator.next();
             cptFirstMaze ++;
         }
+
         stairs.applyEffect(game, game.getHero());
+
         int cptNewMaze = 0;
-        for (Entity entity : game) {
+        Iterator<Entity> newMonstersIterator = game.getMonstersIterator();
+        while (newMonstersIterator.hasNext()) {
+            newMonstersIterator.next();
             cptNewMaze ++;
         }
 

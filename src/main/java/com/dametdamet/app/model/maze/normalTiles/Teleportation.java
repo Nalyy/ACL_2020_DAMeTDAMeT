@@ -8,7 +8,7 @@ import com.dametdamet.app.model.maze.TileType;
 
 public class Teleportation extends Tile {
 
-    private Position destination;
+    private final Position destination;
 
     public Teleportation(Position dest) {
         super(TileType.TELEPORTATION);
@@ -17,7 +17,9 @@ public class Teleportation extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        entity.moveTo(destination);
+        if (entity.canTrigger(this)){
+            entity.moveTo(destination);
+        }
     }
 
     public Position getDestination(){

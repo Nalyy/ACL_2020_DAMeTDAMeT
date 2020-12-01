@@ -3,13 +3,14 @@ package com.dametdamet.app.model.entity.monster;
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.model.*;
 import com.dametdamet.app.model.entity.Entity;
-import com.dametdamet.app.model.entity.TypeEntity;
+import com.dametdamet.app.model.entity.EntityType;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Monster extends Entity {
-    private MoveStrategy strategy;
-    private Timer timer;
+    private final MoveStrategy strategy;
+    private final Timer timer;
     private long millisecondsToWait = 400; // par défaut, chaque monstre bouge après 0.5 secondes d'attente
 
     /**
@@ -23,7 +24,7 @@ public class Monster extends Entity {
      * @param strategy la stratégie de déplacement du monstre
      */
     public Monster(Position position, MoveStrategy strategy){
-        super(position, TypeEntity.MONSTER);
+        super(position, EntityType.MONSTER);
 
         // Lance une erreur si la stratégie donnée est null
         Objects.requireNonNull(strategy, "La stratégie donnée à la construction du monstre est null.");
@@ -34,12 +35,42 @@ public class Monster extends Entity {
         // Lance une erreur si position initiale incorrecte
         assert strategy.isInMaze(position) : "La position initiale est hors du labyrinthe.";
 
-        // Si tout ok, on accepte de lui donner la stratégie pour qu'il puisse se construire.
+        // Si tout est ok...
+        // On lui donne une direction initiale
+        setRandomDirection();
+
+        // On accepte de lui donner la stratégie pour qu'il puisse se construire.
         this.strategy = strategy;
 
         // On donne son timer au monstre et on le démarre.
         timer = new Timer();
         resetTimer();
+
+    }
+
+    public Monster(Position position, MoveStrategy strategy, EntityType type){
+        this(position, strategy);
+        this.type = type;
+    }
+
+    private void setRandomDirection(){
+        Random randomGenerator = new Random();
+        int random = randomGenerator.nextInt(4);
+
+        switch (random){
+            case 0:
+                setDirection(Direction.UP);
+                break;
+            case 1:
+                setDirection(Direction.DOWN);
+                break;
+            case 2:
+                setDirection(Direction.LEFT);
+                break;
+            case 3:
+                setDirection(Direction.RIGHT);
+                break;
+        }
 
     }
 
@@ -51,8 +82,15 @@ public class Monster extends Entity {
      *
      * @return Command la prochaine direction que le monstre va prendre
      */
-    public Command getNextCommand(){
-           return strategy.getNextCommand(this);
+    public Direction getNextDirection(){
+        Direction direction = strategy.getNextDirection(this);
+
+        if (direction != Direction.IDLE){
+            setDirection(direction);
+        }
+
+
+        return direction;
     }
 
     /**

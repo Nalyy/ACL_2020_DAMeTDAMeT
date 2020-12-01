@@ -12,5 +12,6 @@ public enum TileType {
     BONUS,             // B, conséquence de case magique : un coffre bonus peut y apparaître
     DAMAGE,            // D, case piège : blesse le héros
     SPAWNER_MONSTERS,  // S, case piège : fait apparaître un monstre
-    TELEPORTATION      // P, case de téléportation : téléporte une entité sur l'autre case du même type
+    TELEPORTATION,     // P, case de téléportation : téléporte une entité sur l'autre case du même type
+    DYNAMITE           // E, case piège: fait exploser les 9 cases au tour blessant les monstres et le héros
 }

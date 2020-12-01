@@ -15,8 +15,8 @@ public class Damage extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        if(!isPressed() && entity.isHero()){
-            game.hurtHero(AMOUNT_HEAL);
+        if(!isPressed() && entity.canTrigger(this)){
+            game.hurtEntity(entity,AMOUNT_HEAL);
             setPressed(true);
         }
     }

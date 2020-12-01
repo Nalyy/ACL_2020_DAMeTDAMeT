@@ -11,17 +11,17 @@ public class GameEngineGraphical {
 	/**
 	 * le game a executer
 	 */
-	private Game game;
+	private final Game game;
 
 	/**
 	 * l'afficheur a utiliser pour le rendu
 	 */
-	private GamePainter gamePainter;
+	private final GamePainter gamePainter;
 
 	/**
 	 * le controlleur a utiliser pour recuperer les commandes
 	 */
-	private GameController gameController;
+	private final GameController gameController;
 
 	/**
 	 * l'interface graphique

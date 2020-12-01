@@ -13,7 +13,7 @@ public class SpawnerMonster extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        if (!isPressed() && entity.isHero()) {
+        if (!isPressed() && entity.canTrigger(this)) {
             game.spawnNewMonster();
             setPressed(true);
         }

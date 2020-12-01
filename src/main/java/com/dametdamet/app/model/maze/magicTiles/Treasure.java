@@ -15,7 +15,7 @@ public class Treasure extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        if(!isPressed() && entity.isHero()){
+        if(!isPressed() && entity.canTrigger(this)){
             game.addScore(AMOUT_SCORE);
             setPressed(true);
         }

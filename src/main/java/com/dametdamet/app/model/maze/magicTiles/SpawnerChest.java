@@ -12,7 +12,7 @@ public class SpawnerChest extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        if(!isPressed() && entity.isHero()){
+        if(!isPressed() && entity.canTrigger(this)){
             game.spawnNewChest();
             setPressed(true);
         }

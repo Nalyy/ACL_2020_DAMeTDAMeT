@@ -2,6 +2,7 @@ package com.dametdamet.app.model.graphic;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 import com.dametdamet.app.engine.GamePainter;
 import com.dametdamet.app.model.entity.Entity;
@@ -9,6 +10,7 @@ import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.Hero;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
+import com.dametdamet.app.model.leaderboard.Score;
 import com.dametdamet.app.model.maze.Maze;
 
 /**
@@ -19,13 +21,14 @@ import com.dametdamet.app.model.maze.Maze;
  */
 public class PacmanPainter implements GamePainter {
 
-	private PacmanGame pacmanGame;
+	private final PacmanGame pacmanGame;
 	/**
 	 * la taille des cases
 	 */
 	protected final int WIDTH;
 	protected final int HEIGHT;
 	protected final int HEIGHT_HUD;
+	protected final int HEIGHT_LEADERBOARD;
 
 	/**
 	 * appelle constructeur parent
@@ -39,6 +42,7 @@ public class PacmanPainter implements GamePainter {
 		this.WIDTH = width;
 		this.HEIGHT = height;
 		this.HEIGHT_HUD = (int)( 0.1 * height);
+		this.HEIGHT_LEADERBOARD = (int)(0.05 * height);
 	}
 
 	/**
@@ -52,6 +56,8 @@ public class PacmanPainter implements GamePainter {
 			drawMaze(im);
 			drawHero(im);
 			drawMonsters(im);
+			drawProjectiles(im);
+			drawEffects(im);
 			drawHUD(im);
 		} else {
 			drawScreenGameState(im);
@@ -68,29 +74,37 @@ public class PacmanPainter implements GamePainter {
 
 		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
 
-		int heightText = (getHeight() / 2) + (crayon.getFontMetrics().getAscent() / 2);
-		int heightTextScore = heightText + crayon.getFontMetrics().getAscent();
+		int heightText = (crayon.getFontMetrics().getHeight());
+		int widthText = getWidth()/2 - getWidth()/6;
+		int heightTextScore = heightText + crayon.getFontMetrics().getHeight();
+
+		int heightTextLeaderboard = heightTextScore + crayon.getFontMetrics().getHeight();
 
 		if (pacmanGame.isFinished()) {
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("Retry ?", 0, heightText);
-			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+			drawMenu(crayon, " Retry ? ", widthText, heightText, heightTextScore, heightTextLeaderboard);
 		} else if (pacmanGame.isPaused()) {
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("Pause", 0, heightText);
-			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
-
+			drawMenu(crayon, "  Pause  ", widthText, heightText, heightTextScore, heightTextLeaderboard);
 		} else if (pacmanGame.isWon()) {
-			crayon.setColor(Color.BLACK);
-			crayon.fillRect(0, 0, getWidth(), getHeight());
-			crayon.setColor(Color.WHITE);
-			crayon.drawString("You won !", 0, heightText);
-			crayon.drawString("Score:"+String.valueOf(pacmanGame.getScore()),0,heightTextScore);
+			drawMenu(crayon, "You won !", widthText, heightText, heightTextScore, heightTextLeaderboard);
+		}
+	}
 
+	private void drawMenu(Graphics2D crayon, String text, int widthText, int heightText, int heightTextScore, int heightTextLeaderboard){
+
+		crayon.setFont(new Font("Serial",Font.PLAIN,HEIGHT_HUD));
+		crayon.setColor(Color.BLACK);
+		crayon.fillRect(0, 0, getWidth(), getHeight());
+		crayon.setColor(Color.WHITE);
+		crayon.drawString(text, widthText, heightText);
+		crayon.drawString("Score:" + pacmanGame.getScore(),0,heightTextScore);
+
+		crayon.setFont(new Font("Serial", Font.PLAIN, HEIGHT_LEADERBOARD));
+		Iterator<Score> it = pacmanGame.getLeaderboard().iterator();
+		int i = 1;
+		crayon.drawString("Leaderboard : ",0,heightTextLeaderboard);
+		while (it.hasNext()){
+			crayon.drawString(i + ": " + it.next().toString(),0,heightTextLeaderboard + i*crayon.getFontMetrics().getHeight());
+			i++;
 		}
 	}
 
@@ -100,7 +114,9 @@ public class PacmanPainter implements GamePainter {
 	 */
 	private void drawMonsters(BufferedImage im){
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
-		for (Entity monster: pacmanGame) {
+		Iterator<Entity> monstersIterator = pacmanGame.getMonstersIterator();
+		while (monstersIterator.hasNext()) {
+			Entity monster = monstersIterator.next();
 			Position position = monster.getPosition();
 
 			//on récupère l'image du monstre
@@ -108,7 +124,25 @@ public class PacmanPainter implements GamePainter {
 
 			//on dessine l'image du monstre
 			crayon.drawImage(imageMonster,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
+		}
+	}
 
+	/**
+	 * dessine les projectiles sur l'image en paramètre
+	 * @param im image sur laquelle on dessine les projectiles
+	 */
+	private void drawProjectiles(BufferedImage im){
+		Graphics2D crayon = (Graphics2D) im.getGraphics();
+		Iterator<Entity> projectilesIterator = pacmanGame.getProjectilesIterator();
+		while (projectilesIterator.hasNext()) {
+			Entity projectile = projectilesIterator.next();
+			Position position = projectile.getPosition();
+
+			//on récupère l'image du projectile
+			BufferedImage imageProjectile = ImageFactory.getInstance().getEntityImage(projectile);
+
+			//on dessine l'image du projectile
+			crayon.drawImage(imageProjectile,position.getX()*getRatioWidth(),position.getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth(),getRatioHeight(),null);
 		}
 	}
 
@@ -203,6 +237,19 @@ public class PacmanPainter implements GamePainter {
 
 
 
+	}
+
+	private void drawEffects(BufferedImage im){
+		Graphics2D crayon = (Graphics2D) im.getGraphics();
+
+		for(GraphicalEffect effect:pacmanGame.getGraphicalEffects()) {
+			//on récupère l'image de l'effet
+			BufferedImage imageHero = ImageFactory.getInstance().getEffectImage(effect);
+
+			//on dessine l'image de l'effet
+
+			crayon.drawImage(imageHero,effect.getPosition().getX()*getRatioWidth(),effect.getPosition().getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth() * effect.getWidth(),getRatioHeight() * effect.getHeight(),null);
+		}
 	}
 
 	@Override

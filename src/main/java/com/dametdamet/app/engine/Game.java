@@ -14,26 +14,26 @@ public interface Game {
 	 * @param userCmd
 	 *            commande utilisateur
 	 */
-	public void evolve(Command userCmd);
+    void evolve(Command userCmd);
 
 	/**
 	 * Initialise le jeu
 	 */
-	public void init();
+    void init();
 
 	/**
 	 * @return true si et seulement si le jeu est fini
 	 */
-	public boolean isFinished();
+    boolean isFinished();
 
 	/**
 	 * @return true si et seulement si le jeu est fermé
 	 */
-	public boolean isClosed();
+    boolean isClosed();
 
 	/**
 	 * @return true si et seulement si le jeu est en pause
 	 */
-	public boolean isPaused();
+    boolean isPaused();
 
 }

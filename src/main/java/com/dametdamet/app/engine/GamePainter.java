@@ -17,10 +17,10 @@ public interface GamePainter {
 	 * @param image
 	 *            image sur laquelle dessiner
 	 */
-	public abstract void draw(BufferedImage image);
+    void draw(BufferedImage image);
 
-	public abstract int getWidth();
+	int getWidth();
 
-	public abstract int getHeight();
+	int getHeight();
 	
 }

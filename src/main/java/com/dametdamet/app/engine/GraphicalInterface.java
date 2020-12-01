@@ -14,9 +14,9 @@ public class GraphicalInterface  {
 	/**
 	 * le Panel pour l'afficheur
 	 */
-	private DrawingPanel panel;
+	private final DrawingPanel panel;
 
-	private JFrame f;
+	private final JFrame f;
 	
 	/**
 	 * la construction de l'interface graphique: JFrame avec panel pour le game

@@ -1,7 +1,10 @@
 package com.dametdamet.app.model.maze;
 
+
+import com.dametdamet.app.model.MultiMap;
 import com.dametdamet.app.model.PacmanGame;
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.EntityType;
 import com.dametdamet.app.model.maze.magicTiles.Treasure;
 import com.dametdamet.app.model.maze.normalTiles.Empty;
 import com.dametdamet.app.model.maze.normalTiles.OutOfBound;
@@ -15,7 +18,7 @@ public class Maze{
     public static final int DEFAULT_NB_MONSTERS = 5;
 
     private Position initialPositionPlayer;
-    private Collection<Position> initialPositionMonster;
+    private final MultiMap<EntityType, Position> initialPositionsEnnemies;
 
     private Stack<Position> positionBonusChest;
     private List<Position> positionMonsters;
@@ -25,7 +28,7 @@ public class Maze{
      */
     public Maze(){
         maze = new Tile[DEFAULT_WIDTH][DEFAULT_HEIGHT];
-        initialPositionMonster = new ArrayList<>();
+        initialPositionsEnnemies = new MultiMap<>();
         positionBonusChest = new Stack<>();
         positionMonsters = new ArrayList<>();
         generate();
@@ -39,7 +42,7 @@ public class Maze{
      */
     public Maze(int width, int height){
         maze = new Tile[width][height];
-        initialPositionMonster = new ArrayList<>();
+        initialPositionsEnnemies = new MultiMap<>();
         generate();
         this.setInitialPositionPlayer(new Position(0,0));
     }
@@ -76,12 +79,12 @@ public class Maze{
         return initialPositionPlayer;
     }
 
-    public void addInitialMonsterPosition(Position initialPositionMonster){
-        this.initialPositionMonster.add(initialPositionMonster);
+    public void addInitialMonsterPosition(Position initialPositionMonster, EntityType entity){
+        this.initialPositionsEnnemies.put(entity, initialPositionMonster);
     }
 
-    public Iterator<Position> getIteratorMonsterPositions(){
-        return initialPositionMonster.iterator();
+    public Iterator<Position> getIteratorPositions(EntityType e){
+        return initialPositionsEnnemies.getIteratorOf(e);
     }
 
     public void setMaze(Tile[][] maze){
@@ -252,4 +255,5 @@ public class Maze{
 
         return position;
     }
+
 }

@@ -1,11 +1,10 @@
 package com.dametdamet.app.model.entity.monster;
 
-import com.dametdamet.app.engine.Command;
+import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.maze.Maze;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 class RandomMonsterTest {
 
@@ -130,7 +129,7 @@ class RandomMonsterTest {
     /*
      ************************************************
      *
-     *              TESTS DE COMMANDES
+     *              TESTS DE DirectionES
      *
      ************************************************
      */
@@ -150,8 +149,8 @@ class RandomMonsterTest {
         // descendre (= case 20 -> UP de case 19)
         for (int i = 0 ; i < 100; i++){  // à 40 essais (sachant que sa position ne change pas)
                                         // , il devrait forcément réussir à prendre une mauvaise décision
-            Command nextCommand = monster.getNextCommand();
-            assert (nextCommand != Command.DOWN && nextCommand != Command.IDLE) : nextCommand;
+            Direction nextDirection = monster.getNextDirection();
+            assert (nextDirection != Direction.DOWN && nextDirection != Direction.IDLE) : nextDirection;
         }
     }
 
@@ -169,8 +168,8 @@ class RandomMonsterTest {
         // Si le monstre est déjà tout en haut du labyrinthe (= case 0), il ne veut pas encore
         // descendre (= case 0 -> DOWN de case -1)
         for (int i = 0 ; i < 100; i++){
-            Command nextCommand = monster.getNextCommand();
-            assert (nextCommand != Command.UP && nextCommand != Command.IDLE) : nextCommand;
+            Direction nextDirection = monster.getNextDirection();
+            assert (nextDirection != Direction.UP && nextDirection != Direction.IDLE) : nextDirection;
         }
     }
 
@@ -188,8 +187,8 @@ class RandomMonsterTest {
         // Si le monstre est déjà tout en haut du labyrinthe (= case 0), il ne veut pas encore
         // descendre (= case 0 -> DOWN de case -1)
         for (int i = 0 ; i < 100; i++){
-            Command nextCommand = monster.getNextCommand();
-            assert (nextCommand != Command.RIGHT && nextCommand != Command.IDLE) : nextCommand;
+            Direction nextDirection = monster.getNextDirection();
+            assert (nextDirection != Direction.RIGHT && nextDirection != Direction.IDLE) : nextDirection;
         }
     }
 
@@ -207,8 +206,8 @@ class RandomMonsterTest {
         // Si le monstre est déjà tout en haut du labyrinthe (= case 0), il ne veut pas encore
         // descendre (= case 0 -> DOWN de case -1)
         for (int i = 0 ; i < 100; i++){
-            Command nextCommand = monster.getNextCommand();
-            assert (nextCommand != Command.LEFT && nextCommand != Command.IDLE) : nextCommand;
+            Direction nextDirection = monster.getNextDirection();
+            assert (nextDirection != Direction.LEFT && nextDirection != Direction.IDLE) : nextDirection;
         }
     }
 

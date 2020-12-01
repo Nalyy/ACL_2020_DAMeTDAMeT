@@ -1,0 +1,13 @@
+Fonctionnalités pour le sprint 3 :
+a. Visuels: Cases magiques après activation, un affichage pour indiquer sur quoi on a marché.
+b. Attaque du joueur: le joueur choisit dans une direction où lancer le projectile. (Flèches directionnelles ou IJKL)
+c. Si le projectile touche un mur il est stoppé, si le projectile touche un monstre le monstre est tué.
+d. Un monstre tué donne du score au joueur.-Monstres «intelligent»avec A* entre le monstre et le joueur.
+- Nouveau type de monstres:
+  e. Ghost(Peut traverser les murs)
+  f. Runner(Fonce qu’en ligne droiteet change de direction quand il touche un mur)
+g. Nouvelle case:oDynamite: les 9 cases autour de l’actionneur explosent. (1 de dégâts aux entités pour toute les cases qui explosent)
+h. Palmarès de score qui apparait dans le menu pause et en fin de partie. (Les 3 meilleurs scores sans noms)
+i. Petit détail: prise en charge des claviers QWERTY.
+
+de a. à k. : OK

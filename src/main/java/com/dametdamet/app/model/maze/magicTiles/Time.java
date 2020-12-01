@@ -15,7 +15,7 @@ public class Time extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        if(!isPressed() && entity.isHero()){
+        if(!isPressed() && entity.canTrigger(this)){
             game.addTime(AMOUNT_TIME_MS);
             setPressed(true);
         }

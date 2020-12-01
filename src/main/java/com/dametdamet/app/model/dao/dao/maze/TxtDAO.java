@@ -1,6 +1,7 @@
-package com.dametdamet.app.model.dao.dao;
+package com.dametdamet.app.model.dao.dao.maze;
 
 import com.dametdamet.app.model.Position;
+import com.dametdamet.app.model.entity.EntityType;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.*;
 import com.dametdamet.app.model.maze.magicTiles.Heal;
@@ -11,13 +12,14 @@ import com.dametdamet.app.model.maze.normalTiles.Stairs;
 import com.dametdamet.app.model.maze.normalTiles.Teleportation;
 import com.dametdamet.app.model.maze.normalTiles.Wall;
 import com.dametdamet.app.model.maze.trapTiles.Damage;
+import com.dametdamet.app.model.maze.trapTiles.Dynamite;
 import com.dametdamet.app.model.maze.trapTiles.SpawnerMonster;
 
 import java.io.*;
 import java.util.Random;
 
 
-public enum TxtDAO implements AbstractFileDAO {
+public enum TxtDAO implements AbstractMazeDAO {
 
     INSTANCE;
 
@@ -27,6 +29,8 @@ public enum TxtDAO implements AbstractFileDAO {
 
     private static final char POS_JOUEUR = 'X';
     private static final char POS_MONSTRE = 'Y';
+    private static final char POS_FANTOME = 'G';
+    private static final char POS_RUNNER = 'R';
 
     private static final char HEAL = 'H';
     private static final char TIME = 'T';
@@ -34,11 +38,13 @@ public enum TxtDAO implements AbstractFileDAO {
     private static final char POS_CHEST = 'B';
 
     private static final char DAMAGE = 'D';
+    private static final char DYNAMITE = 'E';
 
     private static final char SPAWNER_MONSTERS = 'S';
-    private static final char POS_MONSTERS = 'M';
+    private static final char SPAWNER_POS_MONSTERS = 'M';
 
     private static final char TELEPORTATION = 'P';
+
 
     @Override
     public Maze load(String nomFichier) {
@@ -62,7 +68,6 @@ public enum TxtDAO implements AbstractFileDAO {
             laby = createTabCases(fr, widthHeight[0], widthHeight[1]);
 
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("Erreur lecture fichier : " + e.getMessage());
         } finally { // Code appelé à la fin (même en cas d'exception)
             if (fr != null) {
@@ -145,9 +150,18 @@ public enum TxtDAO implements AbstractFileDAO {
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
                     case POS_MONSTRE:
-                        maze.addInitialMonsterPosition(new Position(x, y));
+                        maze.addInitialMonsterPosition(new Position(x, y), EntityType.MONSTER);
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
+                    case POS_FANTOME:
+                        maze.addInitialMonsterPosition(new Position(x,y), EntityType.GHOST);
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        break;
+                    case POS_RUNNER:
+                        maze.addInitialMonsterPosition(new Position(x,y), EntityType.RUNNER);
+                        laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
+                        break;
+                    default:
                     case EMPTY:
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         break;
@@ -173,10 +187,13 @@ public enum TxtDAO implements AbstractFileDAO {
                     case DAMAGE:
                         laby[x][y] = new Damage();
                         break;
+                    case DYNAMITE:
+                        laby[x][y] = new Dynamite(new Position(x,y));
+                        break;
                     case SPAWNER_MONSTERS:
                         laby[x][y] = new SpawnerMonster();
                         break;
-                    case POS_MONSTERS:
+                    case SPAWNER_POS_MONSTERS:
                         laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         maze.addNewPositionMonster(new Position(x, y));
                         break;
@@ -193,6 +210,7 @@ public enum TxtDAO implements AbstractFileDAO {
                             // si on a déjà deux cases de téléportation (le maximum), on ignore les suivantes et on met une case vide
                             laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         }
+                        break;
                 }
                 x++;
             }

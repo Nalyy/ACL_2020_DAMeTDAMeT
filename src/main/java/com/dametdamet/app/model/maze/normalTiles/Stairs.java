@@ -12,7 +12,7 @@ public class Stairs extends Tile {
     }
 
     public void applyEffect(PacmanGame game, Entity entity){
-        if (entity.isHero()){
+        if (entity.canTrigger(this)){
             game.goToNextLevel();
         }
     }
