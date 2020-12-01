@@ -44,8 +44,10 @@ public class Leaderboard implements Serializable, Iterable<Score> {
                 i++; // Pour éviter d'écraser le nouveau score
                 while(i < scores.size() && i < limiteTaille){ // On décale tout les scores d'avant
                     scores.set(i, oldScore);
-                    oldScore = scores.get(i);
                     i++;
+                    if(i < scores.size()){
+                        oldScore = scores.get(i);
+                    }
                 }
                 if(i == scores.size() && i < limiteTaille){
                     scores.add(oldScore);
