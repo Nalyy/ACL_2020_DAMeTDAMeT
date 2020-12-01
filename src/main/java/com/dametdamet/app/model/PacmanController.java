@@ -52,6 +52,8 @@ public class PacmanController implements GameController {
 		// si on appuie sur 'q', commande joueur est gauche
 			case 'q':
 			case 'Q':
+			case 'a':
+			case 'A':
 				if(!commandesEnCours.contains(Command.LEFT))
 				commandesEnCours.add(Command.LEFT);
 				break;
@@ -72,6 +74,8 @@ public class PacmanController implements GameController {
 		// si on appuie sur 'z', commande joueur est haut
 			case 'z':
 			case 'Z':
+			case 'w':
+			case 'W':
 				if(!commandesEnCours.contains(Command.UP))
 					commandesEnCours.add(Command.UP);
 				break;
@@ -141,6 +145,8 @@ public class PacmanController implements GameController {
 			// si on appuie sur 'q', commande joueur est gauche
 			case 'q':
 			case 'Q':
+			case 'a':
+			case 'A':
 				commandesEnCours.remove(Command.LEFT);
 				break;
 			// si on appuie sur 'd', commande joueur est droite
@@ -158,6 +164,8 @@ public class PacmanController implements GameController {
 			// si on appuie sur 'z', commande joueur est haut
 			case 'z':
 			case 'Z':
+			case 'w':
+			case 'W':
 				commandesEnCours.remove(Command.UP);
 				break;
 
