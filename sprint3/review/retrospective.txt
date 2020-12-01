@@ -1,0 +1,9 @@
+Points négatifs :
+ - Non respect du diagramme de classe Exemple : Un détail sur les directions des entités
+ - Manque de communication sur les modifications du diagramme de classe
+ - Problèmes de merge, certains merges ont été mal fait, disparition de code/commentaires
+
+
+Points positifs:
+ - Bon respect des branches
+ - Fonctionnalités au point

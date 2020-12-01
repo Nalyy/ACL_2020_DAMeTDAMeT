@@ -29,8 +29,9 @@ public class Leaderboard implements Serializable, Iterable<Score> {
     }
 
     /**
-     * Ajoute un score au leaderboard
-     * @param score score au leaderboard
+     * Ajoute un score au leaderboard et décale tout les autres scores sans dépasser la limite
+     * (supprime le dernier en cas de dépassement)
+     * @param score score à ajouter au leaderboard
      */
     public void add(Score score){
         Score oldScore;
