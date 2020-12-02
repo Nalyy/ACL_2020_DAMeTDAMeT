@@ -1,0 +1,12 @@
+Menu extérieur:
+  - Choix de la taille de la fenêtre
+  - Choix de la liste des labyrinthes
+  - Lancer/Quitter
+
+Animation du monstre qui meurt
+
+Cases magiques qui changent l'attaque du joueur (Bonus permanent)
+  - Tir rapide (réduction cooldown)
+  - Tir multiple (Plusieurs projectiles à la suite)
+  - Tir rebondissant (Peut rebondir x fois sur un monstre/mur)
+  - Tir dans plusieurs direction
