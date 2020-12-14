@@ -90,7 +90,7 @@ public class TreasureTest {
      */
     @Test
     public void testNullGame() {
-        Hero hero = new Hero(new Position(1, 1), 3);
+        Hero hero = new Hero(new Position(1, 1));
         assertThrows(NullPointerException.class, () -> treasure.applyEffect(null, hero));
     }
 

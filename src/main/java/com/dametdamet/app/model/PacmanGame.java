@@ -16,7 +16,6 @@ import com.dametdamet.app.model.entity.*;
 import com.dametdamet.app.model.entity.attack.Projectile;
 import com.dametdamet.app.model.entity.attack.ProjectileMove;
 import com.dametdamet.app.model.entity.monster.Monster;
-import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
 import com.dametdamet.app.model.graphic.ExplosionEffect;
 import com.dametdamet.app.model.graphic.GraphicalEffect;
@@ -41,7 +40,6 @@ public class PacmanGame implements Game {
 	private final Collection<GraphicalEffect> graphicalEffects;
 	private Maze maze;
 	private Timer gameTimer;
-	private Timer projectileTimer;
 	private int score;
 	private int currentLevel;
 
@@ -91,47 +89,6 @@ public class PacmanGame implements Game {
 		}
 	}
 
-	/**
-	 * Initialise le jeu comme neuf.
-	 */
-	public void init(){
-		currentLevel = 0;
-		score = 0;
-
-		if (nbMazesToDo > 0){
-			fileName = filesNames[0];
-		}else {
-			fileName = "";
-		}
-
-		loadMaze();
-
-		/* Construction du jeu */
-		hero = new Hero(new Position(maze.getInitialPositionPlayer()),3);
-		gameTimer = new Timer();
-		gameTimer.pause();
-
-		/* Toutes les stratégies doivent être initalisées avec le jeu */
-		RandomMove.INSTANCE.setGame(this);
-		RunnerMove.INSTANCE.setGame(this);
-		AStarMove.INSTANCE.setGame(this);
-
-		// Re-création du monde
-		monsters.clear();
-		graphicalEffects.clear();
-		addEnnemies();
-		projectiles.clear();
-		ProjectileMove.INSTANCE.setMaze(this.maze);
-		projectileTimer = new Timer();
-
-
-		// Lancement du timer
-		gameTimer.top(TIMER_TIME * 1000);
-
-		// Le jeu peut se relancer
-		state = GameState.ONGOING;
-	}
-
 	public void goToNextLevel(){
 		currentLevel++;
 
@@ -150,81 +107,25 @@ public class PacmanGame implements Game {
 			loadMaze();
 
 			// On s'occupe des monstres, des héros et des projectiles
-			initMazeOfStrategies();
+			reinitMazeOfStrategies();
 
 			// On s'occupe des monstres et des héros
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
-			addEnnemies();
+			initEnemies();
 			projectiles.clear();
-			ProjectileMove.INSTANCE.setMaze(this.maze);
-			projectileTimer = new Timer();
+
 		}
 	}
 
+	/**
+	 * Charge le labyrinthe avec le nom donné.
+	 */
 	private void loadMaze(){
 		if(fileName != null && !fileName.equals(""))
 			maze = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getMazeDAO().load(fileName);
 		else
 			maze = new Maze();
-	}
-
-	/**
-	 * Charge un Leaderboard en fonction du nom de fichier donné
-	 */
-	private void loadLeaderboard(){
-		if(fileNameLeaderboard != null && !fileNameLeaderboard.equals("")){
-			leaderboard = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getLeaderboardDAO().load(fileNameLeaderboard);
-		}else{
-			leaderboard = new Leaderboard();
-		}
-	}
-
-	/**
-	 * Crée et ajoute les monstres au jeu.
-	 */
-	private void addEnnemies(){
-		RandomMove.INSTANCE.setMaze(maze);
-		addMonsters();
-		addGhosts();
-		addRunner();
-	}
-
-	private void addMonsters(){
-		Iterator<Position> initialPositionMonster = maze.getIteratorPositions(EntityType.MONSTER);
-
-		// Création des monstres à mettre dans la liste
-		while (initialPositionMonster.hasNext()){
-			// On met le nouveau monstre dans la liste en lui assignant une position initiale
-			monsters.add(new Monster(new Position(initialPositionMonster.next()), RandomMove.INSTANCE));
-		}
-	}
-
-	/**
-	 * Initialise toutes les stratégies avec le labyrinthe actuel.
-	 */
-	private void initMazeOfStrategies(){
-		RandomMove.INSTANCE.setMaze(maze);
-		AStarMove.INSTANCE.setMaze(maze);
-		RunnerMove.INSTANCE.setMaze(maze);
-	}
-
-	private void addGhosts() {
-		Iterator<Position> initialPositionsGhosts = maze.getIteratorPositions(EntityType.GHOST);
-		// Création des fantômes à mettre dans la liste
-		while (initialPositionsGhosts.hasNext()){
-			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
-			monsters.add(new Monster(new Position(initialPositionsGhosts.next()), RandomMove.INSTANCE, EntityType.GHOST));
-		}
-	}
-
-	private void addRunner() {
-		Iterator<Position> initialPositionsRunner = maze.getIteratorPositions(EntityType.RUNNER);
-		// Création des fantômes à mettre dans la liste
-		while (initialPositionsRunner.hasNext()){
-			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
-			monsters.add(new Monster(new Position(initialPositionsRunner.next()), RunnerMove.INSTANCE, EntityType.RUNNER));
-		}
 	}
 
 	/**
@@ -250,17 +151,16 @@ public class PacmanGame implements Game {
 		}
 
 		Direction directionHero;
+
 		if (isAttack(command)) {
 			directionHero = getDirectionFromCommand(Command.IDLE);
-			if (projectileTimer.isFinished()) {
-				Direction directionAttack = getDirFromAttackCommand(command);
-				addProjectile(directionAttack);
-				hero.setDirection(directionAttack);
-			}
+			Direction directionAttack = getDirFromAttackCommand(command);
+			hero.setDirection(directionAttack);
+			projectiles.addAll(hero.shoot());
+
 		} else {
 			directionHero = getDirectionFromCommand(command);
 		}
-
 
 		// Héros
 		moveHero(directionHero);
@@ -349,6 +249,155 @@ public class PacmanGame implements Game {
 				|| command == Command.ATTACK_UP);
 	}
 
+	public void addScore(int scoreToAdd){
+		score += scoreToAdd;
+	}
+
+	public void addTime(int amountTimeInMs) {
+		gameTimer.top(gameTimer.getTime() + amountTimeInMs);
+	}
+
+	private Direction getDirectionFromCommand(Command command){
+		Direction direction;
+		switch (command){
+			case UP:
+				direction = Direction.UP;
+				break;
+			case DOWN:
+				direction = Direction.DOWN;
+				break;
+			case LEFT:
+				direction = Direction.LEFT;
+				break;
+			case RIGHT:
+				direction = Direction.RIGHT;
+				break;
+			case IDLE:
+			default:
+				direction = Direction.IDLE;
+		}
+		return direction;
+	}
+
+	private Direction getDirFromAttackCommand(Command command) {
+		Command newCommand;
+		switch (command) {
+			case ATTACK_UP:
+				newCommand = Command.UP;
+				break;
+			case ATTACK_DOWN:
+				newCommand = Command.DOWN;
+				break;
+			case ATTACK_LEFT:
+				newCommand = Command.LEFT;
+				break;
+			case ATTACK_RIGHT:
+				newCommand = Command.RIGHT;
+				break;
+			default:
+				newCommand = Command.IDLE;
+		}
+		return getDirectionFromCommand(newCommand);
+	}
+
+	private void destroyMonster(Entity entity){
+		monsters.remove(entity);
+	}
+
+	private void destroyProjectile(Entity entity){
+		projectiles.remove(entity);
+	}
+
+	/**
+	 * inflige des dégâts à l'entity
+	 * @param entity entity
+	 * @param hpAmount montant de dégât
+	 */
+	public void hurtEntity(Entity entity,int hpAmount){
+		entity.loseHP(hpAmount);
+	}
+
+	/**
+	 * soigne l'entité
+	 * @param entity entité
+	 * @param hpAmount montant du soin
+	 */
+	public void healEntity(Entity entity,int hpAmount){
+		entity.gainHP(hpAmount);
+	}
+
+	/*
+	 **********************************************************************************
+	 *
+	 *
+	 *               				    GETTERS
+	 *
+	 *
+	 **********************************************************************************
+	 */
+
+
+	/**
+	 * @return le labyrinthe du jeu
+	 */
+	public Maze getMaze() {
+		return maze;
+	}
+
+	/**
+	 * @return le héros du jeu
+	 */
+	public Entity getHero() {
+		return hero;
+	}
+
+	/**
+	 *
+	 * @return le score du jeu
+	 */
+	public int getScore() {
+		return score;
+	}
+
+	/**
+	 * @return le timer du jeu
+	 */
+	public int getGameTimer() {
+		return (int)(gameTimer.getTime() / 1000);
+	}
+
+	public Leaderboard getLeaderboard(){
+		return leaderboard;
+	}
+
+	public Collection<GraphicalEffect> getGraphicalEffects() {
+		return graphicalEffects;
+	}
+
+	/**
+	 * @return l'itérateur sur les monstres
+	 */
+	public Iterator<Entity> getMonstersIterator() {
+		return monsters.iterator();
+	}
+
+	/**
+	 * @return l'itérateur sur les projectiles
+	 */
+	public Iterator<Entity> getProjectilesIterator() {
+		return projectiles.iterator();
+	}
+
+	/*
+	 **********************************************************************************
+	 *
+	 *
+	 *               				    MOVES
+	 *
+	 *
+	 **********************************************************************************
+	 */
+
 	/**
 	 * Déplace le héro selon une direction.
 	 */
@@ -373,8 +422,6 @@ public class PacmanGame implements Game {
 		Position initialPosition, targetPosition;
 		Position heroPosition = hero.getPosition();
 		Direction nextDirection;
-		Collection<Entity> monsterToRemove = new ArrayList<>();
-
 
 		// Monstres
 		for (Entity m : monsters){
@@ -453,6 +500,12 @@ public class PacmanGame implements Game {
 		}
 	}
 
+	/**
+	 * Vérifie si la position où on veut aller ne contient ni le héros, ni de monstres.
+	 *
+	 * @param positionToGo position où on veut aller
+	 * @return vrai s'il y a une collision, faux sinon
+	 */
 	private boolean conflictWithEntity(Position positionToGo) {
 		boolean conflict = false;
 
@@ -470,13 +523,12 @@ public class PacmanGame implements Game {
 			}
 		}
 
-			/* Si aucun soucis avec les monstres, on regarde si soucis avec le héros */
-			if (!conflict) conflict = positionToGo.equals(hero.getPosition());
+		/* Si aucun soucis avec les monstres, on regarde si soucis avec le héros */
+		if (!conflict) conflict = positionToGo.equals(hero.getPosition());
 
-			return conflict;
+		return conflict;
 
-		}
-
+	}
 
 	/**
 	 * Donne la nouvelle position si exécution de cmd.
@@ -505,12 +557,159 @@ public class PacmanGame implements Game {
 		return new Position(x, y);
 	}
 
-	/**
-	 * Indiquer si le jeu est fini
+	/*
+	 **********************************************************************************
+	 *
+	 *
+	 *               				  TILES EFFECTS
+	 *
+	 *
+	 **********************************************************************************
 	 */
-	private void setFinished(boolean b){
-		state = (b ? GameState.LOST : GameState.ONGOING);
+
+	public void spawnNewChest() {
+		maze.addNewChest();
 	}
+
+
+	/**
+	 * Fonction appelée lorsqu'on marche sur une case piège qui fait spawn un monstre.
+	 * Elle demande au labyrinthe une position possible où le nouveau monstre peut apparaître.
+	 * Si la position existe, alors on fait apparaître un nouveau monstre dans le jeu.
+	 */
+	public void spawnNewMonster(){
+		Position position = maze.addNewMonster(this);
+		if (position != null){
+			Monster monster = new Monster(position, AStarMove.INSTANCE);
+			monsters.add(monster);
+		}
+	}
+
+
+	/*
+	 **********************************************************************************
+	 *
+	 *
+	 *               				   INIT
+	 *
+	 *
+	 **********************************************************************************
+	 */
+
+
+	/**
+	 * Initialise le jeu comme neuf.
+	 */
+	public void init(){
+		currentLevel = 0;
+		score = 0;
+
+		if (nbMazesToDo > 0){
+			fileName = filesNames[0];
+		}else {
+			fileName = "";
+		}
+
+		loadMaze();
+
+		/* Construction du jeu */
+		hero = new Hero(new Position(maze.getInitialPositionPlayer()));
+		gameTimer = new Timer();
+		gameTimer.pause();
+
+		initAllStrategies();
+
+		// Re-création du monde
+		monsters.clear();
+		graphicalEffects.clear();
+		initEnemies();
+		projectiles.clear();
+
+
+		// Lancement du timer
+		gameTimer.top(TIMER_TIME * 1000);
+
+		// Le jeu peut se relancer
+		state = GameState.ONGOING;
+	}
+
+	/**
+	 * Initalise les stratégies de mouvement avec le jeu.
+	 */
+	private void initAllStrategies(){
+		RandomMove.INSTANCE.setGame(this);
+		RunnerMove.INSTANCE.setGame(this);
+		AStarMove.INSTANCE.setGame(this);
+		ProjectileMove.INSTANCE.setGame(this);
+	}
+
+	/**
+	 * Crée et ajoute tous les ennemis au jeu.
+	 */
+	private void initEnemies(){
+		RandomMove.INSTANCE.setMaze(maze);
+		initMonsters();
+		initGhosts();
+		initRunners();
+	}
+
+	/**
+	 * Crée et ajoute les monstres au jeu.
+	 */
+	private void initMonsters(){
+		Iterator<Position> initialPositionMonster = maze.getIteratorPositions(EntityType.MONSTER);
+
+		// Création des monstres à mettre dans la liste
+		while (initialPositionMonster.hasNext()){
+			// On met le nouveau monstre dans la liste en lui assignant une position initiale
+			monsters.add(new Monster(new Position(initialPositionMonster.next()), RandomMove.INSTANCE));
+		}
+	}
+
+	/**
+	 * Crée et ajoute les fantômes au jeu.
+	 */
+	private void initGhosts() {
+		Iterator<Position> initialPositionsGhosts = maze.getIteratorPositions(EntityType.GHOST);
+		// Création des fantômes à mettre dans la liste
+		while (initialPositionsGhosts.hasNext()){
+			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
+			monsters.add(new Monster(new Position(initialPositionsGhosts.next()), RandomMove.INSTANCE, EntityType.GHOST));
+		}
+	}
+
+	/**
+	 * Crée et ajoute les runners au jeu.
+	 */
+	private void initRunners() {
+		Iterator<Position> initialPositionsRunner = maze.getIteratorPositions(EntityType.RUNNER);
+		// Création des fantômes à mettre dans la liste
+		while (initialPositionsRunner.hasNext()){
+			// On met le nouveau fantôme dans la liste en lui assignant une position initiale
+			monsters.add(new Monster(new Position(initialPositionsRunner.next()), RunnerMove.INSTANCE, EntityType.RUNNER));
+		}
+	}
+
+	/**
+	 * Ré-initialise toutes les stratégies avec le labyrinthe actuel.
+	 * À utiliser lorsqu'on change de labyrinthe (= niveau suivant).
+	 */
+	private void reinitMazeOfStrategies(){
+		RandomMove.INSTANCE.setMaze(maze);
+		AStarMove.INSTANCE.setMaze(maze);
+		RunnerMove.INSTANCE.setMaze(maze);
+		ProjectileMove.INSTANCE.setMaze(this.maze);
+	}
+
+	/*
+	 **********************************************************************************
+	 *
+	 *
+	 *               				GAME STATES
+	 *
+	 *
+	 **********************************************************************************
+	 */
 
 	/**
 	 * Indiquer que le jeu est fini.
@@ -518,11 +717,6 @@ public class PacmanGame implements Game {
 	private void setFinished(){
 		state = GameState.LOST;
 	}
-
-	/**
-	 * Indiquer que le jeu est gagné.
-	 */
-	private void setWon() { state = GameState.WON; }
 
 	/**
 	 * verifier si le jeu est fini
@@ -533,6 +727,11 @@ public class PacmanGame implements Game {
 	}
 
 	/**
+	 * Indiquer que le jeu est gagné.
+	 */
+	private void setWon() { state = GameState.WON; }
+
+	/**
 	 * Vérifier si le jeu est gagné.
 	 */
 	public boolean isWon() { return state == GameState.WON ; }
@@ -541,6 +740,7 @@ public class PacmanGame implements Game {
 	 * Vérifie si le jeu est en pause.
 	 * @return vrai si le jeu est en pause
 	 */
+	@Override
 	public boolean isPaused() {
 		return state == GameState.PAUSED;
 	}
@@ -550,10 +750,12 @@ public class PacmanGame implements Game {
 	 * @return vrai si le jeu est en cours
 	 */
 	public boolean isOnGoing(){ return state == GameState.ONGOING;}
+
 	/**
 	 * Vérifie si le jeu est fermé.
 	 * @return vrai si le jeu est fermé.
 	 */
+	@Override
 	public boolean isClosed(){
 		return state == GameState.CLOSED;
 	}
@@ -565,151 +767,15 @@ public class PacmanGame implements Game {
 		state = GameState.CLOSED;
 	}
 
-	/**
-	 * @return le labyrinthe du jeu
-	 */
-	public Maze getMaze() {
-		return maze;
-	}
-
-	/**
-	 * @return le héros du jeu
-	 */
-	public Entity getHero() {
-		return hero;
-	}
-
-	/**
+	/*
+	 **********************************************************************************
 	 *
-	 * @return le score du jeu
+	 *
+	 *               				LEADERBOARD
+	 *
+	 *
+	 **********************************************************************************
 	 */
-	public int getScore() {
-		return score;
-	}
-
-	public Leaderboard getLeaderboard(){
-		return leaderboard;
-	}
-
-	/**
-	 * @return le timer du jeu
-	 */
-	public int getGameTimer() {
-		return (int)(gameTimer.getTime() / 1000);
-	}
-
-	/**
-	 * @return l'itérateur sur les monstres
-	 */
-	public Iterator<Entity> getMonstersIterator() {
-		return monsters.iterator();
-	}
-
-	/**
-	 * @return l'itérateur sur les projectiles
-	 */
-	public Iterator<Entity> getProjectilesIterator() {
-		return projectiles.iterator();
-	}
-
-	public void addScore(int scoreToAdd){
-		score += scoreToAdd;
-	}
-
-	public void addTime(int amountTimeInMs) {
-		gameTimer.top(gameTimer.getTime() + amountTimeInMs);
-	}
-
-	public void spawnNewChest() {
-		maze.addNewChest();
-	}
-
-	public void spawnNewMonster(){
-		maze.addNewMonster(this);
-	}
-
-	public void addMonster(Position position){
-		Monster monster = new Monster(position, AStarMove.INSTANCE);
-		monsters.add(monster);
-	}
-
-	private void addProjectile(Direction direction) {
-		Position posHero = hero.getPosition();
-		Position position = new Position(posHero);
-		Projectile projectile = new Projectile(position, direction, ProjectileMove.INSTANCE);
-		projectiles.add(projectile);
-		projectileTimer.top(750);
-	}
-
-	private Direction getDirectionFromCommand(Command command){
-		Direction direction;
-		switch (command){
-			case UP:
-				direction = Direction.UP;
-				break;
-			case DOWN:
-				direction = Direction.DOWN;
-				break;
-			case LEFT:
-				direction = Direction.LEFT;
-				break;
-			case RIGHT:
-				direction = Direction.RIGHT;
-				break;
-			case IDLE:
-			default:
-				direction = Direction.IDLE;
-		}
-		return direction;
-	}
-
-	private Direction getDirFromAttackCommand(Command command) {
-		Command newCommand;
-		switch (command) {
-			case ATTACK_UP:
-				newCommand = Command.UP;
-				break;
-			case ATTACK_DOWN:
-				newCommand = Command.DOWN;
-				break;
-			case ATTACK_LEFT:
-				newCommand = Command.LEFT;
-				break;
-			case ATTACK_RIGHT:
-				newCommand = Command.RIGHT;
-				break;
-			default:
-				newCommand = Command.IDLE;
-		}
-		return getDirectionFromCommand(newCommand);
-	}
-
-	private void destroyMonster(Entity entity){
-		monsters.remove(entity);
-	}
-
-
-	private void destroyProjectile(Entity entity){
-		projectiles.remove(entity);
-	}
-
-	/**
-	 * inflige des dégâts à l'entity
-	 * @param entity entity
-	 * @param hpAmount montant de dégât
-	 */
-	public void hurtEntity(Entity entity,int hpAmount){
-		entity.loseHP(hpAmount);
-	}
-
-	/**
-	 * soigne l'entité
-	 * @param entity entité
-	 * @param hpAmount montant du soin
-	 */
-	public void healEntity(Entity entity,int hpAmount){
-		entity.gainHP(hpAmount);
-	}
 
 	/**
 	 * Sauvegarde le leaderboard dans un fichier si la partie est terminée.
@@ -724,6 +790,28 @@ public class PacmanGame implements Game {
 			}
 		}
 	}
+
+
+	/**
+	 * Charge un Leaderboard en fonction du nom de fichier donné
+	 */
+	private void loadLeaderboard(){
+		if(fileNameLeaderboard != null && !fileNameLeaderboard.equals("")){
+			leaderboard = AbstractDAOFactory.getAbstractDAOFactory(AbstractDAOFactory.TXT).getLeaderboardDAO().load(fileNameLeaderboard);
+		}else{
+			leaderboard = new Leaderboard();
+		}
+	}
+
+	/*
+	**********************************************************************************
+	*
+	*
+	*               				EFFECTS
+	*
+	*
+	**********************************************************************************
+	*/
 	private void updateGraphicalEffects(){
 		Collection<GraphicalEffect> effects_to_destroy = new ArrayList<>();
 		for(GraphicalEffect effect:graphicalEffects){
@@ -756,7 +844,5 @@ public class PacmanGame implements Game {
 		graphicalEffects.add(new ExplosionEffect(position));
 	}
 
-	public Collection<GraphicalEffect> getGraphicalEffects() {
-		return graphicalEffects;
-	}
+
 }

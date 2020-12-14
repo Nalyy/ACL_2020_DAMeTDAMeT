@@ -91,7 +91,7 @@ class SpawnerMonsterTest {
 
     @Test
     void testBoundaryGameIsNull(){
-        assertThrows(NullPointerException.class,() -> spawnerMonster.applyEffect(game,new Hero(new Position(0,0),3)));
+        assertThrows(NullPointerException.class,() -> spawnerMonster.applyEffect(game,new Hero(new Position(0,0))));
     }
 
     @Test
