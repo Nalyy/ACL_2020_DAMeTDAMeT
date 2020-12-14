@@ -69,7 +69,6 @@ public class LauncherModel {
 
     public void addMaze(int index,String maze){
         if(!(index < 0 || index > mazes.size())) {
-            System.out.println("addMaze Model:"+index);
             List<String> list = new ArrayList<>();
             mazes.add(index, maze);
             support.firePropertyChange("addMaze", list, mazes);
@@ -78,7 +77,6 @@ public class LauncherModel {
 
     public void removeMaze(int index){
         if(!(index < 0 || index > mazes.size())) {
-            System.out.println("removeMaze Model:"+index);
             List<String> list = new ArrayList<>();
             mazes.remove(index);
             support.firePropertyChange("removeMaze", list, mazes);

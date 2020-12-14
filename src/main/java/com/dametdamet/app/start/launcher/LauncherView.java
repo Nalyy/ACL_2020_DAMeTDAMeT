@@ -151,13 +151,10 @@ public class LauncherView implements PropertyChangeListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if(actionEvent.getActionCommand().equals("+")){
-                System.out.println("add "+(index+1));
                 controller.notifyAddMaze(index+1);
 
             }
             if(actionEvent.getActionCommand().equals("-")){
-                System.out.println("remove "+index);
-
                 controller.notifyRemoveMaze(index);
 
             }
@@ -194,7 +191,6 @@ public class LauncherView implements PropertyChangeListener {
                     controller.notifyHeight(Integer.parseInt(text.getText()));
                 }
                 if (text.equals(widthTextField)) {
-
                     controller.notifyWidth(Integer.parseInt(text.getText()));
                 }
             }
@@ -207,7 +203,6 @@ public class LauncherView implements PropertyChangeListener {
                     controller.notifyHeight(Integer.parseInt(text.getText()));
                 }
                 if (text.equals(widthTextField)) {
-
                     controller.notifyWidth(Integer.parseInt(text.getText()));
                 }
             }
@@ -220,7 +215,6 @@ public class LauncherView implements PropertyChangeListener {
                     controller.notifyHeight(Integer.parseInt(text.getText()));
                 }
                 if (text.equals(widthTextField)) {
-
                     controller.notifyWidth(Integer.parseInt(text.getText()));
                 }
             }
