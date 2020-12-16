@@ -51,8 +51,16 @@ public enum ProjectileMove implements MoveStrategy {
                 break;
         }
 
+        Projectile projectile = (Projectile) entity;
         if (!entity.canGoTo(maze.whatIsIn(position))) {
-            return Direction.IDLE;
+            if (projectile.getNbBounces() < 1) {
+                return Direction.IDLE;
+            } else {
+                projectile.decNbBounces();
+                direction = direction.getOppositeDirection(direction);
+                projectile.setDirection(direction);
+                return direction;
+            }
         } else {
             return direction;
         }

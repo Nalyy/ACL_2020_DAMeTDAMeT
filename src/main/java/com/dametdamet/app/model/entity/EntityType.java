@@ -17,7 +17,11 @@ public enum EntityType {
                                         TileType.SPAWNER_MONSTERS,
                                         TileType.TELEPORTATION,
                                         TileType.TIME,
-                                        TileType.DYNAMITE
+                                        TileType.DYNAMITE,
+                                        TileType.BOUNCINGSHOT_ENABLER,
+                                        TileType.QUICKSHOT_ENABLER,
+                                        TileType.MULTISHOOT_ENABLER,
+                                        TileType.PIERCINGSHOT_ENABLER
                  )
         )),
 

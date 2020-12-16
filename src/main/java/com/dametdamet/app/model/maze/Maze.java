@@ -164,12 +164,10 @@ public class Maze{
      * Ajoute un monstre dans le monde s'il a un endroit où apparaître.
      *
      * @param pacmanGame le jeu qui possède le labyrinthe et qui accueillera peut-être un monstre supplémentaire
+     * @return position : peut être null
      */
-    public void addNewMonster(PacmanGame pacmanGame){
-        Position position = getAMonsterPosition(positionMonsters.size());
-        if (position!= null){
-            pacmanGame.addMonster(position);
-        }
+    public Position addNewMonster(PacmanGame pacmanGame){
+        return getAMonsterPosition(positionMonsters.size());
 
     }
 

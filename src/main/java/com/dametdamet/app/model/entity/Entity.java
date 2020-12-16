@@ -3,29 +3,46 @@ package com.dametdamet.app.model.entity;
 import com.dametdamet.app.model.Direction;
 import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.Timer;
+import com.dametdamet.app.model.entity.attack.Projectile;
+import com.dametdamet.app.model.entity.attack.ProjectileMove;
+import com.dametdamet.app.model.entity.projectileStrategies.SingleProjectileStrategy;
 import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 public abstract class Entity {
     private final Position position;
     private Direction direction;
 
     protected EntityType type;
-
+    private ProjectileStat projectileStat;
 
     protected int maxHp = 1;
-
     protected int hp = maxHp;
+
     protected Timer invicibiltyTimer;
     protected int recoveryTime = 0;
 
+
     public Entity(Position position, EntityType type){
+        // Projectile Stat par défaut si on n'en passe pas une.
+        ProjectileStat stat = new ProjectileStat(1,0,
+                ProjectileMove.INSTANCE,
+                SingleProjectileStrategy.INSTANCE);
+
         this.position = position;
         this.type = type;
+        this.projectileStat = stat;
         invicibiltyTimer = new Timer();
+
+
+    }
+
+    public Entity(Position position, EntityType type, ProjectileStat projectileStat){
+        this(position, type);
+        this.projectileStat = projectileStat;
     }
 
     /**
@@ -146,4 +163,24 @@ public abstract class Entity {
     public void continueInvicibiltyTimer(){
         invicibiltyTimer.continueTimer();
     }
+
+    public Collection<Projectile> shoot(){
+        Collection<Projectile> projectiles = new ArrayList<>();
+
+        // On demande à notre projectile stat de nous créer des projectiles
+        projectiles.addAll(projectileStat.generateProjectiles(new Position(position), direction));
+
+        return projectiles;
+    }
+
+    public void setMultiProjectileStrategy(){
+        projectileStat.setMultiProjectileStrategy();
+    }
+
+    public void reduceShootingCooldown(int toSubstract){
+        projectileStat.reduceShootingCooldown(toSubstract);
+    }
+    public void addProjectileHP(int toAdd) { projectileStat.addProjectileHP(toAdd); }
+    public void addProjectileBounce(int toAdd) { projectileStat.addProjectileBounce(toAdd); }
+
 }

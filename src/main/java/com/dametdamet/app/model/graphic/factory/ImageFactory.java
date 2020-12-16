@@ -58,6 +58,8 @@ public class ImageFactory {
     private final BufferedImage special_spawner_monster_pressed;
     private final BufferedImage special_spawner_treasure_pressed;
 
+    private final BufferedImage special_gameplay_changes;
+
 
 
     private final BufferedImage entityNotFound;
@@ -120,6 +122,9 @@ public class ImageFactory {
 
         // image TELEPORTATION
         teleportation = ImageIO.read(getClass().getResource(CASE_PATH+"/caseTP.png"));
+
+        // images des changements de tir
+        special_gameplay_changes = ImageIO.read(getClass().getResource(CASE_PATH+"/caseShot.png"));
 
         //images WALL
         for(int i = 1;i < NB_WALL_IMG + 1;i++){
@@ -219,6 +224,13 @@ public class ImageFactory {
                     return special_spawner_monster_pressed;
                 if(ca.getNumSprite() == 0)
                     return special[0];
+
+            case BOUNCINGSHOT_ENABLER:
+            case MULTISHOOT_ENABLER:
+            case PIERCINGSHOT_ENABLER:
+            case QUICKSHOT_ENABLER:
+                return special_gameplay_changes;
+
             default:
                 break;
         }

@@ -12,7 +12,7 @@ class HeroTest {
 
     @BeforeEach
     void setUp() {
-        hero = new Hero(new Position(0, 0),3);
+        hero = new Hero(new Position(0, 0));
     }
 
     /*

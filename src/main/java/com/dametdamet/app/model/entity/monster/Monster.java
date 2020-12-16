@@ -24,7 +24,7 @@ public class Monster extends Entity {
      * @param strategy la stratégie de déplacement du monstre
      */
     public Monster(Position position, MoveStrategy strategy){
-        super(position, EntityType.MONSTER);
+        super(position, EntityType.MONSTER, null);
 
         // Lance une erreur si la stratégie donnée est null
         Objects.requireNonNull(strategy, "La stratégie donnée à la construction du monstre est null.");

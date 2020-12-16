@@ -60,7 +60,7 @@ class DamageTest {
 
     @Test
     void testBoundaryGameIsNull(){
-        assertThrows(NullPointerException.class,() -> dmg.applyEffect(game, new Hero(new Position(0,0),3)));
+        assertThrows(NullPointerException.class,() -> dmg.applyEffect(game, new Hero(new Position(0,0))));
     }
 
     @Test
