@@ -57,6 +57,10 @@ public class ImageFactory {
     private final BufferedImage special_damage_pressed;
     private final BufferedImage special_spawner_monster_pressed;
     private final BufferedImage special_spawner_treasure_pressed;
+    private final BufferedImage special_bouncingShot_pressed;
+    private final BufferedImage special_quickShot_pressed;
+    private final BufferedImage special_multiShoot_pressed;
+    private final BufferedImage special_piercingShot_pressed;
 
     private final BufferedImage special_gameplay_changes;
 
@@ -125,6 +129,11 @@ public class ImageFactory {
 
         // images des changements de tir
         special_gameplay_changes = ImageIO.read(getClass().getResource(CASE_PATH+"/caseShot.png"));
+
+        special_bouncingShot_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_bouncingShot_pressed.png"));
+        special_quickShot_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_quickShot_pressed.png"));
+        special_piercingShot_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_piercingShot_pressed.png"));
+        special_multiShoot_pressed = ImageIO.read(getClass().getResource(CASE_PATH+"/special_multiShoot_pressed.png"));
 
         //images WALL
         for(int i = 1;i < NB_WALL_IMG + 1;i++){
@@ -226,10 +235,19 @@ public class ImageFactory {
                     return special[0];
 
             case BOUNCINGSHOT_ENABLER:
+                if(ca.getNumSprite() > 0)
+                    return special_bouncingShot_pressed;
             case MULTISHOOT_ENABLER:
+                if(ca.getNumSprite() > 0)
+                    return special_multiShoot_pressed;
             case PIERCINGSHOT_ENABLER:
+                if(ca.getNumSprite() > 0)
+                    return special_piercingShot_pressed;
             case QUICKSHOT_ENABLER:
-                return special_gameplay_changes;
+                if(ca.getNumSprite() > 0)
+                    return special_quickShot_pressed;
+                if(ca.getNumSprite() == 0)
+                    return special_gameplay_changes;
 
             default:
                 break;
