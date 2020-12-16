@@ -4,6 +4,10 @@ import com.dametdamet.app.model.Position;
 import com.dametdamet.app.model.entity.EntityType;
 import com.dametdamet.app.model.graphic.factory.ImageFactory;
 import com.dametdamet.app.model.maze.*;
+import com.dametdamet.app.model.maze.gameplayTiles.BouncingshotEnabler;
+import com.dametdamet.app.model.maze.gameplayTiles.MultishootEnabler;
+import com.dametdamet.app.model.maze.gameplayTiles.PiercingshotEnabler;
+import com.dametdamet.app.model.maze.gameplayTiles.QuickshotEnabler;
 import com.dametdamet.app.model.maze.magicTiles.Heal;
 import com.dametdamet.app.model.maze.magicTiles.SpawnerChest;
 import com.dametdamet.app.model.maze.magicTiles.Time;
@@ -44,6 +48,12 @@ public enum TxtDAO implements AbstractMazeDAO {
     private static final char SPAWNER_POS_MONSTERS = 'M';
 
     private static final char TELEPORTATION = 'P';
+
+    // Gameplay tiles
+    private static final char MULTISHOOT = 'N';
+    private static final char QUICKSHOT = 'F';
+    private static final char BOUNCINGSHOT = 'O';
+    private static final char PIERCINGSHOT = 'Z';
 
 
     @Override
@@ -210,6 +220,19 @@ public enum TxtDAO implements AbstractMazeDAO {
                             // si on a déjà deux cases de téléportation (le maximum), on ignore les suivantes et on met une case vide
                             laby[x][y] = new Empty(randomGenerator.nextInt(ImageFactory.NB_EMPTY_IMG));
                         }
+                        break;
+
+                    case BOUNCINGSHOT:
+                        laby[x][y] = new BouncingshotEnabler();
+                        break;
+                    case MULTISHOOT:
+                        laby[x][y] = new MultishootEnabler();
+                        break;
+                    case QUICKSHOT:
+                        laby[x][y] = new QuickshotEnabler();
+                        break;
+                    case PIERCINGSHOT:
+                        laby[x][y] = new PiercingshotEnabler();
                         break;
                 }
                 x++;

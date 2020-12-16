@@ -26,8 +26,6 @@ public abstract class Entity {
     protected Timer invicibiltyTimer;
     protected int recoveryTime = 0;
 
-    protected Timer projectileTimer;
-    protected int projectileCooldown = 750;
 
     public Entity(Position position, EntityType type){
         // Projectile Stat par défaut si on n'en passe pas une.
@@ -39,7 +37,7 @@ public abstract class Entity {
         this.type = type;
         this.projectileStat = stat;
         invicibiltyTimer = new Timer();
-        projectileTimer = new Timer();
+
 
     }
 
@@ -170,15 +168,18 @@ public abstract class Entity {
     public Collection<Projectile> shoot(){
         Collection<Projectile> projectiles = new ArrayList<>();
 
-        // Si le cooldown de tir est fini
-        if (projectileTimer.isFinished()){
-
-            // On demande à notre projectile stat de nous créer des projectiles
-            // à retourner
-            projectiles.addAll(projectileStat.shoot(new Position(position), direction));
-            projectileTimer.top(projectileCooldown);
-        }
+        // On demande à notre projectile stat de nous créer des projectiles
+        projectiles.addAll(projectileStat.shoot(new Position(position), direction));
 
         return projectiles;
     }
+
+    public void setMultiProjectileStrategy(){
+        projectileStat.setMultiProjectileStrategy();
+    }
+
+    public void reduceShootingCooldown(int toSubstract){
+        projectileStat.reduceShootingCooldown(toSubstract);
+    }
+
 }
