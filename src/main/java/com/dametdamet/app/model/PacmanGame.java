@@ -215,7 +215,7 @@ public class PacmanGame implements Game {
 			}
 		}
 		for(Entity e : projectilesToRemove){
-			destroyMonster(e);
+			destroyProjectile(e);
 		}
 	}
 

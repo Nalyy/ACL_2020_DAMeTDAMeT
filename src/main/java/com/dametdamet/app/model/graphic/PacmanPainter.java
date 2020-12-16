@@ -240,11 +240,9 @@ public class PacmanPainter implements GamePainter {
 	}
 
 	private void drawEffects(BufferedImage im){
-		System.out.println("Draw effect");
 		Graphics2D crayon = (Graphics2D) im.getGraphics();
 
 		for(GraphicalEffect effect:pacmanGame.getGraphicalEffects()) {
-			System.out.println("draw");
 			//on récupère l'image de l'effet
 			BufferedImage imageHero = ImageFactory.getInstance().getEffectImage(effect);
 
@@ -252,7 +250,6 @@ public class PacmanPainter implements GamePainter {
 
 			crayon.drawImage(imageHero,effect.getPosition().getX()*getRatioWidth(),effect.getPosition().getY()*getRatioHeight() + HEIGHT_HUD,getRatioWidth() * effect.getWidth(),getRatioHeight() * effect.getHeight(),null);
 		}
-		System.out.println("Fin Draw effect");
 	}
 
 	@Override
