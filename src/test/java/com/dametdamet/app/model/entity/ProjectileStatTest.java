@@ -35,40 +35,38 @@ class ProjectileStatTest {
     void rightProjectileStat(){
         projStat1.addProjectileHP(5);
         Collection<Projectile> projs = projStat1.generateProjectiles(new Position(0,0), Direction.RIGHT);
-        assertEquals(new Projectile(new Position(0, 0), Direction.RIGHT, 5, ProjectileMove.INSTANCE), projs.iterator().next());
+        assertEquals(new Projectile(new Position(0, 0), Direction.RIGHT, 8, 5, ProjectileMove.INSTANCE), projs.iterator().next());
     }
 
     @Test
     void right2ProjectileStat(){
         projStat2.addProjectileHP(5);
         Collection<Projectile> projs = projStat2.generateProjectiles(new Position(0,0), Direction.RIGHT);
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 5, ProjectileMove.INSTANCE)));
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.UP, 5, ProjectileMove.INSTANCE)));
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.DOWN, 5,ProjectileMove.INSTANCE)));
+        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 8, 5, ProjectileMove.INSTANCE)));
+        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.UP, 8, 5, ProjectileMove.INSTANCE)));
+        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.DOWN, 8, 5,ProjectileMove.INSTANCE)));
     }
 
     @Test
     void right3ProjectileStat(){
         projStat2.reduceShootingCooldown(5);
         Collection<Projectile> projs = projStat2.generateProjectiles(new Position(0,0), Direction.RIGHT);
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 5, ProjectileMove.INSTANCE)));
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.UP, 5, ProjectileMove.INSTANCE)));
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.DOWN, 5,ProjectileMove.INSTANCE)));
+        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 3, 5, ProjectileMove.INSTANCE)));
+        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.UP, 3, 5, ProjectileMove.INSTANCE)));
+        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.DOWN, 3, 5,ProjectileMove.INSTANCE)));
     }
 
     @Test
     void BoundaryProjectileStat(){
         projStat3.addProjectileHP(Integer.MAX_VALUE);
-        Collection<Projectile> projs = projStat2.generateProjectiles(new Position(0,0), Direction.RIGHT);
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 5, ProjectileMove.INSTANCE)));
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.UP, 5, ProjectileMove.INSTANCE)));
-        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.DOWN, 5,ProjectileMove.INSTANCE)));
+        Collection<Projectile> projs = projStat3.generateProjectiles(new Position(0,0), Direction.RIGHT);
+        assertTrue(projs.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 1, 5, ProjectileMove.INSTANCE)));
     }
 
     @Test
     void Boundary2ProjectileStat(){
         projStat3.addProjectileBounce(Integer.MAX_VALUE);
-        Collection<Projectile> projs = projStat2.generateProjectiles(new Position(0,0), Direction.RIGHT);
+        Collection<Projectile> projs = projStat3.generateProjectiles(new Position(0,0), Direction.RIGHT);
 
     }
 

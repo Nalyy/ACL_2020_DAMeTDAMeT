@@ -20,13 +20,13 @@ class SingleProjectileStrategyTest {
     @Test
     void RightgenerateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.RIGHT,1, 0, ProjectileMove.INSTANCE);
-        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.RIGHT, 0, ProjectileMove.INSTANCE));
+        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.RIGHT, 1, 0, ProjectileMove.INSTANCE));
     }
 
     @Test
     void Right2generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0, 0), Direction.UP, 10, 50, ProjectileMove.INSTANCE);
-        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 50, ProjectileMove.INSTANCE));
+        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 10, 50, ProjectileMove.INSTANCE));
     }
 
     @Test
@@ -39,25 +39,25 @@ class SingleProjectileStrategyTest {
     @Test
     void BoundarygenerateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0, 0), Direction.UP, Integer.MAX_VALUE, 50, ProjectileMove.INSTANCE);
-        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 50, ProjectileMove.INSTANCE));
+        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 50, 50, ProjectileMove.INSTANCE));
     }
 
     @Test
     void Boundary2generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.UP, Integer.MIN_VALUE, 50, ProjectileMove.INSTANCE);
-        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 50, ProjectileMove.INSTANCE));
+        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 1, 50, ProjectileMove.INSTANCE));
     }
     @Test
     void Boundary3generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.UP, 5, Integer.MAX_VALUE, ProjectileMove.INSTANCE);
-        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, Integer.MAX_VALUE, ProjectileMove.INSTANCE));
+        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 5, Integer.MAX_VALUE, ProjectileMove.INSTANCE));
     }
 
     @Test
     void Boundary4generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.UP, 5, Integer.MIN_VALUE, ProjectileMove.INSTANCE);
 
-        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, Integer.MIN_VALUE, ProjectileMove.INSTANCE));
+        assertEquals(proj.iterator().next(), new Projectile(new Position(0, 0), Direction.UP, 5, Integer.MIN_VALUE, ProjectileMove.INSTANCE));
     }
 
     @Test
