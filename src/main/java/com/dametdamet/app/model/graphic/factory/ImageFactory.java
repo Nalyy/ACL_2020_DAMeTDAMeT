@@ -2,11 +2,11 @@ package com.dametdamet.app.model.graphic.factory;
 
 import com.dametdamet.app.model.entity.Entity;
 import com.dametdamet.app.model.entity.EntityType;
+import com.dametdamet.app.model.graphic.DeathEffect;
 import com.dametdamet.app.model.graphic.ExplosionEffect;
 import com.dametdamet.app.model.graphic.GraphicalEffect;
 import com.dametdamet.app.model.maze.Tile;
 import com.dametdamet.app.model.maze.TileType;
-import com.dametdamet.app.model.maze.trapTiles.Dynamite;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,6 +24,7 @@ public class ImageFactory {
     public final static int NB_SPECIAL_IMG = 2;
     public final static int NB_WALL_IMG = 5;
     public final static int NB_EXPLOSION_IMG = ExplosionEffect.NUM_SPRITE_MAX;
+    public final static int NB_DEATH_IMG = DeathEffect.NUM_SPRITE_MAX;
     private final static String PATH = "/images";
     private final static String CASE_PATH = PATH + "/case";
     private final static String ENTITY_PATH = PATH + "/entity";
@@ -46,6 +47,7 @@ public class ImageFactory {
     private final BufferedImage[] wall;
     private final BufferedImage[] special;
     private final BufferedImage[] explosion;
+    private final BufferedImage[] death;
     private final BufferedImage[] arrow;
     private final BufferedImage stairs;
     private final BufferedImage teleportation;
@@ -77,6 +79,7 @@ public class ImageFactory {
         monster = new BufferedImage[4];
         ghost = new BufferedImage[4];
         explosion = new BufferedImage[ExplosionEffect.NUM_SPRITE_MAX];
+        death = new BufferedImage[DeathEffect.NUM_SPRITE_MAX];
         arrow = new BufferedImage[4];
 
         /// RÉCUPÉRATION DES IMAGES DES CASES ///
@@ -162,6 +165,9 @@ public class ImageFactory {
         ///RÉCUPÉRATION DES IMAGES DES EFFETS///
         for(int i = 0;i < NB_EXPLOSION_IMG;i++){
             explosion[i] = ImageIO.read(getClass().getResourceAsStream((EFFECT_PATH+"/explosion" + (i<10 ? "0":"") + i + ".png")));
+        }
+        for(int i = 0;i < NB_DEATH_IMG;i++){
+            death[i] = ImageIO.read(getClass().getResourceAsStream((EFFECT_PATH+"/death" + (i<10 ? "0":"") + i + ".png")));
         }
     }
 
@@ -278,7 +284,9 @@ public class ImageFactory {
     public BufferedImage getEffectImage(GraphicalEffect effect){
         switch (effect.getType()){
             case EXPLOSION:
-                return explosion[effect.getNum_sprite()];
+                return explosion[effect.getNumSprite()];
+            case DEATH:
+                return death[effect.getNumSprite()];
             default:
                 return caseNotFound;
         }

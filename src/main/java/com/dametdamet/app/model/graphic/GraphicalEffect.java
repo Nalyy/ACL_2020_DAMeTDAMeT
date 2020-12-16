@@ -5,62 +5,62 @@ import com.dametdamet.app.model.Timer;
 
 public abstract class GraphicalEffect {
 
-    private int num_sprite;
-    private int num_sprite_max;
+    private int numSprite;
+    private int numSpriteMax;
     private int height;
     private int width;
 
-    private Timer timer_lifetime;
-    private int initial_lifetime;
+    private Timer timerLifetime;
+    private int initialLifetime;
 
-    private Timer timer_animation;
-    private int time_between_animation;
+    private Timer timerAnimation;
+    private int timeBetweenAnimation;
 
     private GraphicalEffectType type;
 
     private Position position;
 
-    public GraphicalEffect(GraphicalEffectType type, Position position,int time_between_animation, int height, int width, int initial_lifetime,int num_sprite_max){
+    public GraphicalEffect(GraphicalEffectType type, Position position,int timeBetweenAnimation, int height, int width, int initialLifetime, int numSpriteMax){
         this.type = type;
         this.position = position;
-        this.time_between_animation = time_between_animation;
+        this.timeBetweenAnimation = timeBetweenAnimation;
         this.height = height;
         this.width = width;
-        this.initial_lifetime = initial_lifetime;
-        this.num_sprite_max = num_sprite_max;
-        this.num_sprite = 0;
+        this.initialLifetime = initialLifetime;
+        this.numSpriteMax = numSpriteMax;
+        this.numSprite = 0;
 
-        this.timer_lifetime = new Timer();
-        this.timer_animation = new Timer();
+        this.timerLifetime = new Timer();
+        this.timerAnimation = new Timer();
 
-        timer_lifetime.top(initial_lifetime);
-        timer_animation.top(time_between_animation);
+        timerLifetime.top(initialLifetime);
+        timerAnimation.top(timeBetweenAnimation);
 
     }
 
     public boolean isFinished(){
-        return timer_lifetime.isFinished();
+        return timerLifetime.isFinished();
     }
 
     public boolean isTimerAnimationFinished(){
-        return timer_animation.isFinished();
+        return timerAnimation.isFinished();
     }
 
     public void pauseTimer(){
-        timer_lifetime.pause();
-        timer_animation.pause();
+        timerLifetime.pause();
+        timerAnimation.pause();
     }
 
     public void continueTimer(){
-        timer_lifetime.continueTimer();
-        timer_animation.continueTimer();
+        timerLifetime.continueTimer();
+        timerAnimation.continueTimer();
     }
 
     public void update(){
-        if(timer_animation.isFinished())
-            num_sprite++;
-        if(num_sprite > num_sprite_max)
-            num_sprite = 0;
+        if(timerAnimation.isFinished())
+            numSprite++;
+        if(numSprite > numSpriteMax)
+            numSprite = 0;
     }
 
     public int getHeight() {
@@ -79,7 +79,7 @@ public abstract class GraphicalEffect {
         return type;
     }
 
-    public int getNum_sprite() {
-        return num_sprite;
+    public int getNumSprite() {
+        return numSprite;
     }
 }

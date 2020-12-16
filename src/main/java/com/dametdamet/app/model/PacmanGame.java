@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.dametdamet.app.engine.Command;
 import com.dametdamet.app.engine.Game;
@@ -16,8 +17,8 @@ import com.dametdamet.app.model.entity.*;
 import com.dametdamet.app.model.entity.attack.Projectile;
 import com.dametdamet.app.model.entity.attack.ProjectileMove;
 import com.dametdamet.app.model.entity.monster.Monster;
-import com.dametdamet.app.model.entity.monster.MoveStrategy;
 import com.dametdamet.app.model.entity.monster.RandomMove;
+import com.dametdamet.app.model.graphic.DeathEffect;
 import com.dametdamet.app.model.graphic.ExplosionEffect;
 import com.dametdamet.app.model.graphic.GraphicalEffect;
 import com.dametdamet.app.model.leaderboard.Leaderboard;
@@ -38,7 +39,7 @@ public class PacmanGame implements Game {
 	private Hero hero;
 	private final Collection<Entity> monsters;
 	private final Collection<Entity> projectiles;
-	private final Collection<GraphicalEffect> graphicalEffects;
+	private final List<GraphicalEffect> graphicalEffects;
 	private Maze maze;
 	private Timer gameTimer;
 	private Timer projectileTimer;
@@ -156,6 +157,7 @@ public class PacmanGame implements Game {
 			hero.moveTo(new Position(maze.getInitialPositionPlayer()));
 			monsters.clear();
 			addEnnemies();
+			graphicalEffects.clear();
 			projectiles.clear();
 			ProjectileMove.INSTANCE.setMaze(this.maze);
 			projectileTimer = new Timer();
@@ -294,6 +296,7 @@ public class PacmanGame implements Game {
 		for (Entity e : monsters) {
 			if(e.getHP() == 0){
 				monsterToRemove.add(e);
+				graphicalEffects.add(0, new DeathEffect(e.getPosition()));
 			}
 		}
 		for(Entity e : monsterToRemove){
