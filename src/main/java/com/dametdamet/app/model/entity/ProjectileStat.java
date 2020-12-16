@@ -53,6 +53,7 @@ public class ProjectileStat {
     }
 
     public void reduceShootingCooldown(int toSubstract){
+        assert(toSubstract >= 0): "On ne peut pas soustraire un nombre négatif";
         projectileCooldown -= toSubstract;
 
         if (projectileCooldown < 0) projectileCooldown = 0;
