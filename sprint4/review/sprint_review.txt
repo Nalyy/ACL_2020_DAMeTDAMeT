@@ -1,0 +1,12 @@
+Fonctionnalités pour le sprint 4:
+a. Menu de démarrage
+b. Animation du monstre qui meurt (20 minutes)
+c. Cases magiques qui changent l'attaque du joueur (Bonus permanent)
+d. Tir rapide (reduction cooldown) (COOLDOWNSHOOT) (F)
+e. Tir multiple (Plusieurs projectiles à la suite)
+f. Tir rebondissant (Peut rebondir x fois sur un mur) (BOUNCESHOT) (O)
+g. Tir dans plusieurs direction (MULTISHOOT) (N)
+h. Tir transperçant (PIERCINGSHOT) (Z)
+
+de a. à h. : OK
+SAUF e. que nous n'avons pas fait et remplacer par h. car e. allait être trop compliqué à faire
