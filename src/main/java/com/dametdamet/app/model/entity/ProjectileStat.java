@@ -36,7 +36,7 @@ public class ProjectileStat {
         projectileTimer = new Timer();
     }
 
-    public Collection<Projectile> shoot(Position position, Direction direction){
+    public Collection<Projectile> generateProjectiles(Position position, Direction direction){
         Collection<Projectile> projectiles = new ArrayList<>();
 
         if (projectileTimer.isFinished()) {
@@ -58,5 +58,11 @@ public class ProjectileStat {
         if (projectileCooldown < 0) projectileCooldown = 0;
     }
 
+    public void addProjectileHP(int toAdd) {
+        nbHP += toAdd;
+    }
 
+    public void addProjectileBounce(int toAdd) {
+        nbBounces += toAdd;
+    }
 }

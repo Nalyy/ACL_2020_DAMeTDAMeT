@@ -172,6 +172,7 @@ public class PacmanGame implements Game {
 		moveProjectiles();
 
 		killMonsters();
+		killProjectiles();
 
 		//Effets
 		updateGraphicalEffects();
@@ -197,6 +198,19 @@ public class PacmanGame implements Game {
 			}
 		}
 		for(Entity e : monsterToRemove){
+			destroyMonster(e);
+		}
+	}
+
+	private void killProjectiles() {
+		Collection<Entity> projectilesToRemove = new ArrayList<>();
+
+		for (Entity e : projectiles) {
+			if(e.getHP() == 0){
+				projectilesToRemove.add(e);
+			}
+		}
+		for(Entity e : projectilesToRemove){
 			destroyMonster(e);
 		}
 	}
@@ -469,8 +483,8 @@ public class PacmanGame implements Game {
 					if (projectile.getPosition().equals(m.getPosition())) {
 						// si un projectile atteint un monstre, le monstre est tué, le projectile détruit, et le joueur gagne des points
 						hurtEntity(m, 1);
+						hurtEntity(projectile, 1);
 						toRemove = true;
-						projToRemove.add(projectile);
 						addScore(100);
 					}
 				}
@@ -484,7 +498,7 @@ public class PacmanGame implements Game {
 						if (positionProj.equals(m.getPosition())) {
 							// si un projectile atteint un monstre, le monstre est tué, le projectile détruit, et le joueur gagne des points
 							hurtEntity(m, 1);
-							projToRemove.add(projectile);
+							hurtEntity(projectile, 1);
 							addScore(100);
 						}
 					}
@@ -518,8 +532,6 @@ public class PacmanGame implements Game {
 			if (monster.getPosition().equals(positionToGo)) {
 				conflict = true;
 				break;
-
-
 			}
 		}
 

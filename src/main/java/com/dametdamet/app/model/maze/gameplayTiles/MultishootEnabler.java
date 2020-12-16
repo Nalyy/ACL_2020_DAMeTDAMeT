@@ -13,8 +13,9 @@ public class MultishootEnabler extends Tile {
 
     @Override
     public void applyEffect(PacmanGame game, Entity entity) {
-        if (entity.canTrigger(this) & !isPressed()){
+        if (!isPressed() && entity.canTrigger(this)){
             entity.setMultiProjectileStrategy();
+            setPressed(true);
         }
     }
 }

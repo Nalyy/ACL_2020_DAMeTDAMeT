@@ -15,7 +15,7 @@ public enum SingleProjectileStrategy implements GeneratorProjectileStrategy {
     public Collection<Projectile> generateProjectiles(Position position, Direction direction, int nbHP, int nbBounces, MoveStrategy strategy) {
         // SingleProjectile : un seul projectile donc on initialise l'array list à 1
         Collection<Projectile> projectiles = new ArrayList<>(1);
-        Projectile projectile = new Projectile(position, direction, strategy);
+        Projectile projectile = new Projectile(position, direction, nbBounces, strategy);
         projectiles.add(projectile);
         return projectiles;
     }

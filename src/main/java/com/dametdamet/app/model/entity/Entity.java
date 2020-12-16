@@ -11,7 +11,6 @@ import com.dametdamet.app.model.maze.TileType;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Objects;
 
 public abstract class Entity {
     private final Position position;
@@ -169,7 +168,7 @@ public abstract class Entity {
         Collection<Projectile> projectiles = new ArrayList<>();
 
         // On demande à notre projectile stat de nous créer des projectiles
-        projectiles.addAll(projectileStat.shoot(new Position(position), direction));
+        projectiles.addAll(projectileStat.generateProjectiles(new Position(position), direction));
 
         return projectiles;
     }
@@ -181,5 +180,7 @@ public abstract class Entity {
     public void reduceShootingCooldown(int toSubstract){
         projectileStat.reduceShootingCooldown(toSubstract);
     }
+    public void addProjectileHP(int toAdd) { projectileStat.addProjectileHP(toAdd); }
+    public void addProjectileBounce(int toAdd) { projectileStat.addProjectileBounce(toAdd); }
 
 }

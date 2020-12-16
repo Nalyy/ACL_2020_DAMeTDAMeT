@@ -10,6 +10,7 @@ import java.util.Objects;
 
 public class Projectile extends Entity {
 
+    private int nbBounces = 0;
     private final MoveStrategy strategy;
 
     /**
@@ -31,8 +32,19 @@ public class Projectile extends Entity {
         this.strategy = strategy;
     }
 
+    public Projectile(Position position, Direction direction, int nbBounces, MoveStrategy strategy) {
+        this(position, direction, strategy);
+        this.nbBounces = nbBounces;
+    }
+
     /**
      * Retourne la direction du projectile ou Direction.IDLE s'il ne peut plus avancer.
      */
     public Direction getNextDirection() { return this.strategy.getNextDirection(this); }
+
+    public int getNbBounces() {
+        return nbBounces;
+    }
+
+    public void decNbBounces() { nbBounces--; }
 }
