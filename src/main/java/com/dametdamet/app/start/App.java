@@ -23,9 +23,10 @@ public class App {
 	public static void main(String[] args) throws InterruptedException {
 
 		//mazes de base
-		String[] mazes = new String[2];
+		String[] mazes = new String[3];
 		mazes[0] = "maze_1.txt";
 		mazes[1] = "maze_2.txt";
+		mazes[2] = "maze_3.txt";
 
 		//on initialise les classes pour le launcher
 		LauncherModel launcher = new LauncherModel(mazes);
