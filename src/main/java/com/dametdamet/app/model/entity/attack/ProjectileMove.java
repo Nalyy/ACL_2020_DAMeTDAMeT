@@ -36,6 +36,10 @@ public enum ProjectileMove implements MoveStrategy {
         Position position = new Position(posEntity);
         Direction direction = entity.getDirection();
 
+        if(!entity.canGoTo(maze.whatIsIn(position))){
+            return Direction.IDLE;
+        }
+
         switch (direction) {
             case UP:
                 position.setY(position.getY() - 1);

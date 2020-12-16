@@ -199,10 +199,12 @@ public class PacmanGame implements Game {
 			if(e.getHP() == 0){
 				monsterToRemove.add(e);
 				graphicalEffects.add(0, new DeathEffect(e.getPosition()));
+				addScore(100);
 			}
 		}
 		for(Entity e : monsterToRemove){
 			destroyMonster(e);
+
 		}
 	}
 
@@ -483,13 +485,12 @@ public class PacmanGame implements Game {
 			nextDirection = projectile.getNextDirection();
 			if (!nextDirection.equals(Direction.IDLE)) {
 				// Collisions avec les monstres
-				for (Entity m : monsters) {
+				for (Entity m : monsters) { // Première boucle dans le cas où un monstre s'est déplacé sur le projectile
 					if (projectile.getPosition().equals(m.getPosition())) {
 						// si un projectile atteint un monstre, le monstre est tué, le projectile détruit, et le joueur gagne des points
 						hurtEntity(m, 1);
 						hurtEntity(projectile, 1);
 						toRemove = true;
-						addScore(100);
 					}
 				}
 
@@ -498,12 +499,11 @@ public class PacmanGame implements Game {
 					projectile.moveTo(positionProj);
 
 					// Collisions avec les monstres
-					for (Entity m : monsters) {
+					for (Entity m : monsters) { // Deuxième boucle dans le cas où il y a un monstre sur la case suivante
 						if (positionProj.equals(m.getPosition())) {
 							// si un projectile atteint un monstre, le monstre est tué, le projectile détruit, et le joueur gagne des points
 							hurtEntity(m, 1);
 							hurtEntity(projectile, 1);
-							addScore(100);
 						}
 					}
 				}

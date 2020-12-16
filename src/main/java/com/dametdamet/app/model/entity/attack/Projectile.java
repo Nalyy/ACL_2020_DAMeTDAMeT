@@ -36,6 +36,7 @@ public class Projectile extends Entity {
         this(position, direction, strategy);
         this.nbBounces = nbBounces;
         this.maxHp = nbMaxHP;
+        this.hp = maxHp;
     }
 
     /**
