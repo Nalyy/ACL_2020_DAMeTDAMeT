@@ -21,18 +21,18 @@ class MultiProjectileStrategyTest {
     @Test
     void RightgenerateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.RIGHT,1, 0, ProjectileMove.INSTANCE);
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 0, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 0, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.DOWN, 0, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 1, 0, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 1, 0, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.DOWN, 1, 0, ProjectileMove.INSTANCE)));
 
     }
 
     @Test
     void Right2generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0, 0), Direction.UP, 10, 50, ProjectileMove.INSTANCE);
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 50, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 50, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 10, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 10, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 10, 50, ProjectileMove.INSTANCE)));
     }
 
     @Test
@@ -45,33 +45,33 @@ class MultiProjectileStrategyTest {
     @Test
     void BoundarygenerateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0, 0), Direction.UP, Integer.MAX_VALUE, 50, ProjectileMove.INSTANCE);
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 50, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 50, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 50, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 50, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 50, 50, ProjectileMove.INSTANCE)));
     }
 
     @Test
     void Boundary2generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.UP, Integer.MIN_VALUE, 50, ProjectileMove.INSTANCE);
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 50, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 50, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 1, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 1, 50, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 1, 50, ProjectileMove.INSTANCE)));
     }
     @Test
     void Boundary3generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.UP, 5, Integer.MAX_VALUE, ProjectileMove.INSTANCE);
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, Integer.MAX_VALUE, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, Integer.MAX_VALUE, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, Integer.MAX_VALUE, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 5, Integer.MAX_VALUE, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 5, Integer.MAX_VALUE, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 5, Integer.MAX_VALUE, ProjectileMove.INSTANCE)));
     }
 
     @Test
     void Boundary4generateProjectiles() {
         Collection<Projectile> proj = strat.generateProjectiles(new Position(0,0), Direction.UP, 5, Integer.MIN_VALUE, ProjectileMove.INSTANCE);
 
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, Integer.MIN_VALUE, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, Integer.MIN_VALUE, ProjectileMove.INSTANCE)));
-        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, Integer.MIN_VALUE, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.UP, 5, Integer.MIN_VALUE, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.RIGHT, 5, Integer.MIN_VALUE, ProjectileMove.INSTANCE)));
+        assertTrue(proj.contains(new Projectile(new Position(0, 0), Direction.LEFT, 5, Integer.MIN_VALUE, ProjectileMove.INSTANCE)));
     }
 
     @Test

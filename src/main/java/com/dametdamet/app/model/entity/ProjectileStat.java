@@ -61,6 +61,12 @@ public class ProjectileStat {
 
     public void addProjectileHP(int toAdd) {
         nbHP += toAdd;
+        if(nbHP <= 0){
+            nbHP = 1;
+        }
+        if(nbHP >= 50){
+            nbHP = 50;
+        }
     }
 
     public void addProjectileBounce(int toAdd) {

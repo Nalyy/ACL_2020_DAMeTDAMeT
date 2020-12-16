@@ -11,6 +11,7 @@ import com.dametdamet.app.model.maze.TileType;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public abstract class Entity {
     private final Position position;
@@ -183,4 +184,16 @@ public abstract class Entity {
     public void addProjectileHP(int toAdd) { projectileStat.addProjectileHP(toAdd); }
     public void addProjectileBounce(int toAdd) { projectileStat.addProjectileBounce(toAdd); }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entity entity = (Entity) o;
+        return maxHp == entity.maxHp && hp == entity.hp && Objects.equals(position, entity.position) && direction == entity.direction && type == entity.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, direction, type, projectileStat, maxHp, hp, invicibiltyTimer, recoveryTime);
+    }
 }

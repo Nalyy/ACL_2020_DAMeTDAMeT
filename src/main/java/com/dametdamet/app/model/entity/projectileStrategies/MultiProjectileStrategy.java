@@ -14,7 +14,12 @@ public enum MultiProjectileStrategy implements GeneratorProjectileStrategy {
     @Override
     public Collection<Projectile> generateProjectiles(Position position, Direction direction, int nbHP, int nbBounces, MoveStrategy strategy) {
         Collection<Projectile> projectiles = new ArrayList<>(3);
-        Projectile proj1 = new Projectile(position, direction, nbBounces, strategy);
+        if(nbHP <= 0){
+            nbHP = 1;
+        }else if(nbHP >= 50){
+            nbHP = 50;
+        }
+        Projectile proj1 = new Projectile(position, direction, nbHP, nbBounces, strategy);
         projectiles.add(proj1);
 
         Direction direction2, direction3;
@@ -33,8 +38,8 @@ public enum MultiProjectileStrategy implements GeneratorProjectileStrategy {
                 direction2 = Direction.IDLE;
                 direction3 = Direction.IDLE;
         }
-        Projectile proj2 = new Projectile(new Position(position), direction2, nbBounces, strategy);
-        Projectile proj3 = new Projectile(new Position(position), direction3, nbBounces, strategy);
+        Projectile proj2 = new Projectile(new Position(position), direction2, nbHP, nbBounces, strategy);
+        Projectile proj3 = new Projectile(new Position(position), direction3, nbHP, nbBounces, strategy);
         projectiles.add(proj2);
         projectiles.add(proj3);
 
